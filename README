@@ -5,6 +5,10 @@ new dispatcher object and particularly for creating new outputs.
 
 History
 
+1.11
+
+- Realized I need to tweak the $VERSION in Log::Dispatch
+
 1.1
 
 - upped version to 1.1 to indicate my confidence in this release (I'm
