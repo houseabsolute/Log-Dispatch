@@ -13,7 +13,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.25 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.26 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -70,7 +70,11 @@ sub _basic_init
     # Either use the parameter supplies or just the highest possible
     # level.
     $self->{max_level} =
-	exists $p{max_level} ? $self->_level_as_number( $p{max_level} ) : $#{ $self->{level_names} };
+	( exists $p{max_level} ?
+          $self->_level_as_number($p{max_level}) :
+          $#{ $self->{level_names} }
+        );
+
     die "Invalid level specified for max_level" unless defined $self->{max_level};
 
     my @cb = $self->_get_callbacks(%p);
@@ -133,6 +137,22 @@ sub _level_as_number
 
     return $self->{level_numbers}{$level};
 }
+
+sub _level_as_name
+{
+    my $self = shift;
+    my $level = shift;
+
+    unless ( defined $level )
+    {
+	Carp::croak "undefined value provided for log level";
+    }
+
+    return $level unless $level =~ /^\d$/;
+
+    return $self->{level_names}[$level];
+}
+
 
 __END__
 
