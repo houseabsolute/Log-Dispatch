@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..127\n"; }
+BEGIN { $| = 1; print "1..131\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -30,12 +30,13 @@ BEGIN
 my %TestConfig;
 if ( -d '.svn' )
 {
-    %TestConfig = ( email_address => 'autarch@urth.org',
-                    syslog_file   => '/var/log/messages',
-                  );
+   %TestConfig = ( email_address => 'autarch@urth.org',
+                   syslog_file   => '/var/log/messages',
+                 );
 }
 
 use Log::Dispatch::File;
+use Log::Dispatch::File::Locked;
 use Log::Dispatch::Handle;
 use Log::Dispatch::Screen;
 
@@ -500,6 +501,54 @@ else
 
     unlink './close_test.log'
 	or warn "Can't remove ./close_test.log: $!";
+}
+
+# tests for L::D::File::Locked
+{
+    my $dispatch = Log::Dispatch->new;
+
+    $dispatch->add( Log::Dispatch::File::Locked->new( name => 'file1',
+                                                      min_level => 'emerg',
+                                                      filename => './emerg_test.log' ) );
+
+    $dispatch->log( level => 'info', message => "info level 1\n" );
+    $dispatch->log( level => 'emerg', message => "emerg level 1\n" );
+
+    $dispatch->add( Log::Dispatch::File::Locked->new( name => 'file2',
+                                                      min_level => 'debug',
+                                                      filename => 'debug_test.log' ) );
+
+    $dispatch->log( level => 'info', message => "info level 2\n" );
+    $dispatch->log( level => 'emerg', message => "emerg level 2\n" );
+
+    # This'll close them filehandles!
+    undef $dispatch;
+
+    open LOG1, './emerg_test.log'
+	or die "Can't read ./emerg_test.log: $!";
+    open LOG2, './debug_test.log'
+	or die "Can't read ./debug_test.log: $!";
+
+    my @log = <LOG1>;
+    result( $log[0] eq "emerg level 1\n",
+	    "First line in log file set to level 'emerg' is '$log[0]', not 'emerg level 1'\n" );
+    result( $log[1] eq "emerg level 2\n",
+	    "Second line in log file set to level 'emerg' is '$log[0]', not 'emerg level 2'\n" );
+
+    @log = <LOG2>;
+    result( $log[0] eq "info level 2\n",
+	    "First line in log file set to level 'debug' is '$log[0]', not 'info level 2'\n" );
+    result( $log[1] eq "emerg level 2\n",
+	    "Second line in log file set to level 'debug' is '$log[0]', not 'emerg level 2'\n" );
+
+    close LOG1;
+    close LOG2;
+
+    unlink './emerg_test.log'
+	or warn "Can't remove ./emerg_test.log: $!";
+
+    unlink './debug_test.log'
+	or warn "Can't remove ./debug_test.log: $!";
 }
 
 sub fake_test
