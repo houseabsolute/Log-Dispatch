@@ -2,16 +2,14 @@ package Log::Dispatch::Output;
 
 use strict;
 
+use base qw( Log::Dispatch::Base );
 use fields qw( name min_level max_level level_names level_numbers callbacks );
 
-use vars qw[ $VERSION @ISA ];
+use vars qw[ $VERSION ];
 
 use Carp ();
-use Log::Dispatch::Base;
 
-@ISA = qw(Log::Dispatch::Base);
-
-$VERSION = sprintf "%d.%03d", q$Revision: 1.12 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.13 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
