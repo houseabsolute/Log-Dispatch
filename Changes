@@ -6,6 +6,12 @@ for constructors and some other methods.
 - Add an 'autoflush' option to Log::Dispatch::File objects.  Suggested
 by Jerrad Pierce.
 
+- Added some error checking to ::Email::MailSend.
+
+- Changed a carp to a warn in ::Email::MailSendmail.
+
+- Only warn if $^W is true.
+
 2.00 ** BACKWARDS INCOMPATIBILITY ALERT **
 
 - Use a standard hash reference for objects instead of pseudo-hashes.
