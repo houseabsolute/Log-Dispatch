@@ -3,6 +3,8 @@
 - Fix a test failure on Win32 platforms.  The problem was in the test,
 not the code.  Patch by David Viner.
 
+- Distro is now signed with Module::Signature.
+
 
 2.08 Nov 27, 2003
 
