@@ -109,7 +109,7 @@ EOF
 
 WriteMakefile(
 	      'NAME'	=> 'Log::Dispatch',
-	      'VERSION' => '1.010',
+	      'VERSION' => '1.1',
 	      'PM' => {
 		       'Dispatch.pm' => '$(INST_LIBDIR)/Dispatch.pm',
 		       'Dispatch/Output.pm' => '$(INST_LIBDIR)/Dispatch/Output.pm',
