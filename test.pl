@@ -17,7 +17,7 @@ use Log::Dispatch;
 my %tests;
 BEGIN
 {
-    foreach ( qw( MailSend MIMELite Sendmail ) )
+    foreach ( qw( MailSend MIMELite MailSendmail ) )
     {
 	eval "use Log::Dispatch::Email::$_";
 	$tests{$_} = ! $@;
