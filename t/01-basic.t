@@ -493,8 +493,17 @@ SKIP:
         or die "Cannot stat ./close_test.log: $!";
 
     my $mode_string = sprintf( '%04o', $mode & 07777 );
-    is( $mode_string, '0777',
-        "Mode should be 0777" );
+
+    if( $^O =~ /win32/i )
+    {
+        ok( $mode_string == '0777' || $mode_string == '0666',
+            "Mode should be 0777 or 0666");
+    }
+    else
+    {
+        is( $mode_string, '0777',
+            "Mode should be 0777" );
+    }
 
     unlink './close_test.log'
 	or diag( "Can't remove ./close_test.log: $!" );
