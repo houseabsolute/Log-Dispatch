@@ -203,23 +203,25 @@ should be derived.
 This must be overridden in a subclass.  Takes the following
 parameters:
 
-=item -- name ($)
+=over 4
+
+=item * name ($)
 
 The name of the object (not the filename!).  Required.
 
-=item -- min_level ($)
+=item * min_level ($)
 
 The minimum logging level this object will accept.  See the
 Log::Dispatch documentation for more information.  Required.
 
-=item -- max_level ($)
+=item * max_level ($)
 
 The maximum logging level this obejct will accept.  See the
 Log::Dispatch documentation for more information.  This is not
 required.  By default the maximum is the highest possible level (which
 means functionally that the object has no maximum).
 
-=item -- callbacks( \& or [ \&, \&, ... ] )
+=item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
@@ -233,6 +235,8 @@ be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.  If they do not return
 the message then you will get no output.  Make sure to return the
 message!
+
+=back
 
 =item * _basic_init(%p)
 

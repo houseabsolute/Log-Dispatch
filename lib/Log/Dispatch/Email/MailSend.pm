@@ -77,44 +77,46 @@ send_email method using the Mail::Send module.
 This method takes a hash of parameters.  The following options are
 valid:
 
-=item -- name ($)
+=over 8
+
+=item * name ($)
 
 The name of the object (not the filename!).  Required.
 
-=item -- min_level ($)
+=item * min_level ($)
 
 The minimum logging level this object will accept.  See the
 Log::Dispatch documentation for more information.  Required.
 
-=item -- max_level ($)
+=item * max_level ($)
 
 The maximum logging level this obejct will accept.  See the
 Log::Dispatch documentation for more information.  This is not
 required.  By default the maximum is the highest possible level (which
 means functionally that the object has no maximum).
 
-=item -- subject ($)
+=item * subject ($)
 
 The subject of the email messages which are sent.  Defaults to "$0:
 log email"
 
-=item -- to ($ or \@)
+=item * to ($ or \@)
 
 Either a string or a list reference of strings containing email
 addresses.  Required.
 
-=item -- from ($)
+=item * from ($)
 
 A string containing an email address.  This is optional and may not
 work with all mail sending methods.
 
-=item -- buffered (0 or 1)
+=item * buffered (0 or 1)
 
 This determines whether the object sends one email per message it is
 given or whether it stores them up and sends them all at once.  The
 default is to buffer messages.
 
-=item -- callbacks( \& or [ \&, \&, ... ] )
+=item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
@@ -127,7 +129,9 @@ single scalar containing that modified message.  These callbacks will
 be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.
 
-=item * log( level => $, message => $ )
+=back
+
+=item * log_message( level => $, message => $ )
 
 Sends a message if the level is greater than or equal to the object's
 minimum level.

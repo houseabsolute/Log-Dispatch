@@ -71,27 +71,29 @@ method can be passed the object constructor and it should work.
 This method takes a hash of parameters.  The following options are
 valid:
 
-=item -- name ($)
+=over 8
+
+=item * name ($)
 
 The name of the object (not the filename!).  Required.
 
-=item -- min_level ($)
+=item * min_level ($)
 
 The minimum logging level this object will accept.  See the
 Log::Dispatch documentation for more information.  Required.
 
-=item -- max_level ($)
+=item * max_level ($)
 
 The maximum logging level this obejct will accept.  See the
 Log::Dispatch documentation for more information.  This is not
 required.  By default the maximum is the highest possible level (which
 means functionally that the object has no maximum).
 
-=item -- handle ($)
+=item * handle ($)
 
 The handle object.  This object must implement a C<print()> method.
 
-=item -- callbacks( \& or [ \&, \&, ... ] )
+=item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
@@ -103,6 +105,8 @@ The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will
 be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.
+
+=back
 
 =item * log_message( message => $ )
 

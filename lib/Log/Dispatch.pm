@@ -154,7 +154,9 @@ add and remove output objects as desired.
 Returns a new Log::Dispatch object.  This method takes one optional
 parameter:
 
-=item -- callbacks( \& or [ \&, \&, ... ] )
+=over 8
+
+=item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
@@ -171,6 +173,8 @@ be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.  If they do not return
 the message then you will get no output.  Make sure to return the
 message!
+
+=back
 
 =item * add( Log::Dispatch::* OBJECT )
 

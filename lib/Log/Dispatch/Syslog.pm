@@ -108,28 +108,30 @@ system log (via UNIX syslog calls).
 This method takes a hash of parameters.  The following options are
 valid:
 
-=item -- name ($)
+=over 8
+
+=item * name ($)
 
 The name of the object.  Required.
 
-=item -- min_level ($)
+=item * min_level ($)
 
 The minimum logging level this object will accept.  See the
 Log::Dispatch documentation for more information.  Required.
 
-=item -- max_level ($)
+=item * max_level ($)
 
 The maximum logging level this obejct will accept.  See the
 Log::Dispatch documentation for more information.  This is not
 required.  By default the maximum is the highest possible level (which
 means functionally that the object has no maximum).
 
-=item -- ident ($)
+=item * ident ($)
 
 This string will be prepended to all messages in the system log.
 Defaults to $0.
 
-=item -- logopt ($)
+=item * logopt ($)
 
 A string containing the log options (separated by any separator you
 like).  Valid options are 'cons', 'pid', 'ndelay', and 'nowait'.  See
@@ -137,19 +139,19 @@ the openlog(3) and Sys::Syslog docs for more details.  I would suggest
 not using 'cons' but instead using Log::Dispatch::Screen.  Defaults to
 ''.
 
-=item -- facility ($)
+=item * facility ($)
 
 Specifies what type of program is doing the logging to the system log.
 Valid options are 'auth', 'authpriv', 'cron', 'daemon', 'kern',
 'local0' through 'local7', 'mail, 'news', 'syslog', 'user',
 'uucp'.  Defaults to 'user'
 
-=item -- socket ($)
+=item * socket ($)
 
 Tells what type of socket to use for sending syslog messages.  Valid
 options are 'unix' or 'inet'.  Defaults to 'inet'.
 
-=item -- callbacks( \& or [ \&, \&, ... ] )
+=item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
@@ -161,6 +163,8 @@ The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will
 be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.
+
+=back
 
 =item * log_message( message => $ )
 
