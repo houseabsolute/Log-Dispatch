@@ -6,12 +6,11 @@ use Log::Dispatch::Email;
 
 use base qw( Log::Dispatch::Email );
 
-use Carp ();
 use Mail::Sendmail ();
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -28,7 +27,7 @@ sub send_email
 	       );
 
     Mail::Sendmail::sendmail(%mail)
-	or Carp::carp("Error sending mail: $Mail::Sendmail::error");
+	or warn "Error sending mail: $Mail::Sendmail::error";
 }
 
 __END__
