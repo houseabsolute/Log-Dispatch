@@ -3,13 +3,16 @@ package Log::Dispatch;
 require 5.005;
 
 use strict;
-use vars qw[ $VERSION ];
+use vars qw[ $VERSION @ISA ];
 
 use fields qw( outputs callbacks );
 
 use Carp ();
+use Log::Dispatch::Base;
 
-$VERSION = '1.2';
+@ISA = qw(Log::Dispatch::Base);
+
+$VERSION = '1.5';
 
 1;
 
@@ -25,17 +28,8 @@ sub new
 	$self = bless [ \%{"${class}::FIELDS"} ], $class;
     }
 
-    if (exists $params{callbacks})
-    {
-	# If it's not an array ref of some sort its a code ref and this'll
-	# cause an error.
-	my @cb = eval { @{ $params{callbacks} }; };
-
-	# Must have been a code ref.
-	@cb = $params{callbacks} unless @cb;
-
-	$self->{callbacks} = \@cb;
-    }
+    my @cb = $self->_get_callbacks(%params);
+    $self->{callbacks} = \@cb if @cb;
 
     return $self;
 }
@@ -84,7 +78,7 @@ sub log_to
 
     $params{message} = $self->_apply_callbacks(%params)
 	if $self->{callbacks};
-
+    warn "LOG TO\n";
     $self->_log_to(%params);
 }
 
@@ -102,20 +96,6 @@ sub _log_to
     {
 	Carp::carp("Log::Dispatch::* object named '$name' not in dispatcher\n");
     }
-}
-
-sub _apply_callbacks
-{
-    my Log::Dispatch $self = shift;
-    my %params = @_;
-
-    my $msg = $params{message};
-    foreach my $cb ( @{ $self->{callbacks} } )
-    {
-	$msg = $cb->( message => $msg );
-    }
-
-    return $msg;
 }
 
 __END__
