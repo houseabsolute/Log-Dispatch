@@ -1,4 +1,4 @@
-2.04 Mar 21, 2003
+2.04 Mar 21, 2003  (the "not in my name" release)
 
 - The close_after_write option didn't actually do anything.  Fixed by
 JAA Klunder.
