@@ -11,7 +11,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.19 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.20 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
@@ -126,7 +126,7 @@ Log::Dispatch::* system.
 
 =over 4
 
-=item * new(%params)
+=item * new(%p)
 
 This method takes a hash of parameters.  The following options are
 valid:
