@@ -5,6 +5,16 @@ new dispatcher object and particularly for creating new outputs.
 
 History
 
+1.2
+
+- Log/Dispatch.pm: Added callbacks parameter to Log::Dispatch->new.  I
+will also be adding this to the Log::Dispatch::* classes via
+Log::Dispatch::Output but I wanted to get this new version out there
+because I think there are people out there who would benefit from
+this.  Expect a 1.2x release sometime in the near future.
+- Log/Dispatch.pm: Added docs section on why Log::Dispatch doesn't add
+newlines to outgoing messages.
+
 1.11
 
 - Realized I need to tweak the $VERSION in Log::Dispatch
