@@ -52,10 +52,13 @@ sub _make_handle
 					   default => 1 },
           		    close_after_write => { type => BOOLEAN,
                                                    default => 0 },
+                            permissions => { type => SCALAR,
+                                             optional => 1 },
 			  } );
 
     $self->{filename} = $p{filename};
     $self->{close} = $p{close_after_write};
+    $self->{permissions} = $p{permissions};
 
     if ( $self->{close} )
     {
@@ -92,6 +95,12 @@ sub _open_file
     if ( $self->{autoflush} )
     {
         my $oldfh = select $fh; $| = 1; select $oldfh;
+    }
+
+    if ( $self->{permissions} )
+    {
+        chmod $self->{permissions}, $self->{filename}
+            or die "Cannot chmod $self->{filename} to $self->{permissions}: $!";
     }
 
     $self->{fh} = $fh;
@@ -199,6 +208,25 @@ is not re-written for each new message.
 =item -- autoflush ($)
 
 Whether or not the file should be autoflushed.  This defaults to true.
+
+=item -- permissions ($)
+
+If the file does not already exist, the permissions that it should
+be created with.  Optional.  The argument passed must be a valid
+octal value, such as 0600 or the constants available from Fcntl, like
+S_IRUSR|S_IWUSR.
+
+See L<perlfunc/chmod> for more on potential traps when passing octal
+values around.  Most importantly, remember that if you pass a string
+that looks like an octal value, like this:
+
+ my $mode = '0644';
+
+Then the resulting file will end up with permissions like this:
+
+ --w----r-T
+
+which is probably not what you want.
 
 =item -- callbacks( \& or [ \&, \&, ... ] )
 
