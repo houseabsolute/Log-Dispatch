@@ -3,7 +3,7 @@ package Log::Dispatch::Base;
 use strict;
 use vars qw($VERSION @EXPORT_OK);
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.5 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -29,10 +29,10 @@ sub _apply_callbacks
     my Log::Dispatch $self = shift;
     my %params = @_;
 
-    my $msg = $params{message};
+    my $msg = delete $params{message};
     foreach my $cb ( @{ $self->{callbacks} } )
     {
-	$msg = $cb->( message => $msg, level => $params{level} );
+	$msg = $cb->( message => $msg, %params );
     }
 
     return $msg;

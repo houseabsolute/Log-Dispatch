@@ -157,7 +157,8 @@ the order they are given and passed a hash containing the following keys:
 
  ( message => $log_message, level => $log_level )
 
-It's a hash in case I need to add parameters in the future.
+In addition, any key/value pairs passed to a logging method will be
+passed onto your callback.
 
 The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will
