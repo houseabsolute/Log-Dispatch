@@ -90,7 +90,7 @@ sub _open_file
     my $fh = do { local *FH; *FH; };
 
     open $fh, "$self->{mode}$self->{filename}"
-	     or die "Can't write to '$self->{filename}': $!";
+        or die "Cannot write to '$self->{filename}': $!";
 
     if ( $self->{autoflush} )
     {
@@ -118,14 +118,17 @@ sub log_message
     {
       	$self->_open_file;
 	$fh = $self->{fh};
-      	print $fh $p{message};
+      	print $fh $p{message}
+            or die "Cannot write to '$self->{filename}': $!";
 
       	close $fh;
+            or die "Cannot close '$self->{filename}': $!";
     }
     else
     {
         $fh = $self->{fh};
-        print $fh $p{message};
+        print $fh $p{message}
+            or die "Cannot write to '$self->{filename}': $!";
     }
 }
 
@@ -137,7 +140,8 @@ sub DESTROY
     if ( $self->{fh} )
     {
 	my $fh = $self->{fh};
-	close $fh;
+	close $fh
+            or die "Cannot close '$self->{filename}': $!";
     }
 }
 
