@@ -1,3 +1,11 @@
+2.08 Nov 27, 2003
+
+- Added Log::Dispatch->would_log method, which indicates whether
+logging will be done for a given log level.
+
+- Switched tests to use Test::More.
+
+
 2.07 Sep 27, 2003
 
 - Added Log::Dispatch::File::Locked.  Based on code from JAA Klunder.
