@@ -11,7 +11,7 @@ use MIME::Lite;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -28,8 +28,9 @@ sub send_email
 
     $mail{From} = $self->{from} if defined $self->{from};
 
-    MIME::Lite->new(%mail)->send
-	or Carp::carp("Error sending mail");
+    unless ( MIME::Lite->new(%mail)->send )
+    {
+	warn "Error sending mail with MIME::Lite" if $^W;
 }
 
 __END__

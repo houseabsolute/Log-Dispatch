@@ -28,11 +28,11 @@ sub new
 {
     my $proto = shift;
     my $class = ref $proto || $proto;
-    my %params = @_;
+    my %p = @_;
 
     my $self = bless {}, $class;
 
-    my @cb = $self->_get_callbacks(%params);
+    my @cb = $self->_get_callbacks(%p);
     $self->{callbacks} = \@cb if @cb;
 
     return $self;
@@ -63,40 +63,40 @@ sub remove
 sub log
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
-    $params{message} = $self->_apply_callbacks(%params)
+    $p{message} = $self->_apply_callbacks(%p)
 	if $self->{callbacks};
 
     foreach (keys %{ $self->{outputs} })
     {
-	$params{name} = $_;
-	$self->_log_to(%params);
+	$p{name} = $_;
+	$self->_log_to(%p);
     }
 }
 
 sub log_to
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
-    $params{message} = $self->_apply_callbacks(%params)
+    $p{message} = $self->_apply_callbacks(%p)
 	if $self->{callbacks};
 
-    $self->_log_to(%params);
+    $self->_log_to(%p);
 }
 
 sub _log_to
 {
     my $self = shift;
-    my %params = @_;
-    my $name = $params{name};
+    my %p = @_;
+    my $name = $p{name};
 
     if (exists $self->{outputs}{$name})
     {
 	$self->{outputs}{$name}->log(@_);
     }
-    else
+    elsif ($^W)
     {
 	Carp::carp("Log::Dispatch::* object named '$name' not in dispatcher\n");
     }
@@ -166,7 +166,7 @@ message!
 
 Adds a new a Log::Dispatch::* object to the dispatcher.  If an object
 of the same name already exists, then that object is replaced.  A
-warning will be issued if the 'C<-w>' flag is set.
+warning will be issued if the C<$^W> is true.
 
 NOTE: This method can really take any object that has methods called
 'name' and 'log'.
@@ -248,10 +248,10 @@ is also acceptable.
 
 =head1 USAGE
 
-This logging system is designed to be used as a one-stop logging
-system.  In particular, it was designed to be easy to subclass so that
-if you want to handle messaging in a way other than one of the modules
-used here, you should be able to implement this with minimal effort.
+This module is designed to be used as a one-stop logging system.  In
+particular, it was designed to be easy to subclass so that if you want
+to handle messaging in a way not implemented in this package, you
+should be able to add this with minimal effort.
 
 The basic idea behind Log::Dispatch is that you create a Log::Dispatch
 object and then add various logging objects to it (such as a file
@@ -261,16 +261,14 @@ which in turn decide whether or not to accept the message and what to
 do with it.
 
 This makes it possible to call single method and send a message to a
-log file, via email, to the screen, and anywhere else all in one
-simple command.
+log file, via email, to the screen, and anywhere else, all with very
+little code needed on your part, once the dispatching object has been
+created.
 
 The logging levels that Log::Dispatch uses are borrowed from the
 standard UNIX syslog levels, except that where syslog uses partial
-words ('err') Log::Dispatch also allows the use of the full word as
-well ('error').
-
-Please note that because this code uses pseudo-hashes and compile-time
-object typing that it will only run under Perl 5.005 or greater.
+words ("err") Log::Dispatch also allows the use of the full word as
+well ("error").
 
 =head2 Making your own logging objects
 
