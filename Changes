@@ -1,3 +1,9 @@
+2.09 Jan 09, 2004
+
+- Fix a test failure on Win32 platforms.  The problem was in the test,
+not the code.  Patch by David Viner.
+
+
 2.08 Nov 27, 2003
 
 - Added Log::Dispatch->would_log method, which indicates whether
