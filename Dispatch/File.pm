@@ -11,7 +11,7 @@ use IO::File;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.11 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
@@ -22,7 +22,7 @@ BEGIN
     *O_APPEND = \&APPEND unless defined $exists;
 }
 
-sub APPEND {return 'append'};
+sub APPEND {;};
 
 1;
 
@@ -71,12 +71,10 @@ sub _make_handle
     $self->{fh}->autoflush(1);
 }
 
-sub log
+sub log_message
 {
     my Log::Dispatch::File $self = shift;
     my %params = @_;
-
-    return unless $self->_should_log($params{level});
 
     $self->{fh}->print($params{message});
 }
@@ -138,10 +136,26 @@ The mode the file should be opened with.  Valid options are 'write',
 '>', 'append', '>>', or the relevant constants from Fcntl.  The
 default is 'write'.
 
-=item * log( level => $, message => $ )
+=item -- callbacks( \& or [ \&, \&, ... ] )
 
-Sends a message if the level is greater than or equal to the object's
-minimum level.
+This parameter may be a single subroutine reference or an array
+reference of subroutine references.  These callbacks will be called in
+the order they are given and passed a hash containing the following keys:
+
+ ( message => $log_message )
+
+It's a hash in case I need to add parameters in the future.
+
+The callbacks are expected to modify the message and then return a
+single scalar containing that modified message.  These callbacks will
+be called when either the C<log> or C<log_to> methods are called and
+will only be applied to a given message once.
+
+=item * log_message( message => $ )
+
+Sends a message to the appropriate output.  Generally this shouldn't
+be called directly but should be called through the C<log()> method
+(in Log::Dispatch::Output).
 
 =back
 
