@@ -9,7 +9,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.13 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -203,7 +203,8 @@ to maximum.
 
 This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
-the order they are given and passed a hash containing the following keys:
+the order they are given and passed a hash containing the following
+keys:
 
  ( message => $log_message )
 
