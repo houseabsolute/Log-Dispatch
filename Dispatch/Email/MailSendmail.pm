@@ -10,7 +10,7 @@ use Mail::Sendmail ();
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -26,8 +26,10 @@ sub send_email
 		 From    => $self->{from} || 'LogDispatch@foo.bar',
 	       );
 
-    Mail::Sendmail::sendmail(%mail)
-	or warn "Error sending mail: $Mail::Sendmail::error";
+    unless ( Mail::Sendmail::sendmail(%mail) )
+    {
+	warn "Error sending mail: $Mail::Sendmail::error" if $^W;
+    }
 }
 
 __END__
