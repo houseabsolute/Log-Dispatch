@@ -1,3 +1,8 @@
+1.76
+
+- New method: Log::Dispatch->level_is_valid($string).  Suggested by
+Jeff Hamman.
+
 1.75
 
 - Additional argument 'level' passed to message processing callbacks.
