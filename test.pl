@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..18\n"; }
+BEGIN { $| = 1; print "1..106\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -350,6 +350,43 @@ Screen:
 
     result( $text eq 'REVERSE',
 	    "Log::Dispatch callback did not reverse and uppercase text as expected: $text\n" );
+}
+
+# 19 - 106: Comprehensive test of new methods that match level names
+{
+    my %levels = map { $_ => $_ } ( qw( debug info notice warning err error crit critical alert emerg emergency ) );
+    @levels{ qw( err crit emerg ) } = ( qw( error critical emergency ) );
+
+    foreach my $allowed_level ( qw( debug info notice warning error critical alert emergency ) )
+    {
+	my $dispatch = Log::Dispatch->new;
+
+	$dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+						    min_level => $allowed_level,
+						    max_level => $allowed_level,
+						    stderr => 0 ) );
+
+	foreach my $test_level ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
+	{
+	    my $text;
+	    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
+	    $dispatch->$test_level( "$test_level test" );
+	    untie *STDOUT;
+
+	    if ( $levels{$test_level} eq $allowed_level )
+	    {
+		result( $text eq "$test_level test",
+			"Calling $test_level method should have sent message '$test_level test'\n" );
+	    }
+	    else
+	    {
+		result( $text eq '',
+			"Calling $test_level method should not have logged anything but we got '$text'\n" );
+	    }
+
+	    $text = '';
+	}
+    }
 }
 
 sub fake_test
