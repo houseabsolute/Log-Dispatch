@@ -8,7 +8,7 @@ use vars qw[ $VERSION ];
 
 use Carp;
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.11 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -36,15 +36,13 @@ sub _basic_init
     # Map the names to numbers so they can be compared.
     my $x = 0;
     $self->{level_names} = [ qw( debug info notice warning error critical alert emerg ) ];
-    $self->{level_numbers} = { (map {$_ => $x++} @{ $self->{level_names} }),
+    $self->{level_numbers} = { ( map {$_ => $x++} @{ $self->{level_names} } ),
 			       err     => 4,
 			       crit  => 5,
 			       emergency => 7 };
 
     $self->{name} = $params{name}
 	or die "No name supplied for ", ref $self, " object";
-
-    $self->{max_level} = 
 
     die "No min_level supplied for ", ref $self, " object"
 	unless exists $params{min_level};
