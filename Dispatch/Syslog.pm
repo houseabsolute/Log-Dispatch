@@ -10,11 +10,11 @@ use fields qw( ident logopt facility socket priorities );
 use Sys::Syslog ();
 
 # This is old school!
-require 'syslog.ph';
+require 'syslog.ph' if $] < 5.006;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
