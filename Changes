@@ -1,0 +1,95 @@
+1.6
+
+NOTE: 1.5 was never released to CPAN.
+
+- Log/Dispatch.pm: Added convenience methods for log levels like
+$dispatcher->alert($message).  Suggested by Dominique Dumont.
+
+1.5
+
+This version introduces some changes into the interface that will
+cause incompatibility with any Log::Dispatch::Output interface you may
+have created.  However, it is fairly simple to fix.  Simply change the
+method in your subclass named 'log' to be called 'log_message'.  You
+can also remove the line:
+
+  return unless $self->_should_log($params{level});
+
+This is now done before the message ever gets to the Output subclass
+(which is what it should have done in the first place, really.)
+
+This was done so that I could allow per-Output object callbacks, a
+feature which several people have requested and which seems useful
+enough to warrant the breakage.
+
+NOTE: This change is transparent if you are only using the Output
+objects included with this distribution.
+
+- Many: Changed the interface to allow per-Output object level
+callbacks and documented this.
+- Log/Dispatch/Base.pm: new base class for both Log::Dispatch and
+Log::Dispatch::Output objects (contains callback related code).  You
+should never need to deal with this class unles you are me.
+- Log/Dispatch/Output.pm: document _accepted_levels.
+- Log/Dispatch/Output.pm: Fix _accepted_levels so that emergency level
+is returned as 'emergency', not 'emerg'.
+- Log/Dispatch.pm: Fix doc bug (change 'file' to 'filename').  Thanks
+to Clayton Scott.
+- Log/Dispatch/File.pm: Do compile time check for O_APPEND constant
+rather than run time check.
+
+1.2
+
+- Log/Dispatch.pm: Added callbacks parameter to Log::Dispatch->new.  I
+will also be adding this to the Log::Dispatch::* classes via
+Log::Dispatch::Output but I wanted to get this new version out there
+because I think there are people out there who would benefit from
+this.
+- Log/Dispatch.pm: Added docs section on why Log::Dispatch doesn't add
+newlines to outgoing messages.
+
+1.11
+
+- Realized I need to tweak the $VERSION in Log::Dispatch
+
+1.1
+
+- upped version to 1.1 to indicate my confidence in this release (I'm
+just aking for bug reports, I know).
+- added accepted_levels method to Log::Dispatch::Output based on
+discussions with Dominique Dumont (author of the Log::Dispatch::Tk
+suite).
+- canonical names for log levels are now the unabbreviated form
+(though the abbreviated ones used by syslog are still fine and there
+is no plan to deprecate them).  This really only affects what is
+returned by the new accepted_levels method.
+
+1.010
+
+- fixed a bug in the DESTROY method of Log::Dispatch::Email that
+caused an annoying error and may have caused spurious emails to be
+sent (thanks to Radu Greab).
+- fixed a bug in Log::Dispatch::Email::MailSendmail.  For some reason
+this module demands a 'from' address.
+
+1.009
+
+- Created this version simply to address an issue with CPAN and my
+internal version numbers having a conflict.  This has no changes from
+1.008.
+
+1.008
+
+- Fixed a bug causing unitialized value warnings with -w (oops).
+- Fixed a minor mistake in Log::Dispatch::Syslog docs (thanks to Ilya
+Martynov)
+- Put newlines into messages in SYNOPSIS sections for some modules.
+This is to clarify that you need to do this.  Just to be clear,
+Log::Dispatch does not alter message content in any manner whatsoever
+(and never will).  However, it would be trivial to subclass
+Log::Dispatch to do this.
+
+1.007
+
+- First public release.  It passes its own test suite so it should
+work (he says hopefully).
