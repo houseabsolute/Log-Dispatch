@@ -11,7 +11,7 @@ use Apache::Log;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.5 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -22,11 +22,7 @@ sub new
 
     my %params = @_;
 
-    my $self;
-    {
-	no strict 'refs';
-	$self = bless [ \%{"${class}::FIELDS"} ], $class;
-    }
+    my $self = bless {}, $class;
 
     $self->_basic_init(%params);
     $self->{apache_log} = UNIVERSAL::isa( $params{apache}, 'Apache::Server' ) ? $params{apache}->log : $params{apache}->log;
@@ -36,7 +32,7 @@ sub new
 
 sub log_message
 {
-    my Log::Dispatch::ApacheLog $self = shift;
+    my $self = shift;
     my %params = @_;
 
     my $method;

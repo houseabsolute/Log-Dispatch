@@ -14,7 +14,7 @@ require 'syslog.ph' if $] < 5.006;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -25,11 +25,7 @@ sub new
 
     my %params = @_;
 
-    my $self;
-    {
-	no strict 'refs';
-	$self = bless [ \%{"${class}::FIELDS"} ], $class;
-    }
+    my $self = bless {}, $class;
 
     $self->_basic_init(%params);
     $self->_init(%params);
@@ -39,7 +35,7 @@ sub new
 
 sub _init
 {
-    my Log::Dispatch::Syslog $self = shift;
+    my $self = shift;
     my %params = @_;
 
     $self->{ident}    = $params{ident} || $0;
@@ -61,7 +57,7 @@ sub _init
 
 sub log_message
 {
-    my Log::Dispatch::Syslog $self = shift;
+    my $self = shift;
     my %params = @_;
 
     my $pri = $self->_level_as_number($params{level});

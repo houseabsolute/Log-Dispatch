@@ -9,7 +9,7 @@ use fields qw( handle );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.13 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -20,11 +20,7 @@ sub new
 
     my %params = @_;
 
-    my $self;
-    {
-	no strict 'refs';
-	$self = bless [ \%{"${class}::FIELDS"} ], $class;
-    }
+    my $self = bless {}, $class;
 
     $self->_basic_init(%params);
     $self->{handle} = $params{handle};
@@ -34,7 +30,7 @@ sub new
 
 sub log_message
 {
-    my Log::Dispatch::Handle $self = shift;
+    my $self = shift;
     my %params = @_;
 
     $self->{handle}->print($params{message});

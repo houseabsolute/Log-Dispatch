@@ -9,7 +9,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.19 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.20 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -36,7 +36,7 @@ sub log
 
 sub _basic_init
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
     my %params = @_;
 
     # Map the names to numbers so they can be compared.
@@ -68,35 +68,35 @@ sub _basic_init
 
 sub name
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
 
     return $self->{name};
 }
 
 sub min_level
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
 
     return $self->{level_names}[ $self->{min_level} ];
 }
 
 sub max_level
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
 
     return $self->{level_names}[ $self->{max_level} ];
 }
 
 sub accepted_levels
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
 
     return @{ $self->{level_names} }[ $self->{min_level} .. $self->{max_level} ] ;
 }
 
 sub _should_log
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
 
     my $msg_level = $self->_level_as_number(shift);
     return ( ( $msg_level >= $self->{min_level} ) &&
@@ -105,7 +105,7 @@ sub _should_log
 
 sub _level_as_number
 {
-    my Log::Dispatch::Output $self = shift;
+    my $self = shift;
     my $level = shift;
 
     unless ( defined $level )
@@ -143,11 +143,7 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* object
 
       my %params = @_;
 
-      my $self;
-      {
-	  no strict 'refs';
-	  $self = bless [ \%{"${class}::FIELDS"} ], $class;
-      }
+      my $self = bless {}, $class
 
       $self->_basic_init(%params);
 
@@ -156,7 +152,7 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* object
 
   sub log_message
   {
-      my Log::Dispatch::MySubclass $self = shift;
+      my $self = shift;
       my %params = @_;
 
       # Do something with message in $params{message}

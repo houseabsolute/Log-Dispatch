@@ -1,10 +1,7 @@
 use ExtUtils::MakeMaker qw( prompt WriteMakefile );
 
 # Saves some headaches for people later.
-BEGIN
-{
-    require 5.005;
-}
+use 5.005;
 
 {
     unless (-d './Install')

@@ -10,7 +10,7 @@ use fields qw( outputs callbacks );
 
 use Carp ();
 
-$VERSION = '1.80';
+$VERSION = '2.00';
 
 1;
 
@@ -19,7 +19,7 @@ BEGIN
     no strict 'refs';
     foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
     {
-	*{$l} = sub { my Log::Dispatch $self = shift;
+	*{$l} = sub { my $self = shift;
 		      $self->log( level => $l, message => "@_" ); };
 	$LEVELS{$l} = 1;
     }
@@ -31,11 +31,7 @@ sub new
     my $class = ref $proto || $proto;
     my %params = @_;
 
-    my $self;
-    {
-	no strict 'refs';
-	$self = bless [ \%{"${class}::FIELDS"} ], $class;
-    }
+    my $self = bless {}, $class;
 
     my @cb = $self->_get_callbacks(%params);
     $self->{callbacks} = \@cb if @cb;
@@ -45,7 +41,7 @@ sub new
 
 sub add
 {
-    my Log::Dispatch $self = shift;
+    my $self = shift;
     my $object = shift;
 
     # Once 5.6 is more established start using the warnings module.
@@ -59,7 +55,7 @@ sub add
 
 sub remove
 {
-    my Log::Dispatch $self = shift;
+    my $self = shift;
     my $name = shift;
 
     return delete $self->{outputs}{$name};
@@ -67,7 +63,7 @@ sub remove
 
 sub log
 {
-    my Log::Dispatch $self = shift;
+    my $self = shift;
     my %params = @_;
 
     $params{message} = $self->_apply_callbacks(%params)
@@ -82,7 +78,7 @@ sub log
 
 sub log_to
 {
-    my Log::Dispatch $self = shift;
+    my $self = shift;
     my %params = @_;
 
     $params{message} = $self->_apply_callbacks(%params)
@@ -93,7 +89,7 @@ sub log_to
 
 sub _log_to
 {
-    my Log::Dispatch $self = shift;
+    my $self = shift;
     my %params = @_;
     my $name = delete $params{name};
 

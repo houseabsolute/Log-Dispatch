@@ -10,13 +10,13 @@ use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.13 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
 sub send_email
 {
-    my Log::Dispatch::Email::MailSend $self = shift;
+    my $self = shift;
     my %params = @_;
 
     my $msg = Mail::Send->new;
