@@ -5,11 +5,11 @@ require 5.005;
 use strict;
 use vars qw[ $VERSION ];
 
-use fields qw( outputs );
+use fields qw( outputs callbacks );
 
 use Carp ();
 
-$VERSION = '1.11';
+$VERSION = '1.2';
 
 1;
 
@@ -17,11 +17,24 @@ sub new
 {
     my $proto = shift;
     my $class = ref $proto || $proto;
+    my %params = @_;
 
     my $self;
     {
 	no strict 'refs';
 	$self = bless [ \%{"${class}::FIELDS"} ], $class;
+    }
+
+    if (exists $params{callbacks})
+    {
+	# If it's not an array ref of some sort its a code ref and this'll
+	# cause an error.
+	my @cb = eval { @{ $params{callbacks} }; };
+
+	# Must have been a code ref.
+	@cb = $params{callbacks} unless @cb;
+
+	$self->{callbacks} = \@cb;
     }
 
     return $self;
@@ -32,6 +45,7 @@ sub add
     my Log::Dispatch $self = shift;
     my $object = shift;
 
+    # Once 5.6 is more established start using the warnings module.
     if (exists $self->{outputs}{$object->name} && $^W)
     {
 	Carp::carp("Log::Dispatch::* object ", $object->name, " already exists.");
@@ -53,14 +67,28 @@ sub log
     my Log::Dispatch $self = shift;
     my %params = @_;
 
+    $params{message} = $self->_apply_callbacks(%params)
+	if $self->{callbacks};
+
     foreach (keys %{ $self->{outputs} })
     {
 	$params{name} = $_;
-	$self->log_to(%params);
+	$self->_log_to(%params);
     }
 }
 
 sub log_to
+{
+    my Log::Dispatch $self = shift;
+    my %params = @_;
+
+    $params{message} = $self->_apply_callbacks(%params)
+	if $self->{callbacks};
+
+    $self->_log_to(%params);
+}
+
+sub _log_to
 {
     my Log::Dispatch $self = shift;
     my %params = @_;
@@ -74,6 +102,20 @@ sub log_to
     {
 	Carp::carp("Log::Dispatch::* object named '$name' not in dispatcher\n");
     }
+}
+
+sub _apply_callbacks
+{
+    my Log::Dispatch $self = shift;
+    my %params = @_;
+
+    my $msg = $params{message};
+    foreach my $cb ( @{ $self->{callbacks} } )
+    {
+	$msg = $cb->( message => $msg );
+    }
+
+    return $msg;
 }
 
 __END__
@@ -95,6 +137,9 @@ Log::Dispatch - Dispatches messages to multiple Log::Dispatch::* objects
   $dispatcher->log( level => 'info',
                     message => 'Blah, blah' );
 
+  my $sub = sub { my %p = @_;  return reverse $p{message}; };
+  my $reversing_dispatcher = Log::Dispatch->new( callbacks => $sub );
+
 =head1 DESCRIPTION
 
 This module manages a set of Log::Dispatch::* objects, allowing you to
@@ -106,13 +151,32 @@ add and remove output objects as desired.
 
 =item * new
 
-Returns a new Log::Dispatch object.
+Returns a new Log::Dispatch object.  This method takes one optional
+parameter:
 
-=item * add(OBJECT)
+=item -- callbacks( \& or [ \&, \&, ... ] )
+
+This parameter may be a single subroutine reference or an array
+reference of subroutine references.  These callbacks will be called in
+the order they are given and passed a hash containing the following keys:
+
+ ( message => $log_message )
+
+It's a hash in case I need to add parameters in the future.
+
+The callbacks are expected to modify the message and then return a
+single scalar containing that modified message.  These callbacks will
+be called when either the C<log> or C<log_to> methods are called and
+will only be applied to a given message once.
+
+=item * add( Log::Dispatch::* OBJECT )
 
 Adds a new a Log::Dispatch::* object to the dispatcher.  If an object
 of the same name already exists, then that object is replaced.  A
 warning will be issued if the 'C<-w>' flag is set.
+
+NOTE: This method can really take any object that has methods called
+'name' and 'log'.
 
 =item * remove($)
 
@@ -188,11 +252,29 @@ it is even simpler.  Simply subclass L<Log::Dispatch::Email> and
 override the C<send_email> method.  See the L<Log::Dispatch::Email>
 docs for more details.
 
-You may also want to consider subclassing Log::Dispatch itself.  This
-would be a very convenient way of adding a timestamp and process id to
-all outgoing messages, for example.  Simply make a subclass that
-overrides the C<log> and/or C<log_to> method and have it modify the
-message before calling C<SUPER::log>.
+=head2 Why doesn't Log::Dispatch add a newline to the message?
+
+A few people have written email to me asking me to add something that
+would tack a newline onto the end of all messages that don't have one.
+This will never happen.  There are several reasons for this.  First of
+all, Log::Dispatch was designed as a simple system to broadcast a
+message to multiple outputs.  It does not attempt to understand the
+message in any way at all.  Adding a newline applies an attempt to
+understand something about the message and I don't want to go there.
+Secondly, this is not very cross-platform and I don't want to go down
+the road of testing Config values to figure out what to tack onto
+messages based on OS.
+
+I think people's desire to do this is because they are too focused on
+just the logging to files aspect of this module.  In this case
+newlines make sense.  However, imagine someone is using this module to
+log to a remote server and the interactions between the client and
+server use newlines as part of the control flow.  Casually adding a
+newline could cause serious problems.
+
+However, the 1.2 release adds the callbacks parameter for the
+Log::Dispatch object which you can easily use to add newlines to
+messages if you so desire.
 
 =head1 AUTHOR
 
