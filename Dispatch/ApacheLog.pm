@@ -5,13 +5,15 @@ use strict;
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
-use fields qw( apache_log );
+
+use Params::Validate qw(validate);
+Params::Validate::validation_options( allow_extra => 1 );
 
 use Apache::Log;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.5 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -20,12 +22,12 @@ sub new
     my $proto = shift;
     my $class = ref $proto || $proto;
 
-    my %params = @_;
+    my %p = validate( @_, { apache => { can => 'log' } } );
 
     my $self = bless {}, $class;
 
-    $self->_basic_init(%params);
-    $self->{apache_log} = UNIVERSAL::isa( $params{apache}, 'Apache::Server' ) ? $params{apache}->log : $params{apache}->log;
+    $self->_basic_init(%p);
+    $self->{apache_log} = $p{apache}->log;
 
     return $self;
 }
@@ -33,32 +35,32 @@ sub new
 sub log_message
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     my $method;
 
-    if ($params{level} eq 'emergency')
+    if ($p{level} eq 'emergency')
     {
 	$method = 'emerg';
     }
-    elsif ( $params{level} eq 'critical' )
+    elsif ( $p{level} eq 'critical' )
     {
 	$method = 'crit';
     }
-    elsif( $params{level} eq 'err' )
+    elsif( $p{level} eq 'err' )
     {
 	$method = 'error';
     }
-    elsif( $params{level} eq 'warning' )
+    elsif( $p{level} eq 'warning' )
     {
 	$method = 'warn';
     }
     else
     {
-	$method = $params{level};
+	$method = $p{level};
     }
 
-    $self->{apache_log}->$method( $params{message} );
+    $self->{apache_log}->$method( $p{message} );
 }
 
 __END__
@@ -86,7 +88,7 @@ represented by the Apache::Log class.
 
 =over 4
 
-=item * new(%PARAMS)
+=item * new(%p)
 
 This method takes a hash of parameters.  The following options are
 valid:
