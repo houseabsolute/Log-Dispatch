@@ -3,14 +3,14 @@ package Log::Dispatch;
 require 5.005;
 
 use strict;
-use vars qw[ $VERSION ];
+use vars qw[ $VERSION %LEVELS ];
 
 use base qw( Log::Dispatch::Base );
 use fields qw( outputs callbacks );
 
 use Carp ();
 
-$VERSION = '1.75';
+$VERSION = '1.76';
 
 1;
 
@@ -21,6 +21,7 @@ BEGIN
     {
 	*{$l} = sub { my Log::Dispatch $self = shift;
 		      $self->log( level => $l, message => shift ); };
+	$LEVELS{$l} = 1;
     }
 }
 
@@ -106,6 +107,12 @@ sub _log_to
     }
 }
 
+sub level_is_valid
+{
+    shift;
+    return $LEVELS{ shift() };
+}
+
 __END__
 
 =head1 NAME
@@ -183,6 +190,11 @@ C<log_to> method repeatedly).
 =item * log_to( name => $, level => $, message => $ )
 
 Sends the message only to the named object.
+
+=item * level_is_valid( $string )
+
+Returns true or false to indicate whether or not the given string is a
+valid log level.  Can be called as either a class or object method.
 
 =back
 
