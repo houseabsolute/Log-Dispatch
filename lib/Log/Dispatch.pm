@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Base );
 
 use Carp ();
 
-$VERSION = '2.07';
+$VERSION = '2.08';
 
 1;
 
@@ -118,6 +118,21 @@ sub level_is_valid
     return $LEVELS{ shift() };
 }
 
+sub would_log
+{
+    my $self = shift;
+    my $level = shift;
+
+    return 0 unless $self->level_is_valid($level);
+
+    foreach ( values %{ $self->{outputs} } )
+    {
+	return 1 if $_->_should_log($level);
+    }
+
+    return 0;
+}
+
 __END__
 
 =head1 NAME
@@ -205,6 +220,11 @@ Sends the message only to the named object.
 
 Returns true or false to indicate whether or not the given string is a
 valid log level.  Can be called as either a class or object method.
+
+=item * would_log( $string )
+
+Returns true or false to indicate whether or not the given string is a
+valid log level and would be logged with current list of outputs.
 
 =item * output( $name )
 
