@@ -259,7 +259,7 @@ would tack a newline onto the end of all messages that don't have one.
 This will never happen.  There are several reasons for this.  First of
 all, Log::Dispatch was designed as a simple system to broadcast a
 message to multiple outputs.  It does not attempt to understand the
-message in any way at all.  Adding a newline applies an attempt to
+message in any way at all.  Adding a newline implies an attempt to
 understand something about the message and I don't want to go there.
 Secondly, this is not very cross-platform and I don't want to go down
 the road of testing Config values to figure out what to tack onto
