@@ -10,7 +10,6 @@ History
 - fixed a bug in the DESTROY method of Log::Dispatch::Email that
 caused an annoying error and may have caused spurious emails to be
 sent (thanks to Radu Greab).
-
 - fixed a bug in Log::Dispatch::Email::MailSendmail.  For some reason
 this module demands a 'from' address.
 
