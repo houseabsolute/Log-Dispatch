@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Base );
 
 use Carp ();
 
-$VERSION = '2.05';
+$VERSION = '2.06';
 
 1;
 
@@ -346,6 +346,15 @@ do the actual logging.  Created by Mike Schilli and Kevin Goess.
 
 A very different API for doing many of the same things that
 Log::Dispatch does.  Originally written by Raphael Manfredi.
+
+=head1 COPYRIGHT
+
+Copyright (c) 1999-2003 David Rolsky.  All rights reserved.  This
+program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+The full text of the license can be found in the LICENSE file included
+with this module.
 
 =head1 AUTHOR
 
