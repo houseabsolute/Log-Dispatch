@@ -2,6 +2,8 @@ package Log::Dispatch::Output;
 
 use strict;
 
+use Log::Dispatch;
+
 use base qw( Log::Dispatch::Base );
 
 use Params::Validate qw(validate SCALAR ARRAYREF CODEREF);
@@ -11,7 +13,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.23 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.24 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
