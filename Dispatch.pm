@@ -6,7 +6,6 @@ use strict;
 use vars qw[ $VERSION %LEVELS ];
 
 use base qw( Log::Dispatch::Base );
-use fields qw( outputs callbacks );
 
 use Carp ();
 
