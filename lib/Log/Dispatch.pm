@@ -122,7 +122,7 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch - Dispatches messages to multiple Log::Dispatch::* objects
+Log::Dispatch - Dispatches messages to one or more outputs
 
 =head1 SYNOPSIS
 
@@ -322,25 +322,42 @@ messages if you so desire.
 
 =head1 RELATED MODULES
 
-=head2 Log::Dispatch::Tk
-
-Dominique Dumont has written Log::Dispatch::Tk, which allows log
-messages to show up in a Tk window.
-
-=head2 Log::Dispatch::Config
-
-Written by Tatsuhiko Miyagawa.  Allows configuration of logging via a
-text file similar (or so I'm told) to how it is done with log4j.
-
 =head2 Log::Dispatch::DBI
 
-Log::Dispatch::DBI, also written by Tatsuhiko Miyagawa.  Log output to a
-database table.
+Written by Tatsuhiko Miyagawa.  Log output to a database table.
+
+=head2 Log::Dispatch::FileRotate
+
+Written by Mark Pfeiffer.  Rotates log files periodically as part of
+its usage.
+
+=head2 Log::Dispatch::File::Stamped
+
+Written by Eric Cholet.  Stamps log files with date and time
+information.
+
+=head2 Log::Dispatch::Jabber
+
+Written by Aaron Straup Cope.  Logs messages via Jabber.
+
+=head2 Log::Dispatch::Tk
+
+Written by Dominique Dumont.  Logs messages to a Tk window.
+
+=head2 Log::Dispatch::Win32EventLog
+
+Written by Arthur Bergman.  Logs messages to the Windows event log.
 
 =head2 Log::Log4perl
 
 An implementation of Java's log4j API in Perl, using Log::Dispatch to
 do the actual logging.  Created by Mike Schilli and Kevin Goess.
+
+=head2 Log::Dispatch::Config
+
+Written by Tatsuhiko Miyagawa.  Allows configuration of logging via a
+text file similar (or so I'm told) to how it is done with log4j.
+Simpler than Log::Log4perl.
 
 =head2 Log::Agent
 
@@ -365,7 +382,8 @@ Dave Rolsky, <autarch@urth.org>
 Log::Dispatch::ApacheLog, Log::Dispatch::Email,
 Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSender,
 Log::Dispatch::Email::MailSendmail, Log::Dispatch::Email::MIMELite,
-Log::Dispatch::File, Log::Dispatch::Handle, Log::Dispatch::Output,
-Log::Dispatch::Screen, Log::Dispatch::Syslog
+Log::Dispatch::File, Log::Dispatch::File::Locked,
+Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
+Log::Dispatch::Syslog
 
 =cut
