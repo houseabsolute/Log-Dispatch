@@ -13,7 +13,7 @@ use Apache::Log;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.7 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -39,25 +39,26 @@ sub log_message
 
     my $method;
 
-    if ($p{level} eq 'emergency')
+    my $level = $self->_level_to_name($p{level});
+    if ($level eq 'emergency')
     {
 	$method = 'emerg';
     }
-    elsif ( $p{level} eq 'critical' )
+    elsif ( $level eq 'critical' )
     {
 	$method = 'crit';
     }
-    elsif( $p{level} eq 'err' )
+    elsif( $level eq 'err' )
     {
 	$method = 'error';
     }
-    elsif( $p{level} eq 'warning' )
+    elsif( $level eq 'warning' )
     {
 	$method = 'warn';
     }
     else
     {
-	$method = $p{level};
+	$method = $level;
     }
 
     $self->{apache_log}->$method( $p{message} );
