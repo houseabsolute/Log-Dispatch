@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..1\n"; }
+BEGIN { $| = 1; print "1..16\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -267,6 +267,46 @@ Screen:
 
     result( $pass && (scalar @expected == scalar @levels),
 	    "accepted_levels didn't match expected levels\n" );
+}
+
+# 15:  Log::Dispatch single callback
+{
+    my $reverse = sub { my %p = @_;  return reverse $p{message}; };
+    my $dispatch = Log::Dispatch->new( callbacks => $reverse );
+
+    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+						min_level => 'warning',
+						max_level => 'alert',
+						stderr => 0 ) );
+
+    my $text;
+    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
+    $dispatch->log( level => 'warning', message => 'esrever' );
+    untie *STDOUT;
+
+    result( $text eq 'reverse',
+	    "Log::Dispatch callback did not reverse text as expected: $text\n" );
+}
+
+# 16:  Log::Dispatch multiple callbacks
+{
+    my $reverse = sub { my %p = @_;  return reverse $p{message}; };
+    my $uc = sub { my %p = @_; return uc $p{message}; };
+
+    my $dispatch = Log::Dispatch->new( callbacks => [ $reverse, $uc ] );
+
+    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+						min_level => 'warning',
+						max_level => 'alert',
+						stderr => 0 ) );
+
+    my $text;
+    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
+    $dispatch->log( level => 'warning', message => 'esrever' );
+    untie *STDOUT;
+
+    result( $text eq 'REVERSE',
+	    "Log::Dispatch callback did not reverse and uppercase text as expected: $text\n" );
 }
 
 sub fake_test
