@@ -9,7 +9,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -108,14 +108,14 @@ sub _level_as_number
     my Log::Dispatch::Output $self = shift;
     my $level = shift;
 
-    if (not defined $level)
+    unless ( defined $level )
     {
 	Carp::croak "undefined value provided for log level";
     }
 
     return $level if $level =~ /^\d$/;
 
-    if (defined $level && not exists $self->{level_numbers}{$level})
+    unless ( Log::Dispatch->level_is_valid($level) )
     {
 	Carp::croak "$level is not a valid Log::Dispatch log level";
     }
