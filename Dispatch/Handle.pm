@@ -5,11 +5,13 @@ use strict;
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
-use fields qw( handle );
+
+use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
+Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -18,12 +20,12 @@ sub new
     my $proto = shift;
     my $class = ref $proto || $proto;
 
-    my %params = @_;
+    my %p = validate( @_, { handle => { can => 'print' } } );
 
     my $self = bless {}, $class;
 
-    $self->_basic_init(%params);
-    $self->{handle} = $params{handle};
+    $self->_basic_init(%p);
+    $self->{handle} = $p{handle};
 
     return $self;
 }
@@ -31,9 +33,9 @@ sub new
 sub log_message
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
-    $self->{handle}->print($params{message});
+    $self->{handle}->print($p{message});
 }
 
 __END__
@@ -63,7 +65,7 @@ method can be passed the object constructor and it should work.
 
 =over 4
 
-=item * new(%PARAMS)
+=item * new(%p)
 
 This method takes a hash of parameters.  The following options are
 valid:

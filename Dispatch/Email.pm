@@ -5,11 +5,13 @@ use strict;
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
-use fields qw( buffer buffered from subject to );
+
+use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
+Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -18,19 +20,25 @@ sub new
     my $proto = shift;
     my $class = ref $proto || $proto;
 
-    my %params = @_;
+    my %p = validate( @_, { subject  => { type => SCALAR,
+					  default => "$0: log email" },
+			    to       => { type => SCALAR | ARRAYREF },
+			    from     => { type => SCALAR,
+					  optional => 1 },
+			    buffered => { type => BOOLEAN,
+					  default => 1 },
+			  } );
 
     my $self = bless {}, $class;
 
-    $self->_basic_init(%params);
+    $self->_basic_init(%p);
 
-    $self->{subject} = $params{subject} || "$0: log email";
-    $self->{to} = ref $params{to} ? $params{to} : [$params{to}]
-	or die "No addresses provided to new method for ", ref $self, " object";
-    $self->{from} = $params{from};
+    $self->{subject} = $p{subject} || "$0: log email";
+    $self->{to} = ref $p{to} ? $p{to} : [$p{to}];
+    $self->{from} = $p{from};
 
     # Default to buffered for obvious reasons!
-    $self->{buffered} = exists $params{buffered} ? $params{buffered} : 1;
+    $self->{buffered} = $p{buffered};
 
     $self->{buffer} = [] if $self->{buffered};
 
@@ -40,11 +48,11 @@ sub new
 sub log_message
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     if ($self->{buffered})
     {
-	push @{ $self->{buffer} }, $params{message},
+	push @{ $self->{buffer} }, $p{message},
     }
     else
     {
@@ -97,9 +105,9 @@ via email
   sub send_email
   {
       my $self = shift;
-      my %params = @_;
+      my %p = @_;
 
-      # Send email somehow.  Message is in $params{message}
+      # Send email somehow.  Message is in $p{message}
   }
 
 =head1 DESCRIPTION
@@ -113,7 +121,7 @@ L<SYNOPSIS> with a real implementation of the C<send_email()> method.
 
 =over 4
 
-=item * new(%PARAMS)
+=item * new(%p)
 
 This method takes a hash of parameters.  The following options are
 valid:
@@ -174,7 +182,7 @@ Sends a message to the appropriate output.  Generally this shouldn't
 be called directly but should be called through the C<log()> method
 (in Log::Dispatch::Output).
 
-=item * send_email(%PARAMS)
+=item * send_email(%p)
 
 This is the method that must be subclassed.  For now the only
 parameter in the hash is 'message'.
