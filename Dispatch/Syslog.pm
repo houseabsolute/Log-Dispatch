@@ -14,7 +14,7 @@ require 'syslog.ph';
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.11 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.12 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -171,9 +171,9 @@ Dave Rolsky, <autarch@urth.org>
 
 =head1 SEE ALSO
 
-Log::Dispatch, Log::Dispatch::Email, Log::Dispatch::Email::MailSend,
-Log::Dispatch::Email::MailSendmail, Log::Dispatch::Email::MIMELite,
-Log::Dispatch::File, Log::Dispatch::Handle, Log::Dispatch::Output,
-Log::Dispatch::Screen
+Log::Dispatch, Log::Dispatch::ApacheLog, Log::Dispatch::Email,
+Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
+Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
+Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen
 
 =cut
