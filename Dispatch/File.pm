@@ -7,11 +7,11 @@ use Log::Dispatch::Output;
 use base qw( Log::Dispatch::Output );
 use fields qw( fh filename );
 
-use IO::File;
-
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.11 $ =~ /: (\d+)\.(\d+)/;
+use IO::File;
+
+$VERSION = sprintf "%d.%03d", q$Revision: 1.12 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
