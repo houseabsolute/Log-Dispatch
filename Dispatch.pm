@@ -102,6 +102,16 @@ sub _log_to
     }
 }
 
+sub output
+{
+    my $self = shift;
+    my $name = shift;
+
+    return unless exists $self->{outputs}{$name};
+
+    return $self->{outputs}{$name};
+}
+
 sub level_is_valid
 {
     shift;
@@ -191,6 +201,11 @@ Sends the message only to the named object.
 
 Returns true or false to indicate whether or not the given string is a
 valid log level.  Can be called as either a class or object method.
+
+=item * output( $name )
+
+Returns an output of the given name.  Returns undef or an empty list,
+depending on context, if the given output does not exist.
 
 =back
 
