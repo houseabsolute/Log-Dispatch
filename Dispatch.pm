@@ -3,18 +3,27 @@ package Log::Dispatch;
 require 5.005;
 
 use strict;
-use vars qw[ $VERSION @ISA ];
+use vars qw[ $VERSION ];
 
+use base qw( Log::Dispatch::Base );
 use fields qw( outputs callbacks );
 
 use Carp ();
-use Log::Dispatch::Base;
 
-@ISA = qw(Log::Dispatch::Base);
 
-$VERSION = '1.5';
+$VERSION = '1.6';
 
 1;
+
+BEGIN
+{
+    no strict 'refs';
+    foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
+    {
+	*{$l} = sub { my Log::Dispatch $self = shift;
+		      $self->log( level => $l, message => shift ); };
+    }
+}
 
 sub new
 {
@@ -177,6 +186,30 @@ C<log_to> method repeatedly).
 Sends the message only to the named object.
 
 =back
+
+=head1 CONVENIENCE METHODS
+
+Version 1.6 of Log::Dispatch adds a number of convenience methods for
+logging.  You may now call any valid log level (including valid
+abbreviations) as a method on the Log::Dispatch object with a single
+argument that is the message to be logged.  This is converted into a
+call to the C<log> method with the appropriate level.
+
+For example:
+
+ $dispatcher->alert('Strange data in incoming request');
+
+translates to:
+
+ $dispatcher->log( level => 'alert', message => 'Strange data in incoming request' );
+
+One important caveat about these methods is that its not that forwards
+compatible.  If I were to add more parameters to the C<log> call, it
+is unlikely that these could be integrated into these methods without
+breaking existing uses.  This probably means that any future
+parameters to the C<log> method will never be integrated into these
+convenience methods.  OTOH, I don't see any immediate need to expand
+the parameters given to the C<log> method.
 
 =head2 Log Levels
 
