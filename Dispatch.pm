@@ -340,10 +340,10 @@ Log::Dispatch::Syslog
 Log::Dispatch::Tk, written by Dominique Dumont.  Log output to a Tk
 window.
 
-Log::Dispatch::Config, written by Miyagawa Tatsuhiko.  Configure all
+Log::Dispatch::Config, written by Tatsuhiko Miyagawa.  Configure all
 your logging via a config file, similar to log4j.
 
-Log::Dispatch::DBI, written by Miyagawa Tatsuhiko.  Log output to a
+Log::Dispatch::DBI, written by Tatsuhiko Miyagawa.  Log output to a
 DBI handle.
 
 Log::Agent - similar capabilities with a different interface.  If you
