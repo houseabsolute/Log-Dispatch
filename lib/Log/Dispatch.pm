@@ -223,8 +223,8 @@ valid log level.  Can be called as either a class or object method.
 
 =item * would_log( $string )
 
-Returns true or false to indicate whether or not the given string is a
-valid log level and would be logged with current list of outputs.
+Given a log level, returns true or false to indicate whether or not
+anything would be logged for that log level.
 
 =item * output( $name )
 
