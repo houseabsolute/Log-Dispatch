@@ -18,7 +18,7 @@ use Data::Dumper;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.1 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.2 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -29,8 +29,7 @@ sub new
 
     my %params = @_;
 
-    my $smtp = $params{smtp};
-    delete($params{smtp});
+    my $smtp = delete $params{smtp};
 
     my $self = $class->SUPER::new(%params);
 
