@@ -134,8 +134,7 @@ sub DESTROY
     if ( $self->{fh} )
     {
 	my $fh = $self->{fh};
-	close $fh
-            or die "Cannot close '$self->{filename}': $!";
+	close $fh;
     }
 }
 
