@@ -311,18 +311,23 @@ messages if you so desire.
 
 =head2 Log::Dispatch::Tk
 
-Dominique Dumont has written Log::Dispatch::Tk which allows log
-messages to show up in a window.  This code is available from CPAN.
+Dominique Dumont has written Log::Dispatch::Tk, which allows log
+messages to show up in a Tk window.
 
 =head2 Log::Dispatch::Config
 
-Allow configuration of logging via a text file similar (or so I'm
-told) to how it is done with log4j.
+Written by Tatsuhiko Miyagawa.  Allows configuration of logging via a
+text file similar (or so I'm told) to how it is done with log4j.
+
+=head2 Log::Dispatch::DBI
+
+Log::Dispatch::DBI, also written by Tatsuhiko Miyagawa.  Log output to a
+database table.
 
 =head2 Log::Agent
 
-A very different way of doing a lot of the things that Log::Dispatch
-does.
+A very different API for doing many of the same things that
+Log::Dispatch does.  Originally written by Raphael Manfredi.
 
 =head1 AUTHOR
 
@@ -335,18 +340,5 @@ Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
 Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
 Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
 Log::Dispatch::Syslog
-
-Log::Dispatch::Tk, written by Dominique Dumont.  Log output to a Tk
-window.
-
-Log::Dispatch::Config, written by Tatsuhiko Miyagawa.  Configure all
-your logging via a config file, similar to log4j.
-
-Log::Dispatch::DBI, written by Tatsuhiko Miyagawa.  Log output to a
-DBI handle.
-
-Log::Agent - similar capabilities with a different interface.  If you
-like what Params::Validate does but not its 'feel' try this one
-instead.
 
 =cut
