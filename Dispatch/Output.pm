@@ -2,13 +2,16 @@ package Log::Dispatch::Output;
 
 use strict;
 
-use fields qw( name min_level max_level level_names level_numbers );
+use fields qw( name min_level max_level level_names level_numbers callbacks );
 
-use vars qw[ $VERSION ];
+use vars qw[ $VERSION @ISA ];
 
-use Carp;
+use Carp ();
+use Log::Dispatch::Base;
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.11 $ =~ /: (\d+)\.(\d+)/;
+@ISA = qw(Log::Dispatch::Base);
+
+$VERSION = sprintf "%d.%03d", q$Revision: 1.12 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -23,9 +26,14 @@ sub new
 sub log
 {
     my $self = shift;
-    my $class = ref $self;
+    my %params = @_;
 
-    die "The log method must be overridden in the $class subclass";
+    return unless $self->_should_log($params{level});
+
+    $params{message} = $self->_apply_callbacks(%params)
+	if $self->{callbacks};
+
+    $self->log_message(%params);
 }
 
 sub _basic_init
@@ -34,12 +42,13 @@ sub _basic_init
     my %params = @_;
 
     # Map the names to numbers so they can be compared.
+    $self->{level_names} = [ qw( debug info notice warning error critical alert emergency ) ];
+
     my $x = 0;
-    $self->{level_names} = [ qw( debug info notice warning error critical alert emerg ) ];
-    $self->{level_numbers} = { ( map {$_ => $x++} @{ $self->{level_names} } ),
-			       err     => 4,
+    $self->{level_numbers} = { ( map { $_ => $x++ } @{ $self->{level_names} } ),
+			       err   => 4,
 			       crit  => 5,
-			       emergency => 7 };
+			       emerg => 7 };
 
     $self->{name} = $params{name}
 	or die "No name supplied for ", ref $self, " object";
@@ -53,8 +62,10 @@ sub _basic_init
     # level.
     $self->{max_level} =
 	exists $params{max_level} ? $self->_level_as_number( $params{max_level} ) : $#{ $self->{level_names} };
-
     die "Invalid level specified for max_level" unless defined $self->{max_level};
+
+    my @cb = $self->_get_callbacks(%params);
+    $self->{callbacks} = \@cb if @cb;
 }
 
 sub name
@@ -68,14 +79,14 @@ sub min_level
 {
     my Log::Dispatch::Output $self = shift;
 
-    return $self->{level_names}[$self->{min_level}];
+    return $self->{level_names}[ $self->{min_level} ];
 }
 
 sub max_level
 {
     my Log::Dispatch::Output $self = shift;
 
-    return $self->{level_names}[$self->{max_level}];
+    return $self->{level_names}[ $self->{max_level} ];
 }
 
 sub accepted_levels
@@ -145,12 +156,10 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* object
       # Do more if you like
   }
 
-  sub log
+  sub log_message
   {
       my Log::Dispatch::MySubclass $self = shift;
       my %params = @_;
-
-      return unless $self->_should_log($params{level});
 
       # Do something with message in $params{message}
   }
@@ -192,18 +201,34 @@ Returns the object's maximum log level.
 Returns a list of the object's accepted levels (by name) from minimum
 to maximum.
 
+=item -- callbacks( \& or [ \&, \&, ... ] )
+
+This parameter may be a single subroutine reference or an array
+reference of subroutine references.  These callbacks will be called in
+the order they are given and passed a hash containing the following keys:
+
+ ( message => $log_message )
+
+It's a hash in case I need to add parameters in the future.
+
+The callbacks are expected to modify the message and then return a
+single scalar containing that modified message.  These callbacks will
+be called when either the C<log> or C<log_to> methods are called and
+will only be applied to a given message once.
+
 =item * log( level => $, message => $ )
 
 Sends a message if the level is greater than or equal to the object's
-minimum level.  This method must be overridden in the subclass.
+minimum level.  This method applies any message formatting callbacks
+that the object may have.
 
 =item * _should_log ($)
 
-This method should be called from the subclass's C<log()> method with
-the log level of the message to be logged as an argument.  It returns
-a boolean value indicating whether or not the message should be logged
-by this particular object.  The C<log()> method should not process the
-message if the return value is not true.
+This method is called from the C<log()> method with the log level of
+the message to be logged as an argument.  It returns a boolean value
+indicating whether or not the message should be logged by this
+particular object.  The C<log()> method will not process the message
+if the return value is false.
 
 =item * _level_as_number ($)
 
@@ -211,6 +236,11 @@ This method will take a log level as a string (or a number) and return
 the number of that log level.  If not given an argument, it returns
 the calling object's log level instead.  If it cannot determine the
 level then it will issue a warning and return undef.
+
+=item * _accepted_levels
+
+This method returns a list of the canonical (expanded) names of the
+log levels that the object accepts, from minimum to maximum.
 
 =back
 
@@ -220,8 +250,8 @@ This class should be used as the base class for all logging objects
 you create that you would like to work under the Log::Dispatch
 architecture.  Subclassing is fairly trivial.  For most subclasses, if
 you simply copy the code in the SYNOPSIS and then put some
-functionality into the C<log> method then you should be all set.
-Please make sure to use the C<_basic_init> method as directed.
+functionality into the C<log_message> method then you should be all
+set.  Please make sure to use the C<_basic_init> method as directed.
 
 =head1 AUTHOR
 
