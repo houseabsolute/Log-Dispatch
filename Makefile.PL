@@ -1,3 +1,5 @@
+use strict;
+
 use ExtUtils::MakeMaker qw( prompt WriteMakefile );
 
 # Saves some headaches for people later.
@@ -6,8 +8,8 @@ use 5.005;
 {
     unless (-d './Install')
     {
-	mkdir './Install', 0755
-	    or die "can't make dir ./Install: $!";
+        mkdir './Install', 0755
+            or die "can't make dir ./Install: $!";
     }
 
     my %config;
@@ -26,33 +28,33 @@ Yes/No?], 'No' );
 
     if ($config{syslog})
     {
-	my $default;
-	foreach ( qw( /var/adm/messages
+        my $default;
+        foreach ( qw( /var/adm/messages
                       /var/adm/syslog
                       /var/log/messages
                       /var/log/syslog
-		      /var/log/syslog
-		      /etc/log/syslog ) )
-	{
-	    if (-e)
-	    {
-		$default = $_;
-		last;
-	    }
-	}
+                      /var/log/syslog
+                      /etc/log/syslog ) )
+        {
+            if (-e)
+            {
+                $default = $_;
+                last;
+            }
+        }
 
-	$config{syslog_file} = prompt('What file would a message sent as daemon.notice end up in?', $default);
+        $config{syslog_file} = prompt('What file would a message sent as daemon.notice end up in?', $default);
 
-	unless (-r $config{syslog_file})
-	{
-	    warn "$config{syslog_file} is not readable.  Syslog tests will be skipped\n";
-	    delete $config{syslog};
-	    delete $config{syslog_file};
-	}
+        unless (-r $config{syslog_file})
+        {
+            warn "$config{syslog_file} is not readable.  Syslog tests will be skipped\n";
+            delete $config{syslog};
+            delete $config{syslog_file};
+        }
     }
 
     open CFG, ">./Install/TestConfig.pm"
-	or die "can't write to ./Install/TestConfig.pm: $!";
+        or die "can't write to ./Install/TestConfig.pm: $!";
 
     print CFG <<"EOF";
 #
@@ -67,36 +69,29 @@ EOF
     print CFG "\%config = \n(\n";
     foreach (keys %config)
     {
-	print CFG "\t$_ => '$config{$_}',\n";
+        print CFG "\t$_ => '$config{$_}',\n";
     }
     print CFG ');';
     close CFG;
 }
 
-WriteMakefile(
-	      'NAME'	=> 'Log::Dispatch',
-	      'VERSION_FROM' => 'Dispatch.pm',
-	      'PM' => {
-		       'Dispatch.pm' => '$(INST_LIBDIR)/Dispatch.pm',
-		       'Dispatch/ApacheLog.pm' => '$(INST_LIBDIR)/Dispatch/ApacheLog.pm',
-		       'Dispatch/Base.pm' => '$(INST_LIBDIR)/Dispatch/Base.pm',
-		       'Dispatch/Output.pm' => '$(INST_LIBDIR)/Dispatch/Output.pm',
-		       'Dispatch/File.pm' => '$(INST_LIBDIR)/Dispatch/File.pm',
-		       'Dispatch/Handle.pm' => '$(INST_LIBDIR)/Dispatch/Handle.pm',
-		       'Dispatch/Screen.pm' => '$(INST_LIBDIR)/Dispatch/Screen.pm',
-		       'Dispatch/Syslog.pm' => '$(INST_LIBDIR)/Dispatch/Syslog.pm',
-		       'Dispatch/Email.pm' => '$(INST_LIBDIR)/Dispatch/Email.pm',
-		       'Dispatch/Email/MailSend.pm' => '$(INST_LIBDIR)/Dispatch/Email/MailSend.pm',
-		       'Dispatch/Email/MailSender.pm' => '$(INST_LIBDIR)/Dispatch/Email/MailSender.pm',
-		       'Dispatch/Email/MailSendmail.pm' => '$(INST_LIBDIR)/Dispatch/Email/MailSendmail.pm',
-		       'Dispatch/Email/MIMELite.pm' => '$(INST_LIBDIR)/Dispatch/Email/MIMELite.pm',
-		      },
+WriteMakefile( NAME	=> 'Log::Dispatch',
+               VERSION_FROM => 'lib/Log/Dispatch.pm',
+               PREREQ_PM => { 'Params::Validate' => 0.15,
+                            },
 
-	      PREREQ_PM => { 'Params::Validate' => 0.15,
-			   },
+               AUTHOR => 'Dave Rolsky <autarch@urth.org>',
+               ABSTRACT => 'Uniform logging interface to multiple outputs',
 
-	      AUTHOR => 'Dave Rolsky <autarch@urth.org>',
-	      ABSTRACT => 'Uniform logging interface to multiple outputs',
-
-	      realclean => { FILES => 'write_mode.tst ./Install/TestConfig.pm ./Install' },
+               realclean => { FILES => 'write_mode.tst ./Install/TestConfig.pm ./Install' },
 	     );
+
+package MY;
+
+sub libscan
+{
+    my $self = shift;
+    my $file = shift;
+
+    return $file =~ /svn/ ? 0 : $self->SUPER::libscan($file);
+}
