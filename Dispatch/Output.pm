@@ -4,14 +4,14 @@ use strict;
 
 use base qw( Log::Dispatch::Base );
 
-use Params::Validate qw(validate SCALAR BOOLEAN);
-Params::Validate::validateion_options( allow_extra => 1 );
+use Params::Validate qw(validate SCALAR ARRAYREF CODEREF);
+Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.21 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.22 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -44,7 +44,7 @@ sub _basic_init
 			    min_level => { type => SCALAR },
 			    max_level => { type => SCALAR,
 					   optional => 1 },
-			    callbacks => { type => SCALAR | ARRAYREF,
+			    callbacks => { type => ARRAYREF | CODEREF,
 					   optional => 1 },
 			  } );
 
