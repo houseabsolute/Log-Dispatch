@@ -14,14 +14,13 @@ sub _get_callbacks
 
     return unless exists $p{callbacks};
 
-    # If it's not an array ref of some sort its a code ref and this'll
-    # cause an error.
-    my @cb = eval { @{ $p{callbacks} }; };
+    return @{ $p{callbacks} }
+        if UNIVERSAL::isa( $p{callbacks}, 'ARRAY' );
 
-    # Must have been a code ref.
-    @cb = ($p{callbacks}) unless @cb;
+    return $p{callbacks}
+        if UNIVERSAL::isa( $p{callbacks}, 'CODE' );
 
-    return @cb;
+    return;
 }
 
 sub _apply_callbacks

@@ -27,6 +27,14 @@ BEGIN
     $tests{Syslog} = ! $@;
 }
 
+my %TestConfig;
+if ( -d '.svn' )
+{
+    %TestConfig = ( email_address => 'autarch@urth.org',
+                    syslog_file   => '/var/log/messages',
+                  );
+}
+
 use Log::Dispatch::File;
 use Log::Dispatch::Handle;
 use Log::Dispatch::Screen;
@@ -37,8 +45,6 @@ if ( eval { require mod_perl } )
 {
     require Log::Dispatch::ApacheLog;
 }
-
-require Install::TestConfig;
 
 $main::loaded = 1;
 result($main::loaded);
@@ -145,19 +151,19 @@ result( defined $dispatch, "Couldn't create Log::Dispatch object\n" );
 }
 
 fake_test(1, 'Log::Dispatch::Email::MailSend'), goto MailSendmail
-    unless $tests{MailSend} && $Install::TestConfig::config{email_address};
+    unless $tests{MailSend} && $TestConfig{email_address};
 # 9  Log::Dispatch::Email::MailSend
 {
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MailSend->new( name => 'Mail::Send',
 							 min_level => 'debug',
-							 to => $Install::TestConfig::config{email_address},
+							 to => $TestConfig{email_address},
 							 subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "Mail::Send test - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with Mail::Send to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    warn "Sending email with Mail::Send to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);
@@ -165,19 +171,19 @@ fake_test(1, 'Log::Dispatch::Email::MailSend'), goto MailSendmail
 
 MailSendmail:
 fake_test(1, 'Log::Dispatch::Email::MailSendmail'), goto MIMELite
-    unless $tests{MailSendmail} && $Install::TestConfig::config{email_address};
+    unless $tests{MailSendmail} && $TestConfig{email_address};
 # 10  Log::Dispatch::Email::MailSendmail
 {
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MailSendmail->new( name => 'Mail::Sendmail',
 							     min_level => 'debug',
-							     to => $Install::TestConfig::config{email_address},
+							     to => $TestConfig{email_address},
 							     subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "Mail::Sendmail test - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with Mail::Sendmail to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    warn "Sending email with Mail::Sendmail to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);
@@ -185,7 +191,7 @@ fake_test(1, 'Log::Dispatch::Email::MailSendmail'), goto MIMELite
 
 MIMELite:
 fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
-    unless $tests{MIMELite} && $Install::TestConfig::config{email_address};
+    unless $tests{MIMELite} && $TestConfig{email_address};
 # 11  Log::Dispatch::Email::MIMELite
 
 {
@@ -193,12 +199,12 @@ fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
 
     $dispatch->add( Log::Dispatch::Email::MIMELite->new( name => 'Mime::Lite',
 							 min_level => 'debug',
-							 to => $Install::TestConfig::config{email_address},
+							 to => $TestConfig{email_address},
 							 subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "MIME::Lite - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with MIME::Lite to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    warn "Sending email with MIME::Lite to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);
@@ -206,7 +212,7 @@ fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
 
 Syslog:
 fake_test(1, 'Log::Dispatch::Syslog'), goto Screen
-    unless $tests{Syslog} && $Install::TestConfig::config{syslog};
+    unless $tests{Syslog} && $TestConfig{syslog};
 # 12  Log::Dispatch::Syslog
 {
     my $dispatch = Log::Dispatch->new;
@@ -221,7 +227,7 @@ fake_test(1, 'Log::Dispatch::Syslog'), goto Screen
     $dispatch->log( level => 'notice', message => "Log::Dispatch::Syslog testing syslog $time" );
 
     my $success = 0;
-    foreach my $line (`tail -10 $Install::TestConfig::config{syslog_file}`)
+    foreach my $line (`tail -10 $TestConfig{syslog_file}`)
     {
 	if ( index $line, "Log::Dispatch::Syslog testing syslog $time")
 	{
@@ -231,7 +237,7 @@ fake_test(1, 'Log::Dispatch::Syslog'), goto Screen
     }
 
     result( $success,
-	    "Log::Dispatch::Syslog test failed to write to $Install::TestConfig::config{syslog_file}\n" );
+	    "Log::Dispatch::Syslog test failed to write to $TestConfig{syslog_file}\n" );
 }
 
 # 13  Log::Dispatch::Screen
@@ -451,7 +457,7 @@ Screen:
 }
 
 # 124  Log::Dispatch::Email::MailSend
-if ( $tests{MailSender} && $Install::TestConfig::config{email_address} )
+if ( $tests{MailSender} && $TestConfig{email_address} )
 {
     my $dispatch = Log::Dispatch->new;
 
@@ -460,12 +466,12 @@ if ( $tests{MailSender} && $Install::TestConfig::config{email_address} )
               ( name => 'Mail::Sender',
                 min_level => 'debug',
                 smtp => 'localhost',
-                to => $Install::TestConfig::config{email_address},
+                to => $TestConfig{email_address},
                 subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "Mail::Sender - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with Mail::Sender to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    warn "Sending email with Mail::Sender to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);

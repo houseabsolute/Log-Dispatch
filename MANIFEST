@@ -1,10 +1,11 @@
 MANIFEST
 README
 LICENSE
+Build.PL
 Changes
 Makefile.PL
+META.yml
 test.pl
-
 lib/Log/Dispatch.pm
 lib/Log/Dispatch/ApacheLog.pm
 lib/Log/Dispatch/Base.pm

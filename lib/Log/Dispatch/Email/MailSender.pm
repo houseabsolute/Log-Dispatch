@@ -14,7 +14,6 @@ use fields qw( buffer buffered from subject to smtp );
 
 use Carp ();
 use Mail::Sender ();
-use Data::Dumper;
 
 use vars qw[ $VERSION ];
 
