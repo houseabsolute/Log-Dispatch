@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Base );
 
 use Carp ();
 
-$VERSION = '2.09';
+$VERSION = '2.10';
 
 1;
 

@@ -1,3 +1,10 @@
+2.10 Feb 11, 2004
+
+- No changes to the core code, just a change to the included
+Makefile.PL so it works with Module::Build 0.23, which breaks
+backwards compatibility (grr).
+
+
 2.09 Jan 09, 2004
 
 - Fix a test failure on Win32 platforms.  The problem was in the test,
@@ -9,8 +16,8 @@ not the code.  Patch by David Viner.
 2.08 Nov 27, 2003
 
 - Added Log::Dispatch->would_log method, which indicates whether
-logging will be done for a given log level.  Suggested by mystery
-person via rt.cpan.org.
+logging will be done for a given log level.  Suggested by Ruslan
+Zakirov.
 
 - Switched tests to use Test::More.
 

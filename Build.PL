@@ -9,6 +9,7 @@ my $build =
                                          'Test::More'       => 0,
                                        },
                         sign        => 1,
+                        create_makefile_pl => 'passthrough',
                       );
 
 $build->add_to_cleanup('write_mode.tst');
