@@ -5,6 +5,18 @@ new dispatcher object and particularly for creating new outputs.
 
 History
 
+1.1
+
+- upped version to 1.1 to indicate my confidence in this release (I'm
+just aking for bug reports, I know).
+- added accepted_levels method to Log::Dispatch::Output based on
+discussions with Dominique Dumont (author of the Log::Dispatch::Tk
+suite).
+- canonical names for log levels are now the unabbreviated form
+(though the abbreviated ones used by syslog are still fine and there
+is no plan to deprecate them).  This really only affects what is
+returned by the new accepted_levels method.
+
 1.010
 
 - fixed a bug in the DESTROY method of Log::Dispatch::Email that
