@@ -9,7 +9,7 @@ use fields qw( stderr );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.13 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -26,7 +26,7 @@ sub new
     }
 
     $self->_basic_init(%params);
-    $self->{stderr} = $params{stderr} if $params{stderr};
+    $self->{stderr} = exists $params{stderr} ? $params{stderr} : 1;
 
     return $self;
 }
@@ -42,7 +42,7 @@ sub log_message
     }
     else
     {
-	print $params{message};
+	print STDOUT $params{message};
     }
 }
 

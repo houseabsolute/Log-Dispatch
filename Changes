@@ -1,3 +1,9 @@
+1.81
+
+- Log::Dispatch::Screen claimed it defaulted to using STDERR but it
+was lying, it defaulted to using STDOUT.  This has been changed so
+that it really does default to STDERR.  Reported by James FitzGibbon.
+
 1.80
 
 - Log::Dispatch::Syslog no longer requires syslog.ph for Perl >=
