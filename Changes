@@ -1,3 +1,8 @@
+2.03 Feb 27, 2003
+
+- Log::Dispatch::ApacheLog would break if a log level was specified as
+a number.  Reported by Kevin Goess.
+
 2.02 Feb 20, 2003
 
 - Added Log::Dispatch->output_exists methods to check that an output
