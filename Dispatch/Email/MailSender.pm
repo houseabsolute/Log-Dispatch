@@ -18,7 +18,7 @@ use Data::Dumper;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -142,7 +142,7 @@ default is to buffer messages.
 =item -- smtp ($)
 
 A string containing the network address of the SMTP server to use for
-sending the email.
+sending the email.  This defaults to localhost.
 
 =item -- callbacks( \& or [ \&, \&, ... ] )
 

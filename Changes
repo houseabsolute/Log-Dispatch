@@ -1,4 +1,7 @@
-2.01
+2.01 Jun 21, 2002
+
+- Added new module Log::Dispatch::Email::MailSender, provided by
+Joseph Annino.
 
 - Log::Dispatch::Output now contains "use Log::Dispatch".
 
