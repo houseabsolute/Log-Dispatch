@@ -1,3 +1,8 @@
+1,7
+
+- Added Log/Dispatch/ApacheLog.pm.  This logs to the Apache error log.
+This is for use under mod_perl.
+
 1.6
 
 NOTE: 1.5 was never released to CPAN.
