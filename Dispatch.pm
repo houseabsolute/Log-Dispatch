@@ -225,9 +225,9 @@ levels are:
  alert
  emergency
 
-Alternately, the numbers 0 through 7 may be used (debug is 0 and emerg
-is 7).  The syslog standard of 'err', 'crit', and 'emerg' are also
-acceptable.
+Alternately, the numbers 0 through 7 may be used (debug is 0 and
+emergency is 7).  The syslog standard of 'err', 'crit', and 'emerg'
+is also acceptable.
 
 =head1 USAGE
 
@@ -296,9 +296,10 @@ Dave Rolsky, <autarch@urth.org>
 
 =head1 SEE ALSO
 
-Log::Dispatch::Email, Log::Dispatch::Email::MailSend,
-Log::Dispatch::Email::MailSendmail, Log::Dispatch::Email::MIMELite,
-Log::Dispatch::File, Log::Dispatch::Handle, Log::Dispatch::Output,
-Log::Dispatch::Screen, Log::Dispatch::Syslog
+Log::Dispatch::ApacheLog, Log::Dispatch::Email,
+Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
+Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
+Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
+Log::Dispatch::Syslog
 
 =cut
