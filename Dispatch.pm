@@ -20,7 +20,7 @@ BEGIN
     foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
     {
 	*{$l} = sub { my Log::Dispatch $self = shift;
-		      $self->log( level => $l, message => join $,, @_ ); };
+		      $self->log( level => $l, message => "@_" ); };
 	$LEVELS{$l} = 1;
     }
 }
@@ -220,7 +220,7 @@ arguments.  Thus, the following calls are equivalent:
  my @array = ('Something', 'bad', 'is', here');
  $dispatcher->alert(@array);
 
- my $scalar = join $,, @array; # That is not a typo.  See perldoc perlvar for info on $,
+ my $scalar = "@array";
  $dispatcher->alert($scalar);
 
 One important caveat about these methods is that its not that forwards

@@ -10,6 +10,7 @@ BEGIN { $| = 1; print "1..122\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
+$^W = 1;
 
 use Log::Dispatch;
 
@@ -379,7 +380,7 @@ Screen:
 
 # 20 - 107: Comprehensive test of new methods that match level names
 {
-    my %levels = map { $_ => $_ } ( qw( debug info notice warning err error crit critical alert emerg emergency ) );
+    my %levels = map { $_ => $_ } ( qw( debug info notice warning error critical alert emergency ) );
     @levels{ qw( err crit emerg ) } = ( qw( error critical emergency ) );
 
     foreach my $allowed_level ( qw( debug info notice warning error critical alert emergency ) )
@@ -400,8 +401,9 @@ Screen:
 
 	    if ( $levels{$test_level} eq $allowed_level )
 	    {
-		result( $text eq (join $,, $test_level, 'test'),
-			"Calling $test_level method should have sent message '$test_level test'\n" );
+		my $expect = join $", $test_level, 'test';
+		result( $text eq $expect,
+			"Calling $test_level method should have sent message '$expect'\n" );
 	    }
 	    else
 	    {
@@ -452,6 +454,7 @@ sub TIEHANDLE
     my $class = shift;
     my $self = {};
     $self->{string} = shift;
+    ${ $self->{string} } ||= '';
 
     return bless $self, $class;
 }

@@ -1,3 +1,10 @@
+1.79
+
+- Don't use $, internally.  Apparently this is usually undefined.
+Instead, the convenience methods now simply take an array of messages
+and turn it into a scalar by doing "@_".  Thanks to Dean Kopesky for
+the bug report.
+
 1.78
 
 - Allow ApacheLog to take either an Apache or Apache::Server object.
