@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..123\n"; }
+BEGIN { $| = 1; print "1..124\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -17,7 +17,7 @@ use Log::Dispatch;
 my %tests;
 BEGIN
 {
-    foreach ( qw( MailSend MIMELite MailSendmail ) )
+    foreach ( qw( MailSend MIMELite MailSendmail MailSender ) )
     {
 	eval "use Log::Dispatch::Email::$_";
 	$tests{$_} = ! $@;
@@ -155,9 +155,9 @@ fake_test(1, 'Log::Dispatch::Email::MailSend'), goto MailSendmail
 							 to => $Install::TestConfig::config{email_address},
 							 subject => 'Log::Dispatch test suite' ) );
 
-    $dispatch->log( level => 'emerg', message => 'Mail::Send test - If you can read this then the test succeeded' );
+    $dispatch->log( level => 'emerg', message => "Mail::Send test - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded\n";
+    warn "Sending email with Mail::Send to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);
@@ -175,9 +175,9 @@ fake_test(1, 'Log::Dispatch::Email::MailSendmail'), goto MIMELite
 							     to => $Install::TestConfig::config{email_address},
 							     subject => 'Log::Dispatch test suite' ) );
 
-    $dispatch->log( level => 'emerg', message => 'Mail::Sendmail test - If you can read this then the test succeeded' );
+    $dispatch->log( level => 'emerg', message => "Mail::Sendmail test - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded\n";
+    warn "Sending email with Mail::Sendmail to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);
@@ -196,9 +196,9 @@ fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
 							 to => $Install::TestConfig::config{email_address},
 							 subject => 'Log::Dispatch test suite' ) );
 
-    $dispatch->log( level => 'emerg', message => 'MIME::Lite - If you can read this then the test succeeded' );
+    $dispatch->log( level => 'emerg', message => "MIME::Lite - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded\n";
+    warn "Sending email with MIME::Lite to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
     undef $dispatch;
 
     result(1);
@@ -448,6 +448,31 @@ Screen:
     close F;
 
     result( $data =~ /^test2/ );
+}
+
+# 124  Log::Dispatch::Email::MailSend
+if ( $tests{MailSender} && $Install::TestConfig::config{email_address} )
+{
+    my $dispatch = Log::Dispatch->new;
+
+    $dispatch->add
+        ( Log::Dispatch::Email::MailSender->new
+              ( name => 'Mail::Sender',
+                min_level => 'debug',
+                smtp => 'localhost',
+                to => $Install::TestConfig::config{email_address},
+                subject => 'Log::Dispatch test suite' ) );
+
+    $dispatch->log( level => 'emerg', message => "Mail::Sender - If you can read this then the test succeeded (PID $$)" );
+
+    warn "Sending email with Mail::Sender to $Install::TestConfig::config{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    undef $dispatch;
+
+    result(1);
+}
+else
+{
+    fake_test(1, 'Log::Dispatch::Email::MailSender')
 }
 
 sub fake_test
