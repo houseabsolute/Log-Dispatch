@@ -319,6 +319,16 @@ messages if you so desire.
 Dominique Dumont has written Log::Dispatch::Tk which allows log
 messages to show up in a window.  This code is available from CPAN.
 
+=head2 Log::Dispatch::Config
+
+Allow configuration of logging via a text file similar (or so I'm
+told) to how it is done with log4j.
+
+=head2 Log::Agent
+
+A very different way of doing a lot of the things that Log::Dispatch
+does.
+
 =head1 AUTHOR
 
 Dave Rolsky, <autarch@urth.org>
