@@ -14,7 +14,7 @@ require 'syslog.ph';
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.9 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -43,7 +43,7 @@ sub _init
     my %params = @_;
 
     $self->{ident}    = $params{ident} || $0;
-    $self->{logopt}   = $params{logopt} || 'cons';
+    $self->{logopt}   = $params{logopt} || '';
     $self->{facility} = $params{facility} || 'user';
     $self->{socket}   = $params{socket} || 'unix';
 
@@ -129,19 +129,20 @@ Defaults to $0.
 A string containing the log options (separated by any separator you
 like).  Valid options are 'cons', 'pid', 'ndelay', and 'nowait'.  See
 the openlog(3) and Sys::Syslog docs for more details.  I would suggest
-not using 'cons' but instead using Log::Dispatch::Screen.
+not using 'cons' but instead using Log::Dispatch::Screen.  Defaults to
+''.
 
 =item -- facility ($)
 
 Specifies what type of program is doing the logging to the system log.
 Valid options are 'auth', 'authpriv', 'cron', 'daemon', 'kern',
 'local0' through 'local7', 'mail, 'news', 'syslog', 'user',
-'uucp'.  This defaults to 'user'
+'uucp'.  Defaults to 'user'
 
 =item -- socket ($)
 
 Tells what type of socket to use for sending syslog messages.  Valid
-options are 'unix' or 'inet'.  Default to 'inet'.
+options are 'unix' or 'inet'.  Defaults to 'inet'.
 
 =back
 
