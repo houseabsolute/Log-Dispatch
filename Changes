@@ -1,5 +1,7 @@
 2.01
 
+- Log::Dispatch::Output now contains "use Log::Dispatch".
+
 - Now requires Params::Validate, which is used to validate parameter
 for constructors and some other methods.
 
