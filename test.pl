@@ -443,7 +443,7 @@ Screen:
     undef $f1;
 
     open F, '<./write_mode.tst'
-	or die "Cannot read ./write_mode.tst: $!";
+	or die "Cannot read ./wr_mode.tst: $!";
     my $data = join '', <F>;
     close F;
 
