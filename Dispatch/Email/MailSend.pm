@@ -11,7 +11,7 @@ use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.19 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -133,6 +133,17 @@ Sends a message if the level is greater than or equal to the object's
 minimum level.
 
 =back
+
+=head1 CHANGING HOW MAIL IS SENT
+
+Since C<Mail::Send> is a subclass of C<Mail::Mailer>, you can change
+how mail is sent from this module by simply C<use>ing C<Mail::Mailer>
+in your code before mail is sent.  For example, to send mail via smtp,
+you could do:
+
+  use Mail::Mailer 'smtp', Server => 'foo.example.com';
+
+For more details, see the C<Mail::Mailer> docs.
 
 =head1 AUTHOR
 
