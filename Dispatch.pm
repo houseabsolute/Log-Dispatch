@@ -10,7 +10,7 @@ use fields qw( outputs callbacks );
 
 use Carp ();
 
-$VERSION = '1.78';
+$VERSION = '1.79';
 
 1;
 
