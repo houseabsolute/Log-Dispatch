@@ -3,23 +3,23 @@ package Log::Dispatch::Base;
 use strict;
 use vars qw($VERSION @EXPORT_OK);
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.7 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
 sub _get_callbacks
 {
     shift;
-    my %params = @_;
+    my %p = @_;
 
-    return unless exists $params{callbacks};
+    return unless exists $p{callbacks};
 
     # If it's not an array ref of some sort its a code ref and this'll
     # cause an error.
-    my @cb = eval { @{ $params{callbacks} }; };
+    my @cb = eval { @{ $p{callbacks} }; };
 
     # Must have been a code ref.
-    @cb = ($params{callbacks}) unless @cb;
+    @cb = ($p{callbacks}) unless @cb;
 
     return @cb;
 }
@@ -27,12 +27,12 @@ sub _get_callbacks
 sub _apply_callbacks
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
-    my $msg = delete $params{message};
+    my $msg = delete $p{message};
     foreach my $cb ( @{ $self->{callbacks} } )
     {
-	$msg = $cb->( message => $msg, %params );
+	$msg = $cb->( message => $msg, %p );
     }
 
     return $msg;
