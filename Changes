@@ -1,4 +1,10 @@
-1,7
+1.75
+
+- Additional argument 'level' passed to message processing callbacks.
+Suggested by Jeff MacDonald.
+- Log/Dispatch.pm: added docs section on Log::Dispatch::Tk.
+
+1.7
 
 - Added Log/Dispatch/ApacheLog.pm.  This logs to the Apache error log.
 This is for use under mod_perl.
@@ -34,7 +40,7 @@ objects included with this distribution.
 callbacks and documented this.
 - Log/Dispatch/Base.pm: new base class for both Log::Dispatch and
 Log::Dispatch::Output objects (contains callback related code).  You
-should never need to deal with this class unles you are me.
+should never need to deal with this class unless you are me.
 - Log/Dispatch/Output.pm: document _accepted_levels.
 - Log/Dispatch/Output.pm: Fix _accepted_levels so that emergency level
 is returned as 'emergency', not 'emerg'.
@@ -60,7 +66,7 @@ newlines to outgoing messages.
 1.1
 
 - upped version to 1.1 to indicate my confidence in this release (I'm
-just aking for bug reports, I know).
+just asking for bug reports, I know).
 - added accepted_levels method to Log::Dispatch::Output based on
 discussions with Dominique Dumont (author of the Log::Dispatch::Tk
 suite).
