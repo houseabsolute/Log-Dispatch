@@ -6,11 +6,12 @@ use Log::Dispatch::Email;
 
 use base qw( Log::Dispatch::Email );
 
+use Carp ();
 use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -27,11 +28,19 @@ sub send_email
     # Does this ever work for this module?
     $msg->set('From', $self->{from}) if $self->{from};
 
-    my $fh = $msg->open;
+    eval
+    {
+	my $fh = $msg->open
+	    or die "Cannot open handle to mail program";
 
-    $fh->print( $p{message} );
+	$fh->print( $p{message} )
+	    or die "Cannot print message to mail program handle";
 
-    $fh->close;
+	$fh->close
+	    or die "Cannot close handle to mail program";
+    };
+
+    warn $@ if $@;
 }
 
 
