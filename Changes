@@ -4,7 +4,7 @@
 Jeff Hamman.
 
 - Fix for version issues between CPAN versions of
-Log::Dispatch::ApacheLog.
+Log::Dispatch::ApacheLog.  Reported by Jost Krieger.
 
 1.75
 
