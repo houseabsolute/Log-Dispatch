@@ -3,13 +3,15 @@ package Log::Dispatch::Output;
 use strict;
 
 use base qw( Log::Dispatch::Base );
-use fields qw( name min_level max_level level_names level_numbers callbacks );
+
+use Params::Validate qw(validate SCALAR BOOLEAN);
+Params::Validate::validateion_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.20 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.21 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -24,20 +26,27 @@ sub new
 sub log
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
-    return unless $self->_should_log($params{level});
+    return unless $self->_should_log($p{level});
 
-    $params{message} = $self->_apply_callbacks(%params)
+    $p{message} = $self->_apply_callbacks(%p)
 	if $self->{callbacks};
 
-    $self->log_message(%params);
+    $self->log_message(%p);
 }
 
 sub _basic_init
 {
     my $self = shift;
-    my %params = @_;
+
+    my %p = validate( @_, { name => { type => SCALAR },
+			    min_level => { type => SCALAR },
+			    max_level => { type => SCALAR,
+					   optional => 1 },
+			    callbacks => { type => SCALAR | ARRAYREF,
+					   optional => 1 },
+			  } );
 
     # Map the names to numbers so they can be compared.
     $self->{level_names} = [ qw( debug info notice warning error critical alert emergency ) ];
@@ -48,21 +57,18 @@ sub _basic_init
 			       crit  => 5,
 			       emerg => 7 };
 
-    $self->{name} = $params{name}
-	or die "No name supplied for ", ref $self, " object";
+    $self->{name} = $p{name};
 
-    die "No min_level supplied for ", ref $self, " object"
-	unless exists $params{min_level};
-    $self->{min_level} = $self->_level_as_number($params{min_level});
+    $self->{min_level} = $self->_level_as_number($p{min_level});
     die "Invalid level specified for min_level" unless defined $self->{min_level};
 
     # Either use the parameter supplies or just the highest possible
     # level.
     $self->{max_level} =
-	exists $params{max_level} ? $self->_level_as_number( $params{max_level} ) : $#{ $self->{level_names} };
+	exists $p{max_level} ? $self->_level_as_number( $p{max_level} ) : $#{ $self->{level_names} };
     die "Invalid level specified for max_level" unless defined $self->{max_level};
 
-    my @cb = $self->_get_callbacks(%params);
+    my @cb = $self->_get_callbacks(%p);
     $self->{callbacks} = \@cb if @cb;
 }
 
@@ -141,11 +147,11 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* object
       my $proto = shift;
       my $class = ref $proto || $proto;
 
-      my %params = @_;
+      my %p = @_;
 
       my $self = bless {}, $class
 
-      $self->_basic_init(%params);
+      $self->_basic_init(%p);
 
       # Do more if you like
   }
@@ -153,9 +159,9 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* object
   sub log_message
   {
       my $self = shift;
-      my %params = @_;
+      my %p = @_;
 
-      # Do something with message in $params{message}
+      # Do something with message in $p{message}
   }
 
 =head1 DESCRIPTION
@@ -167,7 +173,7 @@ should be derived.
 
 =over 4
 
-=item * new(%PARAMS)
+=item * new(%p)
 
 This must be overridden in a subclass.  Takes the following
 parameters:
@@ -203,7 +209,7 @@ will only be applied to a given message once.  If they do not return
 the message then you will get no output.  Make sure to return the
 message!
 
-=item * _basic_init(%PARAMS)
+=item * _basic_init(%p)
 
 This should be called from a subclass's constructor.  Make sure to
 pass the arguments in @_ to it.  It sets the object's name and minimum
