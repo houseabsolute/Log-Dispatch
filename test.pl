@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..126\n"; }
+BEGIN { $| = 1; print "1..127\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -210,6 +210,8 @@ fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
     result(1);
 }
 
+Syslog:
+{ ; }
 # 12 is gone
 
 # 13  Log::Dispatch::Screen
@@ -468,13 +470,14 @@ else
             "nomama output should not exist" );
 }
 
-# 127  Test Log::Dispatch::File
+# 127 - 128  Test Log::Dispatch::File - close_after_write & permissions
 {
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::File->new( name => 'close',
 					      min_level => 'info',
 					      filename => './close_test.log',
+                                              permissions => 0777,
                                               close_after_write => 1 ) );
 
     $dispatch->log( level => 'info', message => "info\n" );
@@ -487,6 +490,13 @@ else
 	    "First line in log file is '$log[0]', not 'info'\n" );
 
     close LOG1;
+
+    my $mode = (stat('./close_test.log'))[2]
+        or die "Cannot stat ./close_test.log: $!";
+
+    my $mode_string = sprintf( '%04o', $mode & 07777 );
+    result( $mode_string eq '0777',
+            "Mode should be 0777 but it is $mode_string\n" );
 
     unlink './close_test.log'
 	or warn "Can't remove ./close_test.log: $!";
