@@ -11,7 +11,7 @@ use Mail::Sendmail ();
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.9 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -20,12 +20,12 @@ sub send_email
     my Log::Dispatch::Email::MailSendmail $self = shift;
     my %params = @_;
 
-    my %mail = ( To      => join ',', @{ $self->{to} },
+    my %mail = ( To      => (join ',', @{ $self->{to} }),
 		 Subject => $self->{subject},
 		 Message => $params{message},
+		 # Mail::Sendmail insists on having this parameter.
+		 From    => $self->{from} || 'LogDispatch@foo.bar',
 	       );
-
-    $mail{From} = $self->{from} if defined $self->{from};
 
     Mail::Sendmail::sendmail(%mail)
 	or Carp::carp("Error sending mail: $Mail::Sendmail::error");
@@ -93,6 +93,10 @@ addresses.  Required.
 
 A string containing an email address.  This is optional and may not
 work with all mail sending methods.
+
+NOTE: The Mail::Sendmail module requires an address be passed to it to
+set this in the mail it sends.  We pass in 'LogDispatch@foo.bar' as
+the default.
 
 =item -- buffered (0 or 1)
 
