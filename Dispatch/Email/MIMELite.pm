@@ -11,7 +11,7 @@ use MIME::Lite;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.13 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -37,7 +37,7 @@ __END__
 =head1 NAME
 
 Log::Dispatch::Email::MIMELite - Subclass of Log::Dispatch::Email that
-uses the Mail::Sendmail module
+uses the MIME::Lite module
 
 =head1 SYNOPSIS
 
