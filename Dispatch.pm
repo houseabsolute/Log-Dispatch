@@ -337,6 +337,15 @@ Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
 Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
 Log::Dispatch::Syslog
 
+Log::Dispatch::Tk, written by Dominique Dumont.  Log output to a Tk
+window.
+
+Log::Dispatch::Config, written by Miyagawa Tatsuhiko.  Configure all
+your logging via a config file, similar to log4j.
+
+Log::Dispatch::DBI, written by Miyagawa Tatsuhiko.  Log output to a
+DBI handle.
+
 Log::Agent - similar capabilities with a different interface.  If you
 like what Params::Validate does but not its 'feel' try this one
 instead.
