@@ -28,7 +28,7 @@ but no one else ;)
 installation process.
 
 - Log::Dispatch::Email::MailSender was causing Mail::Sender to send
-debug output to STDERR if warning were on.  Now it's not.
+debug output to STDERR if warnings were on.  Now it's not.
 
 2.04 Mar 21, 2003  (the "not in my name" release)
 
