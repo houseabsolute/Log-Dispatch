@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..124\n"; }
+BEGIN { $| = 1; print "1..126\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -473,6 +473,21 @@ if ( $tests{MailSender} && $Install::TestConfig::config{email_address} )
 else
 {
     fake_test(1, 'Log::Dispatch::Email::MailSender')
+}
+
+# 125 - 126 dispatcher exists
+{
+    my $dispatch = Log::Dispatch->new;
+
+    $dispatch->add
+        ( Log::Dispatch::Screen->new( name => 'yomama',
+                                      min_level => 'alert' ) );
+
+    result( $dispatch->output('yomama'),
+            "yomama output should exist" );
+
+    result( ! $dispatch->output('nomama'),
+            "nomama output should not exist" );
 }
 
 sub fake_test
