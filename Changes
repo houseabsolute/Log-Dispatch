@@ -1,4 +1,4 @@
-2.07
+2.07 Sep 27, 2003
 
 - Added Log::Dispatch::File::Locked.  Based on code from JAA Klunder.
 
@@ -6,6 +6,8 @@
 
 - Fix warning from Log::Dispatch::File if it was loaded after
 Attribute::Handlers.  Reported by Mike Schilli.
+
+- Fixed up POD to pass pod tests.
 
 2.06 May 1, 2003
 
