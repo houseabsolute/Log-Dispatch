@@ -11,7 +11,7 @@ use MIME::Lite;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.19 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -31,23 +31,25 @@ sub send_email
     unless ( MIME::Lite->new(%mail)->send )
     {
 	warn "Error sending mail with MIME::Lite" if $^W;
+    }
 }
 
 __END__
 
 =head1 NAME
 
-Log::Dispatch::Email::MIMELite - Subclass of Log::Dispatch::Email that
-uses the MIME::Lite module
+Log::Dispatch::Email::MIMELite - Subclass of Log::Dispatch::Email that uses the MIME::Lite module
 
 =head1 SYNOPSIS
 
   use Log::Dispatch::Email::MIMELite;
 
-  my $email = Log::Dispatch::Email::MIMELite->new( name => 'email',
-                                                   min_level => 'emerg',
-                                                   to => [ qw( foo@bar.com bar@baz.org ) ],
-                                                   subject => 'Oh no!!!!!!!!!!!', );
+  my $email =
+      Log::Dispatch::Email::MIMELite->new
+          ( name => 'email',
+            min_level => 'emerg',
+            to => [ qw( foo@bar.com bar@baz.org ) ],
+            subject => 'Oh no!!!!!!!!!!!', );
 
   $email->log( message => "Something bad is happening\n", level => 'emerg' );
 
