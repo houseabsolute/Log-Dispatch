@@ -11,9 +11,10 @@ use IO::File;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.9 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
+BEGIN
 {
     my $exists;
     eval { $exists = O_APPEND(); };
