@@ -5,6 +5,7 @@ Makefile.PL
 test.pl
 
 Dispatch.pm
+Dispatch/ApacheLog.pm
 Dispatch/Base.pm
 Dispatch/File.pm
 Dispatch/Handle.pm

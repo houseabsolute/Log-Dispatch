@@ -112,6 +112,7 @@ WriteMakefile(
 	      'VERSION_FROM' => 'Dispatch.pm',
 	      'PM' => {
 		       'Dispatch.pm' => '$(INST_LIBDIR)/Dispatch.pm',
+		       'Dispatch/ApacheLog.pm' => '$(INST_LIBDIR)/Dispatch/ApacheLog.pm',
 		       'Dispatch/Base.pm' => '$(INST_LIBDIR)/Dispatch/Base.pm',
 		       'Dispatch/Output.pm' => '$(INST_LIBDIR)/Dispatch/Output.pm',
 		       'Dispatch/File.pm' => '$(INST_LIBDIR)/Dispatch/File.pm',
