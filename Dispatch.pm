@@ -322,6 +322,11 @@ text file similar (or so I'm told) to how it is done with log4j.
 Log::Dispatch::DBI, also written by Tatsuhiko Miyagawa.  Log output to a
 database table.
 
+=head2 Log::Log4perl
+
+An implementation of Java's log4j API in Perl, using Log::Dispatch to
+do the actual logging.  Created by Mike Schilli and Kevin Goess.
+
 =head2 Log::Agent
 
 A very different API for doing many of the same things that
