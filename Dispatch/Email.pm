@@ -11,7 +11,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -52,7 +52,7 @@ sub log_message
 
     if ($self->{buffered})
     {
-	push @{ $self->{buffer} }, $p{message},
+	push @{ $self->{buffer} }, $p{message};
     }
     else
     {
