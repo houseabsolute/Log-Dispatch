@@ -9,7 +9,7 @@ use fields qw( stderr );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.1 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.2 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -62,7 +62,7 @@ Log::Dispatch::Screen - Object for logging to the screen
                                            min_level => 'debug',
                                            stderr    => 1 );
 
-  $screen->log( level => 'alert', message => "I'm searching the city for sci-fi wasabi" );
+  $screen->log( level => 'alert', message => "I'm searching the city for sci-fi wasabi\n" );
 
 =head1 DESCRIPTION
 
