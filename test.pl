@@ -383,8 +383,6 @@ Screen:
 		result( $text eq '',
 			"Calling $test_level method should not have logged anything but we got '$text'\n" );
 	    }
-
-	    $text = '';
 	}
     }
 }
