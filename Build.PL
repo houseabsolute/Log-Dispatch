@@ -10,7 +10,9 @@ EOF
 my $build =
     $class->new( module_name => 'Log::Dispatch',
                  license     => 'perl',
-                 requires    => { 'Params::Validate' => 0.15 },
+                 requires    => { 'Params::Validate' => 0.15,
+                                  'Test::More'       => 0,
+                                },
                );
 
 $build->create_build_script;
