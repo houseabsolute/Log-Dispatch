@@ -1,7 +1,8 @@
 2.08 Nov 27, 2003
 
 - Added Log::Dispatch->would_log method, which indicates whether
-logging will be done for a given log level.
+logging will be done for a given log level.  Suggested by mystery
+person via rt.cpan.org.
 
 - Switched tests to use Test::More.
 
