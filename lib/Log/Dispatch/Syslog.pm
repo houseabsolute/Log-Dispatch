@@ -149,7 +149,7 @@ Valid options are 'auth', 'authpriv', 'cron', 'daemon', 'kern',
 =item * socket ($)
 
 Tells what type of socket to use for sending syslog messages.  Valid
-options are 'unix' or 'inet'.  Defaults to 'inet'.
+options are 'unix' or 'inet'.  Defaults to 'unix'.
 
 =item * callbacks( \& or [ \&, \&, ... ] )
 
