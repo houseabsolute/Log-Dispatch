@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..126\n"; }
+BEGIN { $| = 1; print "1..127\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -488,6 +488,30 @@ else
 
     result( ! $dispatch->output('nomama'),
             "nomama output should not exist" );
+}
+
+# 127  Test Log::Dispatch::File
+{
+    my $dispatch = Log::Dispatch->new;
+
+    $dispatch->add( Log::Dispatch::File->new( name => 'close',
+					      min_level => 'info',
+					      filename => './close_test.log',
+                                              close_after_write => 1 ) );
+
+    $dispatch->log( level => 'info', message => "info\n" );
+
+    open LOG1, './close_test.log'
+	or die "Can't read ./clse_test.log: $!";
+
+    my @log = <LOG1>;
+    result( $log[0] eq "info\n",
+	    "First line in log file is '$log[0]', not 'info'\n" );
+
+    close LOG1;
+
+    unlink './close_test.log'
+	or warn "Can't remove ./close_test.log: $!";
 }
 
 sub fake_test
