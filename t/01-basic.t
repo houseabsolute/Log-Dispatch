@@ -21,7 +21,7 @@ BEGIN
 }
 
 my %TestConfig;
-if ( -d '.svn1' )
+if ( -d '.svn' )
 {
     %TestConfig = ( email_address => 'autarch@urth.org',
                     syslog_file   => '/var/log/messages',
