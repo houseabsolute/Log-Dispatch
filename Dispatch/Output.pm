@@ -8,7 +8,7 @@ use vars qw[ $VERSION ];
 
 use Carp;
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.9 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -35,10 +35,10 @@ sub _basic_init
 
     # Map the names to numbers so they can be compared.
     my $x = 0;
-    $self->{level_names} = [ qw( debug info notice warning err crit alert emerg ) ];
+    $self->{level_names} = [ qw( debug info notice warning error critical alert emerg ) ];
     $self->{level_numbers} = { (map {$_ => $x++} @{ $self->{level_names} }),
-			       error     => 4,
-			       critical  => 5,
+			       err     => 4,
+			       crit  => 5,
 			       emergency => 7 };
 
     $self->{name} = $params{name}
@@ -78,6 +78,13 @@ sub max_level
     my Log::Dispatch::Output $self = shift;
 
     return $self->{level_names}[$self->{max_level}];
+}
+
+sub accepted_levels
+{
+    my Log::Dispatch::Output $self = shift;
+
+    return @{ $self->{level_names} }[ $self->{min_level} .. $self->{max_level} ] ;
 }
 
 sub _should_log
@@ -181,6 +188,11 @@ Returns the object's minimum log level.
 =item * max_level
 
 Returns the object's maximum log level.
+
+=item * accepted_levels
+
+Returns a list of the object's accepted levels (by name) from minimum
+to maximum.
 
 =item * log( level => $, message => $ )
 
