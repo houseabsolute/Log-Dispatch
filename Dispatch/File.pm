@@ -11,7 +11,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.20 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.21 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
@@ -185,13 +185,6 @@ be called directly but should be called through the C<log()> method
 =head1 AUTHOR
 
 Dave Rolsky, <autarch@urth.org>
-
-=head1 SEE ALSO
-
-Log::Dispatch, Log::Dispatch::ApacheLog, Log::Dispatch::Email,
-Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
-Log::Dispatch::Email::MIMELite, Log::Dispatch::Handle,
-Log::Dispatch::Output, Log::Dispatch::Screen, Log::Dispatch::Syslog
 
 =cut
 

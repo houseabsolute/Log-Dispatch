@@ -334,9 +334,9 @@ Dave Rolsky, <autarch@urth.org>
 =head1 SEE ALSO
 
 Log::Dispatch::ApacheLog, Log::Dispatch::Email,
-Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
-Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
-Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
-Log::Dispatch::Syslog
+Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSender,
+Log::Dispatch::Email::MailSendmail, Log::Dispatch::Email::MIMELite,
+Log::Dispatch::File, Log::Dispatch::Handle, Log::Dispatch::Output,
+Log::Dispatch::Screen, Log::Dispatch::Syslog
 
 =cut

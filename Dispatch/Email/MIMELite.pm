@@ -11,7 +11,7 @@ use MIME::Lite;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -125,12 +125,5 @@ minimum level.
 =head1 AUTHOR
 
 Dave Rolsky, <autarch@urth.org>
-
-=head1 SEE ALSO
-
-Log::Dispatch, Log::Dispatch::ApacheLog, Log::Dispatch::Email,
-Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
-Log::Dispatch::File, Log::Dispatch::Handle, Log::Dispatch::Output,
-Log::Dispatch::Screen, Log::Dispatch::Syslog
 
 =cut

@@ -13,7 +13,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.24 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.25 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -273,12 +273,5 @@ set.  Please make sure to use the C<_basic_init> method as directed.
 =head1 AUTHOR
 
 Dave Rolsky, <autarch@urth.org>
-
-=head1 SEE ALSO
-
-Log::Dispatch, Log::Dispatch::ApacheLog, Log::Dispatch::Email,
-Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
-Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
-Log::Dispatch::Handle, Log::Dispatch::Screen, Log::Dispatch::Syslog
 
 =cut
