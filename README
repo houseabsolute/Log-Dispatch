@@ -5,6 +5,21 @@ new dispatcher object and particularly for creating new outputs.
 
 History
 
+1.010
+
+- fixed a bug in the DESTROY method of Log::Dispatch::Email that
+caused an annoying error and may have caused spurious emails to be
+sent (thanks to Radu Greab).
+
+- fixed a bug in Log::Dispatch::Email::MailSendmail.  For some reason
+this module demands a 'from' address.
+
+1.009
+
+- Created this version simply to address an issue with CPAN and my
+internal version numbers having a conflict.  This has no changes from
+1.008.
+
 1.008
 
 - Fixed a bug causing unitialized value warnings with -w (oops).
