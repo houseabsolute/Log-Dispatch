@@ -9,7 +9,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -173,7 +173,40 @@ should be derived.
 
 =item * new(%PARAMS)
 
-This must be overridden in a subclass.
+This must be overridden in a subclass.  Takes the following
+parameters:
+
+=item -- name ($)
+
+The name of the object (not the filename!).  Required.
+
+=item -- min_level ($)
+
+The minimum logging level this object will accept.  See the
+Log::Dispatch documentation for more information.  Required.
+
+=item -- max_level ($)
+
+The maximum logging level this obejct will accept.  See the
+Log::Dispatch documentation for more information.  This is not
+required.  By default the maximum is the highest possible level (which
+means functionally that the object has no maximum).
+
+=item -- callbacks( \& or [ \&, \&, ... ] )
+
+This parameter may be a single subroutine reference or an array
+reference of subroutine references.  These callbacks will be called in
+the order they are given and passed a hash containing the following
+keys:
+
+ ( message => $log_message )
+
+It's a hash in case I need to add parameters in the future.
+
+The callbacks are expected to modify the message and then return a
+single scalar containing that modified message.  These callbacks will
+be called when either the C<log> or C<log_to> methods are called and
+will only be applied to a given message once.
 
 =item * _basic_init(%PARAMS)
 
@@ -199,22 +232,6 @@ Returns the object's maximum log level.
 Returns a list of the object's accepted levels (by name) from minimum
 to maximum.
 
-=item -- callbacks( \& or [ \&, \&, ... ] )
-
-This parameter may be a single subroutine reference or an array
-reference of subroutine references.  These callbacks will be called in
-the order they are given and passed a hash containing the following
-keys:
-
- ( message => $log_message )
-
-It's a hash in case I need to add parameters in the future.
-
-The callbacks are expected to modify the message and then return a
-single scalar containing that modified message.  These callbacks will
-be called when either the C<log> or C<log_to> methods are called and
-will only be applied to a given message once.
-
 =item * log( level => $, message => $ )
 
 Sends a message if the level is greater than or equal to the object's
@@ -235,11 +252,6 @@ This method will take a log level as a string (or a number) and return
 the number of that log level.  If not given an argument, it returns
 the calling object's log level instead.  If it cannot determine the
 level then it will issue a warning and return undef.
-
-=item * _accepted_levels
-
-This method returns a list of the canonical (expanded) names of the
-log levels that the object accepts, from minimum to maximum.
 
 =back
 
