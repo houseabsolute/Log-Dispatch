@@ -10,7 +10,7 @@ use Mail::Sendmail ();
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.19 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.20 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -36,17 +36,18 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch::Email::MailSendmail - Subclass of Log::Dispatch::Email
-that uses the Mail::Sendmail module
+Log::Dispatch::Email::MailSendmail - Subclass of Log::Dispatch::Email that uses the Mail::Sendmail module
 
 =head1 SYNOPSIS
 
   use Log::Dispatch::Email::MailSendmail;
 
-  my $email = Log::Dispatch::Email::MailSendmail->new( name => 'email',
-                                                       min_level => 'emerg',
-                                                       to => [ qw( foo@bar.com bar@baz.org ) ],
-                                                       subject => 'Oh no!!!!!!!!!!!', );
+  my $email =
+      Log::Dispatch::Email::MailSendmail->new
+          ( name => 'email',
+            min_level => 'emerg',
+            to => [ qw( foo@bar.com bar@baz.org ) ],
+            subject => 'Oh no!!!!!!!!!!!', );
 
   $email->log( message => 'Something bad is happening', level => 'emerg' );
 

@@ -11,7 +11,7 @@ use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -48,17 +48,18 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch::Email::MailSend - Subclass of Log::Dispatch::Email that
-uses the Mail::Send module
+Log::Dispatch::Email::MailSend - Subclass of Log::Dispatch::Email that uses the Mail::Send module
 
 =head1 SYNOPSIS
 
   use Log::Dispatch::Email::MailSend;
 
-  my $email = Log::Dispatch::Email::MailSend->new( name => 'email',
-                                                   min_level => 'emerg',
-                                                   to => [ qw( foo@bar.com bar@baz.org ) ],
-                                                   subject => 'Oh no!!!!!!!!!!!', );
+  my $email =
+      Log::Dispatch::Email::MailSend->new
+          ( name => 'email',
+            min_level => 'emerg',
+            to => [ qw( foo@bar.com bar@baz.org ) ],
+            subject => 'Oh no!!!!!!!!!!!', );
 
   $email->log( message => 'Something bad is happening', level => 'emerg' );
 

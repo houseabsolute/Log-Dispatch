@@ -15,5 +15,6 @@ Dispatch/Output.pm
 Dispatch/Screen.pm
 Dispatch/Syslog.pm
 Dispatch/Email/MailSend.pm
+Dispatch/Email/MailSender.pm
 Dispatch/Email/MailSendmail.pm
 Dispatch/Email/MIMELite.pm
