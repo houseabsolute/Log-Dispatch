@@ -1,5 +1,7 @@
 2.07
 
+- Added Log::Dispatch::File::Locked.  Based on code from JAA Klunder.
+
 - Check all system call return values.
 
 - Fix warning from Log::Dispatch::File if it was loaded after
