@@ -1,4 +1,9 @@
-2.06
+2.06 May 1, 2003
+
+  "Arise ye workers from your slumbers
+   Arise ye criminals of want
+   For reason in revolt now thunders
+   and at last ends the age of cant."
 
 - Added a permissions parameter to Log::Dispatch::File->new.  Based on
 a patch from James FitzGibbon.
