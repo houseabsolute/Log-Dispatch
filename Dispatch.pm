@@ -132,7 +132,7 @@ Log::Dispatch - Dispatches messages to multiple Log::Dispatch::* objects
 
   $dispatcher->add( Log::Dispatch::File->new( name => 'file1',
                                               min_level => 'debug',
-                                              file => 'logfile' ) );
+                                              filename => 'logfile' ) );
 
   $dispatcher->log( level => 'info',
                     message => 'Blah, blah' );
