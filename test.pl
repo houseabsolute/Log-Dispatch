@@ -17,16 +17,13 @@ use Log::Dispatch;
 my %tests;
 BEGIN
 {
-    eval "use Log::Dispatch::Email::MailSend;";
-    $tests{MailSend} = ! $@;
+    foreach ( qw( MailSend MIMELite Sendmail ) )
+    {
+	eval "use Log::Dispatch::Email::$_";
+	$tests{$_} = ! $@;
+    }
 
-    eval "use Log::Dispatch::Email::MIMELite;";
-    $tests{MIMELite} = ! $@;
-
-    eval "use Log::Dispatch::Email::MailSendmail;";
-    $tests{MailSendmail} = ! $@;
-
-    eval "use Log::Dispatch::Syslog;";
+    eval "use Log::Dispatch::Syslog";
     $tests{Syslog} = ! $@;
 }
 
@@ -425,6 +422,32 @@ Screen:
     {
 	result( ! Log::Dispatch->level_is_valid($l) );
     }
+}
+
+# 123: make sure passing mode as write works
+{
+    local *F;
+    open F, '>./write_mode.tst'
+	or die "Cannot open ./write_mode.tst: $!";
+    print F "test1\n";
+    close F;
+
+    my $f1 = Log::Dispatch::File->new( name => 'file',
+				       min_level => 1,
+				       filename => './write_mode.tst',
+				       mode => 'write',
+				      );
+    $f1->log( level => 'emerg',
+	      message => "test2\n" );
+
+    undef $f1;
+
+    open F, '<./write_mode.tst'
+	or die "Cannot read ./write_mode.tst: $!";
+    my $data = join '', <F>;
+    close F;
+
+    result( $data =~ /^test2/ );
 }
 
 sub fake_test

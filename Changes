@@ -1,3 +1,14 @@
+1.80
+
+- Log::Dispatch::Syslog no longer requires syslog.ph for Perl >=
+5.006.  Patch by Benoit Beausejour.
+
+- If you passed a mode parameter to Log::Dispatch::File it always
+thought the mode was append, no matter what was passed.  Patch from
+Luke Bakken.
+
+- Log::Dispatch::File no longer uses IO::File internally.
+
 1.79
 
 - Don't use $, internally.  Apparently this is usually undefined.
