@@ -5,11 +5,13 @@ use strict;
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
-use fields qw( stderr );
+
+use Params::Validate qw(validate BOOLEAN);
+Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -17,12 +19,15 @@ sub new
 {
     my $proto = shift;
     my $class = ref $proto || $proto;
-    my %params = @_;
+
+    my %p = validate( @_, { stderr => { type => BOOLEAN,
+					default => 1 },
+			  } );
 
     my $self = bless {}, $class;
 
-    $self->_basic_init(%params);
-    $self->{stderr} = exists $params{stderr} ? $params{stderr} : 1;
+    $self->_basic_init(%p);
+    $self->{stderr} = exists $p{stderr} ? $p{stderr} : 1;
 
     return $self;
 }
@@ -30,15 +35,15 @@ sub new
 sub log_message
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     if ($self->{stderr})
     {
-	print STDERR $params{message};
+	print STDERR $p{message};
     }
     else
     {
-	print STDOUT $params{message};
+	print STDOUT $p{message};
     }
 }
 
@@ -67,7 +72,7 @@ STDOUT or STDERR).
 
 =over 4
 
-=item * new(%PARAMS)
+=item * new(%p)
 
 This method takes a hash of parameters.  The following options are
 valid:
