@@ -91,7 +91,7 @@ sub _log_to
 {
     my $self = shift;
     my %params = @_;
-    my $name = delete $params{name};
+    my $name = $params{name};
 
     if (exists $self->{outputs}{$name})
     {
