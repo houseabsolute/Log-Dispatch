@@ -3,6 +3,9 @@
 - New method: Log::Dispatch->level_is_valid($string).  Suggested by
 Jeff Hamman.
 
+- Fix for version issues between CPAN versions of
+Log::Dispatch::ApacheLog.
+
 1.75
 
 - Additional argument 'level' passed to message processing callbacks.
