@@ -18,7 +18,7 @@ use Data::Dumper;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.2 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -27,11 +27,11 @@ sub new
     my $proto = shift;
     my $class = ref $proto || $proto;
 
-    my %params = @_;
+    my %p = @_;
 
-    my $smtp = delete $params{smtp};
+    my $smtp = delete $p{smtp} || 'localhost';
 
-    my $self = $class->SUPER::new(%params);
+    my $self = $class->SUPER::new(%p);
 
     $self->{smtp} = $smtp;
 
@@ -41,21 +41,23 @@ sub new
 sub send_email
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     eval
     {
         my $sender =
             Mail::Sender->new( { from => $self->{from} || 'LogDispatch@foo.bar',
                                  replyto => $self->{from} || 'LogDispatch@foo.bar',
-                                 to => join ',', @{ $self->{to} },
+                                 to => ( join ',', @{ $self->{to} } ),
                                  subject => $self->{subject},
                                  smtp => $self->{smtp},
-                                 debug => \*STDERR,
-                               } )
-                or die "Error sending mail: $Mail::Sender::Error";
+                                 ( $^W ? ( debug => \*STDERR ) : () ),
+                               } );
 
-        $sender->MailMsg( $params{message} )
+        die "Error sending mail ($sender): $Mail::Sender::Error"
+            unless ref $sender;
+
+        ref $sender->MailMsg( { msg => $p{message} } )
             or die "Error sending mail: $Mail::Sender::Error";
     };
 
