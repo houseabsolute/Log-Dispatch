@@ -11,7 +11,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.21 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.22 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
@@ -49,32 +49,49 @@ sub _make_handle
 			    mode      => { type => SCALAR,
 					   default => '>' },
 			    autoflush => { type => BOOLEAN,
-					   default => 1 }
+					   default => 1 },
+          		    close_after_write => { type => BOOLEAN,
+                                                   default => 0 },
 			  } );
 
     $self->{filename} = $p{filename};
+    $self->{close} = $p{close};
 
-    my $mode;
-    if ( exists $p{mode} &&
+    if ( $self->{close} )
+    {
+        $self->{mode} = '>>';
+    }
+    elsif ( exists $p{mode} &&
 	 defined $p{mode} &&
-	 ( $p{mode} =~ /^>>$|^append$/ ||
+	 ( $p{mode} =~ /^(?:>>|append)$/ ||
 	   ( $p{mode} =~ /^\d+$/ &&
 	     $p{mode} == O_APPEND() ) ) )
     {
-	$mode = '>>';
+	$self->{mode} = '>>';
     }
     else
     {
-	$mode = '>';
+	$self->{mode} = '>';
     }
 
-    my $fh = do { local *FH; *FH; };
-    open $fh, "$mode$self->{filename}"
-	or die "Can't write to '$self->{filename}': $!";
+    $self->{autoflush}=$p{autoflush};
 
-    if ( $p{autoflush} )
+    $self->_open_file() unless $p{close};
+
+}
+
+sub _open_file
+{
+    my $self = shift;
+
+    my $fh = do { local *FH; *FH; };
+
+    open $fh, "$self->{mode}$self->{filename}"
+	     or die "Can't write to '$self->{filename}': $!";
+
+    if ( $self->{autoflush} )
     {
-	my $oldfh = select $fh; $| = 1; select $oldfh;
+        my $oldfh = select $fh; $| = 1; select $oldfh;
     }
 
     $self->{fh} = $fh;
@@ -86,8 +103,21 @@ sub log_message
     my %p = @_;
 
     my $fh = $self->{fh};
-    print $fh $p{message};
+
+    if ( $self->{close} )
+    {
+      	$self->_open_file;
+
+      	print $fh $p{message};
+
+      	close $fh;
+    }
+    else
+    {
+        print $fh $p{message};
+    }
 }
+
 
 sub DESTROY
 {
@@ -156,6 +186,14 @@ The filename to be opened for writing.
 The mode the file should be opened with.  Valid options are 'write',
 '>', 'append', '>>', or the relevant constants from Fcntl.  The
 default is 'write'.
+
+=item -- close_after_write ($)
+
+Whether or not the file should be closed after each write.  This
+defaults to false.
+
+If this is true, then the mode will aways be append, so that the file
+is not re-written for each new message.
 
 =item -- autoflush ($)
 
