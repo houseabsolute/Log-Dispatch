@@ -16,7 +16,9 @@ lib/Log/Dispatch/Screen.pm
 lib/Log/Dispatch/Syslog.pm
 LICENSE
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 META.yml
 README
-test.pl
+t/99-pod.t
+t/basic.t
+
