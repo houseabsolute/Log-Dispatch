@@ -1,8 +1,11 @@
-2.02
+2.02 Feb 20, 2003
 
 - Added Log::Dispatch->output_exists methods to check that an output
 of a given name exists.  Based on a suggestion given long ago by Craig
 Manley.
+
+- Added close_after_write option to Log::Dispatch::File.  Based on
+patch from JAA Klunder.
 
 2.01 Jun 21, 2002
 
