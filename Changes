@@ -1,7 +1,15 @@
-2.00
+2.01
+
+- Now requires Params::Validate, which is used to validate parameter
+for constructors and some other methods.
+
+- Add an 'autoflush' option to Log::Dispatch::File objects.  Suggested
+by Jerrad Pierce.
+
+2.00 ** BACKWARDS INCOMPATIBILITY ALERT **
 
 - Use a standard hash reference for objects instead of pseudo-hashes.
-This will break existing subclasses.
+** THIS MAY BREAK EXISTING SUBCLASSES **.
 
 - Log::Dispatch::Screen claimed it defaulted to using STDERR but it
 was lying, it defaulted to using STDOUT.  This has been changed so
