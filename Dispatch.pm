@@ -10,7 +10,6 @@ use fields qw( outputs callbacks );
 
 use Carp ();
 
-
 $VERSION = '1.6';
 
 1;
