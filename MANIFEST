@@ -1,0 +1,14 @@
+MANIFEST
+Makefile.PL
+test.pl
+
+Dispatch.pm
+Dispatch/File.pm
+Dispatch/Handle.pm
+Dispatch/Email.pm
+Dispatch/Output.pm
+Dispatch/Screen.pm
+Dispatch/Syslog.pm
+Dispatch/Email/MailSend.pm
+Dispatch/Email/MailSendmail.pm
+Dispatch/Email/MIMELite.pm
