@@ -1,3 +1,8 @@
+2.06
+
+- Added a permissions parameter to Log::Dispatch::File->new.  Based on
+a patch from James FitzGibbon.
+
 2.05 Apr 18, 2003
 
 - Changed a code construct that seems to provoke a bug for Meng Wong,
