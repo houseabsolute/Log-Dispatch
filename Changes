@@ -1,3 +1,9 @@
+2.02
+
+- Added Log::Dispatch->output_exists methods to check that an output
+of a given name exists.  Based on a suggestion given long ago by Craig
+Manley.
+
 2.01 Jun 21, 2002
 
 - Added new module Log::Dispatch::Email::MailSender, provided by
