@@ -10,7 +10,7 @@ use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.9 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.10 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -103,6 +103,21 @@ work with all mail sending methods.
 This determines whether the object sends one email per message it is
 given or whether it stores them up and sends them all at once.  The
 default is to buffer messages.
+
+=item -- callbacks( \& or [ \&, \&, ... ] )
+
+This parameter may be a single subroutine reference or an array
+reference of subroutine references.  These callbacks will be called in
+the order they are given and passed a hash containing the following keys:
+
+ ( message => $log_message )
+
+It's a hash in case I need to add parameters in the future.
+
+The callbacks are expected to modify the message and then return a
+single scalar containing that modified message.  These callbacks will
+be called when either the C<log> or C<log_to> methods are called and
+will only be applied to a given message once.
 
 =item * log( level => $, message => $ )
 
