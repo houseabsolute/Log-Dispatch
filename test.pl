@@ -249,6 +249,26 @@ Screen:
 	    "Log::Dispatch::Screen didn't send any output to STDOUT\n" );
 }
 
+# 14  Log::Dispatch::Output->accepted_levels
+{
+    my $l = Log::Dispatch::Screen->new( name => 'foo',
+					min_level => 'warning',
+					max_level => 'alert',
+					stderr => 0 );
+
+    my @expected = qw(warning err crit alert);
+    my @levels = $l->accepted_levels;
+
+    my $pass = 1;
+    for (my $x = 0; $x < scalar @expected; $x++)
+    {
+	$pass = 0 unless $expected[$x] eq $levels[$x];
+    }
+
+    result( $pass && (scalar @expected == scalar @levels),
+	    "accepted_levels didn't match expected levels\n" );
+}
+
 sub fake_test
 {
     my ($x, $pm) = @_;
