@@ -127,5 +127,5 @@ WriteMakefile(
 	      AUTHOR => 'Dave Rolsky <autarch@urth.org>',
 	      ABSTRACT => 'Uniform logging interface to multiple outputs',
 
-	      realclean => { FILES => 'wr_mode.tst ./Install/TestConfig.pm ./Install' },
+	      realclean => { FILES => 'write_mode.tst ./Install/TestConfig.pm ./Install' },
 	     );
