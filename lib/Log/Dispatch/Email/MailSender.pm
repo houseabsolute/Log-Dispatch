@@ -51,7 +51,6 @@ sub send_email
                                  to => ( join ',', @{ $self->{to} } ),
                                  subject => $self->{subject},
                                  smtp => $self->{smtp},
-                                 ( $^W ? ( debug => \*STDERR ) : () ),
                                } );
 
         die "Error sending mail ($sender): $Mail::Sender::Error"
