@@ -124,6 +124,9 @@ WriteMakefile(
 		       %extra_pms,
 		      },
 
+	      PREREQ => { 'Params::Validate' => 0.14,
+			},
+
 	      AUTHOR => 'Dave Rolsky <autarch@urth.org>',
 	      ABSTRACT => 'Uniform logging interface to multiple outputs',
 
