@@ -14,10 +14,7 @@ use vars qw[ $VERSION ];
 $VERSION = sprintf "%d.%02d", q$Revision: 1.22 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
-BEGIN
-{
-    *O_APPEND = \&APPEND unless defined &O_APPEND;;
-}
+*O_APPEND = \&APPEND unless defined &O_APPEND;
 
 sub APPEND { 0 }
 
@@ -118,7 +115,7 @@ sub log_message
       	print $fh $p{message}
             or die "Cannot write to '$self->{filename}': $!";
 
-      	close $fh;
+      	close $fh
             or die "Cannot close '$self->{filename}': $!";
     }
     else
