@@ -4,6 +4,9 @@
 Makefile.PL so it works with Module::Build 0.23, which breaks
 backwards compatibility (grr).
 
+- Fix a doc bug in Log::Dispatch::Syslog.  It defaults to using a unix
+socket, not an inet socket.
+
 
 2.09 Jan 09, 2004
 
