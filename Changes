@@ -1,3 +1,10 @@
+2.07
+
+- Check all system call return values.
+
+- Fix warning from Log::Dispatch::File if it was loaded after
+Attribute::Handlers.  Reported by Mike Schilli.
+
 2.06 May 1, 2003
 
   "Arise ye workers from your slumbers
