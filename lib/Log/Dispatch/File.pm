@@ -55,7 +55,7 @@ sub _make_handle
 			  } );
 
     $self->{filename} = $p{filename};
-    $self->{close} = $p{close};
+    $self->{close} = $p{close_after_write};
 
     if ( $self->{close} )
     {
@@ -74,9 +74,9 @@ sub _make_handle
 	$self->{mode} = '>';
     }
 
-    $self->{autoflush}=$p{autoflush};
+    $self->{autoflush} = $p{autoflush};
 
-    $self->_open_file() unless $p{close};
+    $self->_open_file() unless $p{close_after_write};
 
 }
 
@@ -102,18 +102,19 @@ sub log_message
     my $self = shift;
     my %p = @_;
 
-    my $fh = $self->{fh};
+    my $fh;
 
     if ( $self->{close} )
     {
       	$self->_open_file;
-
+	$fh = $self->{fh};
       	print $fh $p{message};
 
       	close $fh;
     }
     else
     {
+        $fh = $self->{fh};
         print $fh $p{message};
     }
 }
