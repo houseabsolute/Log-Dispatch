@@ -3,7 +3,7 @@ package Log::Dispatch::Base;
 use strict;
 use vars qw($VERSION @EXPORT_OK);
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.1 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.2 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -19,7 +19,7 @@ sub _get_callbacks
     my @cb = eval { @{ $params{callbacks} }; };
 
     # Must have been a code ref.
-    @cb = $params{callbacks} unless @cb;
+    @cb = ($params{callbacks}) unless @cb;
 
     return @cb;
 }
