@@ -11,7 +11,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.22 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.23 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -26,7 +26,10 @@ sub new
 sub log
 {
     my $self = shift;
-    my %p = @_;
+
+    my %p = validate( @_, { level => { type => SCALAR },
+			    message => { type => SCALAR },
+			  } );
 
     return unless $self->_should_log($p{level});
 
