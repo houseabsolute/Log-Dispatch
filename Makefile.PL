@@ -73,37 +73,6 @@ EOF
     close CFG;
 }
 
-my %extra_pms;
-{
-    print <<'EOF';
-
-Please list any extra modules you would like added as part of this
-installation.  These should be located somewhere under the Dispatch/
-directory.  Please type the path after Dispatch/ (including the .pm
-extension).
-
-Press enter a blank line when you are done.
-
-EOF
-
-    while (1)
-    {
-	chomp (my $module = <STDIN>);
-	last unless $module;
-
-	if (-e "./Dispatch/$module")
-	{
-	    $extra_pms{"Dispatch/$module"} = '$(INST_LIBDIR)/Dispatch/' . $module;
-	}
-	else
-	{
-	    warn "Couldn't find ./Dispatch/$module\n";
-	}
-    }
-}
-
-
-
 WriteMakefile(
 	      'NAME'	=> 'Log::Dispatch',
 	      'VERSION_FROM' => 'Dispatch.pm',
@@ -121,8 +90,6 @@ WriteMakefile(
 		       'Dispatch/Email/MailSender.pm' => '$(INST_LIBDIR)/Dispatch/Email/MailSender.pm',
 		       'Dispatch/Email/MailSendmail.pm' => '$(INST_LIBDIR)/Dispatch/Email/MailSendmail.pm',
 		       'Dispatch/Email/MIMELite.pm' => '$(INST_LIBDIR)/Dispatch/Email/MIMELite.pm',
-
-		       %extra_pms,
 		      },
 
 	      PREREQ_PM => { 'Params::Validate' => 0.15,
