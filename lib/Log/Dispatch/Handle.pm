@@ -35,7 +35,8 @@ sub log_message
     my $self = shift;
     my %p = @_;
 
-    $self->{handle}->print($p{message});
+    $self->{handle}->print($p{message})
+        or die "Cannot write to handle: $!";
 }
 
 __END__
