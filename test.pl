@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..127\n"; }
+BEGIN { $| = 1; print "1..126\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -210,35 +210,7 @@ fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
     result(1);
 }
 
-Syslog:
-fake_test(1, 'Log::Dispatch::Syslog'), goto Screen
-    unless $tests{Syslog} && $TestConfig{syslog};
-# 12  Log::Dispatch::Syslog
-{
-    my $dispatch = Log::Dispatch->new;
-
-    $dispatch->add( Log::Dispatch::Syslog->new( name => 'syslog',
-						min_level => 'debug',
-						facility => 'daemon',
-						socket => 'unix',
-						ident => 'Log::Dispatch test' ) );
-
-    my $time = time;
-    $dispatch->log( level => 'notice', message => "Log::Dispatch::Syslog testing syslog $time" );
-
-    my $success = 0;
-    foreach my $line (`tail -10 $TestConfig{syslog_file}`)
-    {
-	if ( index $line, "Log::Dispatch::Syslog testing syslog $time")
-	{
-	    $success = 1;
-	    last;
-	}
-    }
-
-    result( $success,
-	    "Log::Dispatch::Syslog test failed to write to $TestConfig{syslog_file}\n" );
-}
+# 12 is gone
 
 # 13  Log::Dispatch::Screen
 Screen:
