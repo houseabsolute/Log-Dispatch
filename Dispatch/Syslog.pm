@@ -5,7 +5,9 @@ use strict;
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
-use fields qw( ident logopt facility socket priorities );
+
+use Params::Validate qw(validate SCALAR);
+Params::Validate::validation_options( allow_extra => 1 );
 
 use Sys::Syslog ();
 
@@ -14,7 +16,7 @@ require 'syslog.ph' if $] < 5.006;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.17 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -23,12 +25,12 @@ sub new
     my $proto = shift;
     my $class = ref $proto || $proto;
 
-    my %params = @_;
+    my %p = @_;
 
     my $self = bless {}, $class;
 
-    $self->_basic_init(%params);
-    $self->_init(%params);
+    $self->_basic_init(%p);
+    $self->_init(%p);
 
     return $self;
 }
@@ -36,12 +38,21 @@ sub new
 sub _init
 {
     my $self = shift;
-    my %params = @_;
 
-    $self->{ident}    = $params{ident} || $0;
-    $self->{logopt}   = $params{logopt} || '';
-    $self->{facility} = $params{facility} || 'user';
-    $self->{socket}   = $params{socket} || 'unix';
+    my %p = validate( @_, { ident    => { type => SCALAR,
+					  default => $0 },
+			    logopt   => { type => SCALAR,
+					  default => '' },
+			    facility => { type => SCALAR,
+					  default => 'user' },
+			    socket   => { type => SCALAR,
+					  default => 'unix' },
+			  } );
+
+    $self->{ident}    = $p{ident};
+    $self->{logopt}   = $p{logopt};
+    $self->{facility} = $p{facility};
+    $self->{socket}   = $p{socket};
 
     $self->{priorities} = [ 'DEBUG',
 			    'INFO',
@@ -58,12 +69,12 @@ sub _init
 sub log_message
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
-    my $pri = $self->_level_as_number($params{level});
+    my $pri = $self->_level_as_number($p{level});
 
     Sys::Syslog::openlog($self->{ident}, $self->{logopt}, $self->{facility});
-    Sys::Syslog::syslog($self->{priorities}[$pri], '%s', $params{message});
+    Sys::Syslog::syslog($self->{priorities}[$pri], '%s', $p{message});
     Sys::Syslog::closelog;
 }
 
@@ -92,7 +103,7 @@ system log (via UNIX syslog calls).
 
 =over 4
 
-=item * new(%PARAMS)
+=item * new(%p)
 
 This method takes a hash of parameters.  The following options are
 valid:
