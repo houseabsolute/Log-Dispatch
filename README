@@ -1,0 +1,27 @@
+Log::Dispatch is a suite of OO modules for logging messages to
+multiple outputs, each of which can have a minimum and maximum log
+level.  It is designed to be easily subclassed, both for creating a
+new dispatcher object and particularly for creating new outputs.
+
+History
+
+1.008
+
+- Fixed a bug causing unitialized value warnings with -w (oops).
+- Fixed a minor mistake in Log::Dispatch::Syslog docs (thanks to Ilya
+Martynov)
+- Put newlines into messages in SYNOPSIS sections for some modules.
+This is to clarify that you need to do this.  Just to be clear,
+Log::Dispatch does not alter message content in any manner whatsoever
+(and never will).  However, it would be trivial to subclass
+Log::Dispatch to do this.
+
+1.007
+
+- First public release.  It passes its own test suite so it should
+work (he says hopefully).
+
+
+Copyright (c) 1999 David Rolsky. All rights reserved. This program is
+free software; you can redistribute it and/or modify it under the same
+terms as Perl itself.
