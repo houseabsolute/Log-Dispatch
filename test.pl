@@ -256,7 +256,7 @@ Screen:
 					max_level => 'alert',
 					stderr => 0 );
 
-    my @expected = qw(warning err crit alert);
+    my @expected = qw(warning error critical alert);
     my @levels = $l->accepted_levels;
 
     my $pass = 1;
