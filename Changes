@@ -1,3 +1,8 @@
+2.04 Mar 21, 2003
+
+- The close_after_write option didn't actually do anything.  Fixed by
+JAA Klunder.
+
 2.03 Feb 27, 2003
 
 - Log::Dispatch::ApacheLog would break if a log level was specified as
