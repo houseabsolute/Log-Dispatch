@@ -16,13 +16,10 @@ $VERSION = sprintf "%d.%02d", q$Revision: 1.22 $ =~ /: (\d+)\.(\d+)/;
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
 {
-    my $exists;
-    eval { $exists = O_APPEND(); };
-
-    *O_APPEND = \&APPEND unless defined $exists;
+    *O_APPEND = \&APPEND unless defined &O_APPEND;;
 }
 
-sub APPEND {;};
+sub APPEND { 0 }
 
 1;
 
