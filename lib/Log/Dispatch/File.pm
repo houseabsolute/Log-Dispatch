@@ -97,10 +97,11 @@ sub _open_file
         my $oldfh = select $fh; $| = 1; select $oldfh;
     }
 
-    if ( $self->{permissions} )
+    if ( $self->{permissions} && ! $self->{chmodded} )
     {
         chmod $self->{permissions}, $self->{filename}
             or die "Cannot chmod $self->{filename} to $self->{permissions}: $!";
+        $self->{chmodded} = 1;
     }
 
     $self->{fh} = $fh;
