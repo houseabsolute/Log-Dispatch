@@ -11,7 +11,7 @@ use MIME::Lite;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.1 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.2 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -48,7 +48,7 @@ uses the Mail::Sendmail module
                                                    to => [ qw( foo@bar.com bar@baz.org ) ],
                                                    subject => 'Oh no!!!!!!!!!!!', );
 
-  $email->log( message => 'Something bad is happening', level => 'emerg' );
+  $email->log( message => "Something bad is happening\n", level => 'emerg' );
 
 =head1 DESCRIPTION
 

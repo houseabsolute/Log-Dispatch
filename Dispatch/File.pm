@@ -11,7 +11,7 @@ use IO::File;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%03d", q$Revision: 1.1 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%03d", q$Revision: 1.2 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 {
@@ -95,7 +95,7 @@ Log::Dispatch::File - Object for logging to files
                                        filename  => 'Somefile.log',
                                        mode      => 'append' );
 
-  $file->log( level => 'emerg', message => "I've fallen and I can't get up" );
+  $file->log( level => 'emerg', message => "I've fallen and I can't get up\n" );
 
 =head1 DESCRIPTION
 
