@@ -6,7 +6,7 @@
 # Change 1..1 below to 1..last_test_to_print .
 # (It may become useful if the test is moved to ./t subdirectory.)
 
-BEGIN { $| = 1; print "1..106\n"; }
+BEGIN { $| = 1; print "1..122\n"; }
 END {print "not ok 1\n" unless $main::loaded;}
 
 use strict;
@@ -352,7 +352,27 @@ Screen:
 	    "Log::Dispatch callback did not reverse and uppercase text as expected: $text\n" );
 }
 
-# 19 - 106: Comprehensive test of new methods that match level names
+# 19:  test level paramter to callbacks
+{
+    my $level = sub { my %p = @_; return uc $p{level}; };
+
+    my $dispatch = Log::Dispatch->new( callbacks => $level );
+
+    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+						min_level => 'warning',
+						max_level => 'alert',
+						stderr => 0 ) );
+
+    my $text;
+    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
+    $dispatch->log( level => 'warning', message => 'esrever' );
+    untie *STDOUT;
+
+    result( $text eq 'WARNING',
+	    "Log::Dispatch callback did return an uppercase version of the level parameter as expected: $text\n" );
+}
+
+# 20 - 107: Comprehensive test of new methods that match level names
 {
     my %levels = map { $_ => $_ } ( qw( debug info notice warning err error crit critical alert emerg emergency ) );
     @levels{ qw( err crit emerg ) } = ( qw( error critical emergency ) );
@@ -384,6 +404,19 @@ Screen:
 			"Calling $test_level method should not have logged anything but we got '$text'\n" );
 	    }
 	}
+    }
+}
+
+# 108 - 122:  Log::Dispatch->level_is_valid method
+{
+    foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
+    {
+	result( Log::Dispatch->level_is_valid($l) );
+    }
+
+    foreach my $l ( qw( debu inf foo bar ) )
+    {
+	result( ! Log::Dispatch->level_is_valid($l) );
     }
 }
 
