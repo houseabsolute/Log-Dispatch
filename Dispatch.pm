@@ -10,7 +10,7 @@ use fields qw( outputs callbacks );
 
 use Carp ();
 
-$VERSION = '1.6';
+$VERSION = '1.75';
 
 1;
 
@@ -148,7 +148,7 @@ This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
 the order they are given and passed a hash containing the following keys:
 
- ( message => $log_message )
+ ( message => $log_message, level => $log_level )
 
 It's a hash in case I need to add parameters in the future.
 
@@ -289,6 +289,13 @@ newline could cause serious problems.
 However, the 1.2 release adds the callbacks parameter for the
 Log::Dispatch object which you can easily use to add newlines to
 messages if you so desire.
+
+=head1 RELATED MODULES
+
+=head2 Log::Dispatch::Tk
+
+Dominique Dumont has written Log::Dispatch::Tk which allows log
+message to show up in a window.  This code is available from CPAN.
 
 =head1 AUTHOR
 
