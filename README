@@ -10,6 +10,4 @@ and should reduce the need for subclassing.
 Subclassing is only needed to send a message to a different output,
 not to change the message format.
 
-Copyright (c) 1999-2001 David Rolsky. All rights reserved. This program
-is free software; you can redistribute it and/or modify it under the
-same terms as Perl itself.
+Please see the Log::Dispatch documentation for more details.
