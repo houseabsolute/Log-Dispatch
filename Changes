@@ -12,7 +12,9 @@ by Jerrad Pierce.
 
 - Only warn if $^W is true.
 
-2.00 ** BACKWARDS INCOMPATIBILITY ALERT **
+2.00 Apr 11, 2002
+
+** BACKWARDS INCOMPATIBILITY ALERT **
 
 - Use a standard hash reference for objects instead of pseudo-hashes.
 ** THIS MAY BREAK EXISTING SUBCLASSES **.
@@ -21,7 +23,7 @@ by Jerrad Pierce.
 was lying, it defaulted to using STDOUT.  This has been changed so
 that it really does default to STDERR.  Reported by James FitzGibbon.
 
-1.80
+1.80 Oct 27, 2001
 
 - Log::Dispatch::Syslog no longer requires syslog.ph for Perl >=
 5.006.  Patch by Benoit Beausejour.
@@ -32,14 +34,14 @@ Luke Bakken.
 
 - Log::Dispatch::File no longer uses IO::File internally.
 
-1.79
+1.79 May 15, 2001
 
 - Don't use $, internally.  Apparently this is usually undefined.
 Instead, the convenience methods now simply take an array of messages
 and turn it into a scalar by doing "@_".  Thanks to Dean Kopesky for
 the bug report.
 
-1.78
+1.78 Apr 19, 2001
 
 - Allow ApacheLog to take either an Apache or Apache::Server object.
 
@@ -49,14 +51,14 @@ Napier.
 - Add flush method to Log::Dispatch::Email.  Patch submitted by Rob
 Napier.
 
-1.77
+1.77 Jan 2, 2001
 
 - The convenience methods named after the log levels ($log->debug,
 $log->alert, etc.) can now take a list of scalars.  These are joined
 together just like Perl's print function does.  Suggested by Tim
 Ayers.
 
-1.76
+1.76 Oct 10, 2000
 
 - New method: Log::Dispatch->level_is_valid($string).  Suggested by
 Jeff Hamman.
@@ -64,18 +66,18 @@ Jeff Hamman.
 - Fix for version issues between CPAN versions of
 Log::Dispatch::ApacheLog.  Reported by Jost Krieger.
 
-1.75
+1.75 Sep 28, 2000
 
 - Additional argument 'level' passed to message processing callbacks.
 Suggested by Jeff MacDonald.
 - Log/Dispatch.pm: added docs section on Log::Dispatch::Tk.
 
-1.7
+1.7 Aug 30, 2000
 
 - Added Log/Dispatch/ApacheLog.pm.  This logs to the Apache error log.
 This is for use under mod_perl.
 
-1.6
+1.6 Jul 4, 2000
 
 NOTE: 1.5 was never released to CPAN.
 
@@ -115,7 +117,7 @@ to Clayton Scott.
 - Log/Dispatch/File.pm: Do compile time check for O_APPEND constant
 rather than run time check.
 
-1.2
+1.2 May 5, 2000
 
 - Log/Dispatch.pm: Added callbacks parameter to Log::Dispatch->new.  I
 will also be adding this to the Log::Dispatch::* classes via
@@ -125,11 +127,11 @@ this.
 - Log/Dispatch.pm: Added docs section on why Log::Dispatch doesn't add
 newlines to outgoing messages.
 
-1.11
+1.11 Feb 24, 2000
 
 - Realized I need to tweak the $VERSION in Log::Dispatch
 
-1.1
+1.1 Feb 24, 2000
 
 - upped version to 1.1 to indicate my confidence in this release (I'm
 just asking for bug reports, I know).
@@ -141,7 +143,7 @@ suite).
 is no plan to deprecate them).  This really only affects what is
 returned by the new accepted_levels method.
 
-1.010
+1.010 Jan 17, 2000
 
 - fixed a bug in the DESTROY method of Log::Dispatch::Email that
 caused an annoying error and may have caused spurious emails to be
@@ -149,13 +151,13 @@ sent (thanks to Radu Greab).
 - fixed a bug in Log::Dispatch::Email::MailSendmail.  For some reason
 this module demands a 'from' address.
 
-1.009
+1.009 Jan 2, 2000
 
 - Created this version simply to address an issue with CPAN and my
 internal version numbers having a conflict.  This has no changes from
 1.008.
 
-1.008
+1.008 Dec 30, 1999
 
 - Fixed a bug causing unitialized value warnings with -w (oops).
 - Fixed a minor mistake in Log::Dispatch::Syslog docs (thanks to Ilya
@@ -166,7 +168,7 @@ Log::Dispatch does not alter message content in any manner whatsoever
 (and never will).  However, it would be trivial to subclass
 Log::Dispatch to do this.
 
-1.007
+1.007 Dec 1, 1999
 
 - First public release.  It passes its own test suite so it should
 work (he says hopefully).
