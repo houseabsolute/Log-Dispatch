@@ -10,14 +10,14 @@ use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
 sub send_email
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     my $msg = Mail::Send->new;
 
@@ -29,7 +29,7 @@ sub send_email
 
     my $fh = $msg->open;
 
-    $fh->print( $params{message} );
+    $fh->print( $p{message} );
 
     $fh->close;
 }

@@ -11,19 +11,19 @@ use MIME::Lite;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
 sub send_email
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     my %mail = ( To      => (join ',', @{ $self->{to} }),
 		 Subject => $self->{subject},
 		 Type    => 'TEXT',
-		 Data    => $params{message},
+		 Data    => $p{message},
 	       );
 
     $mail{From} = $self->{from} if defined $self->{from};

@@ -11,18 +11,18 @@ use Mail::Sendmail ();
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
 sub send_email
 {
     my $self = shift;
-    my %params = @_;
+    my %p = @_;
 
     my %mail = ( To      => (join ',', @{ $self->{to} }),
 		 Subject => $self->{subject},
-		 Message => $params{message},
+		 Message => $p{message},
 		 # Mail::Sendmail insists on having this parameter.
 		 From    => $self->{from} || 'LogDispatch@foo.bar',
 	       );
