@@ -35,6 +35,11 @@ use Log::Dispatch::Screen;
 
 use IO::File;
 
+if ( eval { require mod_perl } )
+{
+    require Log::Dispatch::ApacheLog;
+}
+
 require Install::TestConfig;
 
 $main::loaded = 1;
@@ -390,12 +395,12 @@ Screen:
 	{
 	    my $text;
 	    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
-	    $dispatch->$test_level( "$test_level test" );
+	    $dispatch->$test_level( $test_level, 'test' );
 	    untie *STDOUT;
 
 	    if ( $levels{$test_level} eq $allowed_level )
 	    {
-		result( $text eq "$test_level test",
+		result( $text eq (join $,, $test_level, 'test'),
 			"Calling $test_level method should have sent message '$test_level test'\n" );
 	    }
 	    else

@@ -1,3 +1,20 @@
+1.78
+
+- Allow ApacheLog to take either an Apache or Apache::Server object.
+
+- Fix callback documentation in Log::Dispatch::Output.  Thanks to Rob
+Napier.
+
+- Add flush method to Log::Dispatch::Email.  Patch submitted by Rob
+Napier.
+
+1.77
+
+- The convenience methods named after the log levels ($log->debug,
+$log->alert, etc.) can now take a list of scalars.  These are joined
+together just like Perl's print function does.  Suggested by Tim
+Ayers.
+
 1.76
 
 - New method: Log::Dispatch->level_is_valid($string).  Suggested by

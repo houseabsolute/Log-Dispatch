@@ -10,7 +10,7 @@ use fields qw( outputs callbacks );
 
 use Carp ();
 
-$VERSION = '1.76';
+$VERSION = '1.78';
 
 1;
 
@@ -20,7 +20,7 @@ BEGIN
     foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
     {
 	*{$l} = sub { my Log::Dispatch $self = shift;
-		      $self->log( level => $l, message => shift ); };
+		      $self->log( level => $l, message => join $,, @_ ); };
 	$LEVELS{$l} = 1;
     }
 }
@@ -214,6 +214,15 @@ translates to:
 
  $dispatcher->log( level => 'alert', message => 'Strange data in incoming request' );
 
+These methods act like Perl's C<print> built-in when given a list of
+arguments.  Thus, the following calls are equivalent:
+
+ my @array = ('Something', 'bad', 'is', here');
+ $dispatcher->alert(@array);
+
+ my $scalar = join $,, @array; # That is not a typo.  See perldoc perlvar for info on $,
+ $dispatcher->alert($scalar);
+
 One important caveat about these methods is that its not that forwards
 compatible.  If I were to add more parameters to the C<log> call, it
 is unlikely that these could be integrated into these methods without
@@ -307,7 +316,7 @@ messages if you so desire.
 =head2 Log::Dispatch::Tk
 
 Dominique Dumont has written Log::Dispatch::Tk which allows log
-message to show up in a window.  This code is available from CPAN.
+messages to show up in a window.  This code is available from CPAN.
 
 =head1 AUTHOR
 
@@ -320,5 +329,9 @@ Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSendmail,
 Log::Dispatch::Email::MIMELite, Log::Dispatch::File,
 Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
 Log::Dispatch::Syslog
+
+Log::Agent - similar capabilities with a different interface.  If you
+like what Params::Validate does but not its 'feel' try this one
+instead.
 
 =cut

@@ -9,7 +9,7 @@ use fields qw( buffer buffered from subject to );
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -64,8 +64,7 @@ sub send_email
     die "The send_email method must be overridden in the $class subclass";
 }
 
-
-sub DESTROY
+sub flush
 {
     my Log::Dispatch::Email $self = shift;
 
@@ -74,7 +73,15 @@ sub DESTROY
 	my $message = join '', @{ $self->{buffer} };
 
 	$self->send_email( message => $message );
+        $self->{buffer} = [];
     }
+}
+
+sub DESTROY
+{
+    my Log::Dispatch::Email $self = shift;
+
+    $self->flush;
 }
 
 __END__
@@ -158,9 +165,7 @@ This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
 the order they are given and passed a hash containing the following keys:
 
- ( message => $log_message )
-
-It's a hash in case I need to add parameters in the future.
+ ( message => $log_message, level => $log_level )
 
 The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will
@@ -178,10 +183,16 @@ be called directly but should be called through the C<log()> method
 This is the method that must be subclassed.  For now the only
 parameter in the hash is 'message'.
 
-=item * DESTROY
+=item * flush
 
 If the object is buffered, then this method will call the
-C<send_email()> method to send the contents of the buffer.
+C<send_email()> method to send the contents of the buffer and then
+clear the buffer.
+
+=item * DESTROY
+
+On destruction, the object will call C<flush()> to send any pending
+email.
 
 =back
 

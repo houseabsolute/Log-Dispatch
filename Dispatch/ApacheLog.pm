@@ -11,7 +11,7 @@ use Apache::Log;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /: (\d+)\.(\d+)/;
 
 1;
 
@@ -29,7 +29,7 @@ sub new
     }
 
     $self->_basic_init(%params);
-    $self->{apache_log} = $params{apache}->server->log;
+    $self->{apache_log} = UNIVERSAL::isa( $params{apache}, 'Apache::Server' ) ? $params{apache}->log : $params{apache}->log;
 
     return $self;
 }
@@ -113,7 +113,7 @@ means functionally that the object has no maximum).
 
 =item -- apache ($)
 
-The apache object.
+An object of either the Apache or Apache::Server classes.
 
 =item -- callbacks( \& or [ \&, \&, ... ] )
 
@@ -121,9 +121,7 @@ This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
 the order they are given and passed a hash containing the following keys:
 
- ( message => $log_message )
-
-It's a hash in case I need to add parameters in the future.
+ ( message => $log_message, level => $log_level )
 
 The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will

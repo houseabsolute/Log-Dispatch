@@ -11,7 +11,7 @@ use vars qw[ $VERSION ];
 
 use IO::File;
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /: (\d+)\.(\d+)/;
 
 # Prevents death later on if IO::File can't export this constant.
 BEGIN
@@ -142,9 +142,7 @@ This parameter may be a single subroutine reference or an array
 reference of subroutine references.  These callbacks will be called in
 the order they are given and passed a hash containing the following keys:
 
- ( message => $log_message )
-
-It's a hash in case I need to add parameters in the future.
+ ( message => $log_message, level => $log_level )
 
 The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will
