@@ -1,18 +1,11 @@
-# Before `make install' is performed this script should be runnable with
-# `make test'. After `make install' it should work as `perl test.pl'
-
-######################### We start with some black magic to print on failure.
-
-# Change 1..1 below to 1..last_test_to_print .
-# (It may become useful if the test is moved to ./t subdirectory.)
-
-BEGIN { $| = 1; print "1..127\n"; }
-END {print "not ok 1\n" unless $main::loaded;}
+#!/usr/bin/perl -w
 
 use strict;
-$^W = 1;
 
-use Log::Dispatch;
+use Test::More tests => 131;
+
+use_ok('Log::Dispatch');
+
 
 my %tests;
 BEGIN
@@ -28,7 +21,7 @@ BEGIN
 }
 
 my %TestConfig;
-if ( -d '.svn' )
+if ( -d '.svn1' )
 {
     %TestConfig = ( email_address => 'autarch@urth.org',
                     syslog_file   => '/var/log/messages',
@@ -46,11 +39,8 @@ if ( eval { require mod_perl } )
     require Log::Dispatch::ApacheLog;
 }
 
-$main::loaded = 1;
-result($main::loaded);
-
 my $dispatch = Log::Dispatch->new;
-result( defined $dispatch, "Couldn't create Log::Dispatch object\n" );
+ok( $dispatch, "Couldn't create Log::Dispatch object\n" );
 
 # 3-6  Test Log::Dispatch::File
 {
@@ -77,25 +67,27 @@ result( defined $dispatch, "Couldn't create Log::Dispatch object\n" );
 	or die "Can't read ./debug_test.log: $!";
 
     my @log = <LOG1>;
-    result( $log[0] eq "emerg level 1\n",
-	    "First line in log file set to level 'emerg' is '$log[0]', not 'emerg level 1'\n" );
-    result( $log[1] eq "emerg level 2\n",
-	    "Second line in log file set to level 'emerg' is '$log[0]', not 'emerg level 2'\n" );
+    is( $log[0], "emerg level 1\n",
+        "First line in log file set to level 'emerg' is 'emerg level 1'" );
+
+    is( $log[1], "emerg level 2\n",
+        "Second line in log file set to level 'emerg' is 'emerg level 2'" );
 
     @log = <LOG2>;
-    result( $log[0] eq "info level 2\n",
-	    "First line in log file set to level 'debug' is '$log[0]', not 'info level 2'\n" );
-    result( $log[1] eq "emerg level 2\n",
-	    "Second line in log file set to level 'debug' is '$log[0]', not 'emerg level 2'\n" );
+    is( $log[0], "info level 2\n",
+        "First line in log file set to level 'debug' is 'info level 2'" );
+
+    is( $log[1], "emerg level 2\n",
+        "Second line in log file set to level 'debug' is 'emerg level 2'" );
 
     close LOG1;
     close LOG2;
 
     unlink './emerg_test.log'
-	or warn "Can't remove ./emerg_test.log: $!";
+	or diag( "Can't remove ./emerg_test.log: $!" );
 
     unlink './debug_test.log'
-	or warn "Can't remove ./debug_test.log: $!";
+	or diag( "Can't remove ./debug_test.log: $!" );
 }
 
 # 7  max_level test
@@ -113,13 +105,13 @@ result( defined $dispatch, "Couldn't create Log::Dispatch object\n" );
 	or die "Can't read ./max_test.log: $!";
     my @log = <LOG>;
 
-    result( $log[0] eq "critical\n",
-	    "First line in log file with a max level of 'crit' is 'emergency'\n" );
+    is( $log[0], "critical\n",
+        "First line in log file with a max level of 'crit' is 'critical'" );
 
     close LOG;
 
     unlink './max_test.log'
-	or warn "Can't remove ./max_test.log: $!";
+	or diag( "Can't remove ./max_test.log: $!" );
 }
 
 # 8  Log::Dispatch::Handle test
@@ -143,17 +135,19 @@ result( defined $dispatch, "Couldn't create Log::Dispatch object\n" );
 
     my @log = <LOG>;
 
-    result( $log[0] eq "handle test\n",
-	    "Log::Dispatch::Handle created log file should contain 'handle test\\n'\n" );
+    is( $log[0], "handle test\n",
+        "Log::Dispatch::Handle created log file should contain 'handle test\\n'" );
 
     unlink './handle_test.log'
-	or warn "Can't temove ./handle_test.log: $!";
+	or diag( "Can't temove ./handle_test.log: $!" );
 }
 
-fake_test(1, 'Log::Dispatch::Email::MailSend'), goto MailSendmail
-    unless $tests{MailSend} && $TestConfig{email_address};
 # 9  Log::Dispatch::Email::MailSend
+SKIP:
 {
+    skip "Cannot do MailSend tests", 1
+        unless $tests{MailSend} && $TestConfig{email_address};
+
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MailSend->new( name => 'Mail::Send',
@@ -163,17 +157,19 @@ fake_test(1, 'Log::Dispatch::Email::MailSend'), goto MailSendmail
 
     $dispatch->log( level => 'emerg', message => "Mail::Send test - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with Mail::Send to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    diag( "Sending email with Mail::Send to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    result(1);
+    ok(1);
 }
 
-MailSendmail:
-fake_test(1, 'Log::Dispatch::Email::MailSendmail'), goto MIMELite
-    unless $tests{MailSendmail} && $TestConfig{email_address};
+
 # 10  Log::Dispatch::Email::MailSendmail
+SKIP:
 {
+    skip "Cannot do MailSendmail tests", 1
+        unless $tests{MailSendmail} && $TestConfig{email_address};
+
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MailSendmail->new( name => 'Mail::Sendmail',
@@ -183,18 +179,19 @@ fake_test(1, 'Log::Dispatch::Email::MailSendmail'), goto MIMELite
 
     $dispatch->log( level => 'emerg', message => "Mail::Sendmail test - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with Mail::Sendmail to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    diag( "Sending email with Mail::Sendmail to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    result(1);
+    ok(1);
 }
 
-MIMELite:
-fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
-    unless $tests{MIMELite} && $TestConfig{email_address};
 # 11  Log::Dispatch::Email::MIMELite
-
+SKIP:
 {
+
+    skip "Cannot do MIMELite tests", 1
+        unless $tests{MIMELite} && $TestConfig{email_address};
+
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MIMELite->new( name => 'Mime::Lite',
@@ -204,18 +201,13 @@ fake_test(1, 'Log::Dispatch::Email::MIMELite'), goto Syslog
 
     $dispatch->log( level => 'emerg', message => "MIME::Lite - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with MIME::Lite to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    diag( "Sending email with MIME::Lite to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    result(1);
+    ok(1);
 }
 
-Syslog:
-{ ; }
-# 12 is gone
-
-# 13  Log::Dispatch::Screen
-Screen:
+# 12  Log::Dispatch::Screen
 {
     my $dispatch = Log::Dispatch->new;
 
@@ -228,11 +220,11 @@ Screen:
     $dispatch->log( level => 'crit', message => 'testing screen' );
     untie *STDOUT;
 
-    result( $text eq 'testing screen',
-	    "Log::Dispatch::Screen didn't send any output to STDOUT\n" );
+    is( $text, 'testing screen',
+        "Log::Dispatch::Screen outputs to STDOUT" );
 }
 
-# 14  Log::Dispatch::Output->accepted_levels
+# 13-14  Log::Dispatch::Output->accepted_levels
 {
     my $l = Log::Dispatch::Screen->new( name => 'foo',
 					min_level => 'warning',
@@ -248,8 +240,10 @@ Screen:
 	$pass = 0 unless $expected[$x] eq $levels[$x];
     }
 
-    result( $pass && (scalar @expected == scalar @levels),
-	    "accepted_levels didn't match expected levels\n" );
+    is( scalar @expected, scalar @levels,
+        "number of levels matched" );
+
+    ok( $pass, "levels matched" );
 }
 
 # 15:  Log::Dispatch single callback
@@ -267,8 +261,8 @@ Screen:
     $dispatch->log( level => 'warning', message => 'esrever' );
     untie *STDOUT;
 
-    result( $text eq 'reverse',
-	    "Log::Dispatch callback did not reverse text as expected: $text\n" );
+    is( $text, 'reverse',
+        "callback to reverse text" );
 }
 
 # 16:  Log::Dispatch multiple callbacks
@@ -288,8 +282,8 @@ Screen:
     $dispatch->log( level => 'warning', message => 'esrever' );
     untie *STDOUT;
 
-    result( $text eq 'REVERSE',
-	    "Log::Dispatch callback did not reverse and uppercase text as expected: $text\n" );
+    is( $text, 'REVERSE',
+        "callback to reverse and uppercase text" );
 }
 
 # 17:  Log::Dispatch::Output single callback
@@ -309,8 +303,8 @@ Screen:
     $dispatch->log( level => 'warning', message => 'esrever' );
     untie *STDOUT;
 
-    result( $text eq 'reverse',
-	    "Log::Dispatch::Output callback did not reverse text as expected: $text\n" );
+    is( $text, 'reverse',
+        "Log::Dispatch::Output callback to reverse text" );
 }
 
 # 18:  Log::Dispatch::Output multiple callbacks
@@ -331,8 +325,8 @@ Screen:
     $dispatch->log( level => 'warning', message => 'esrever' );
     untie *STDOUT;
 
-    result( $text eq 'REVERSE',
-	    "Log::Dispatch callback did not reverse and uppercase text as expected: $text\n" );
+    is( $text, 'REVERSE',
+        "Log::Dispatch::Output callbacks to reverse and uppercase text" );
 }
 
 # 19:  test level paramter to callbacks
@@ -351,8 +345,8 @@ Screen:
     $dispatch->log( level => 'warning', message => 'esrever' );
     untie *STDOUT;
 
-    result( $text eq 'WARNING',
-	    "Log::Dispatch callback did return an uppercase version of the level parameter as expected: $text\n" );
+    is( $text, 'WARNING',
+        "Log::Dispatch callback to uppercase the level parameter" );
 }
 
 # 20 - 107: Comprehensive test of new methods that match level names
@@ -369,7 +363,8 @@ Screen:
 						    max_level => $allowed_level,
 						    stderr => 0 ) );
 
-	foreach my $test_level ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
+	foreach my $test_level ( qw( debug info notice warning err
+                                     error crit critical alert emerg emergency ) )
 	{
 	    my $text;
 	    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
@@ -379,13 +374,13 @@ Screen:
 	    if ( $levels{$test_level} eq $allowed_level )
 	    {
 		my $expect = join $", $test_level, 'test';
-		result( $text eq $expect,
-			"Calling $test_level method should have sent message '$expect'\n" );
+		is( $text, $expect,
+                    "Calling $test_level method should send message '$expect'\n" );
 	    }
 	    else
 	    {
-		result( $text eq '',
-			"Calling $test_level method should not have logged anything but we got '$text'\n" );
+		ok( ! $text,
+                    "Calling $test_level method should not log anything" );
 	    }
 	}
     }
@@ -393,14 +388,15 @@ Screen:
 
 # 108 - 122:  Log::Dispatch->level_is_valid method
 {
-    foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
+    foreach my $l ( qw( debug info notice warning err error
+                        crit critical alert emerg emergency ) )
     {
-	result( Log::Dispatch->level_is_valid($l) );
+	ok( Log::Dispatch->level_is_valid($l), "$l is valid level" );
     }
 
     foreach my $l ( qw( debu inf foo bar ) )
     {
-	result( ! Log::Dispatch->level_is_valid($l) );
+	ok( ! Log::Dispatch->level_is_valid($l), "$l is not valid level" );
     }
 }
 
@@ -427,12 +423,18 @@ Screen:
     my $data = join '', <F>;
     close F;
 
-    result( $data =~ /^test2/ );
+    like( $data, qr/^test2/, "test write mode" );
+
+    unlink './write_mode.tst'
+	or diag( "Can't remove ./write_mode.tst: $!" );
 }
 
-# 124  Log::Dispatch::Email::MailSend
-if ( $tests{MailSender} && $TestConfig{email_address} )
+# 124  Log::Dispatch::Email::MailSender
+SKIP:
 {
+    skip "Cannot do MailSender tests", 1
+        unless $tests{MailSender} && $TestConfig{email_address};
+
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add
@@ -445,14 +447,10 @@ if ( $tests{MailSender} && $TestConfig{email_address} )
 
     $dispatch->log( level => 'emerg', message => "Mail::Sender - If you can read this then the test succeeded (PID $$)" );
 
-    warn "Sending email with Mail::Sender to $TestConfig{email_address}.  If you get it then the test succeeded (PID $$)\n";
+    diag( "Sending email with Mail::Sender to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    result(1);
-}
-else
-{
-    fake_test(1, 'Log::Dispatch::Email::MailSender')
+    ok(1);
 }
 
 # 125 - 126 dispatcher exists
@@ -463,11 +461,11 @@ else
         ( Log::Dispatch::Screen->new( name => 'yomama',
                                       min_level => 'alert' ) );
 
-    result( $dispatch->output('yomama'),
-            "yomama output should exist" );
+    ok( $dispatch->output('yomama'),
+        "yomama output should exist" );
 
-    result( ! $dispatch->output('nomama'),
-            "nomama output should not exist" );
+    ok( ! $dispatch->output('nomama'),
+        "nomama output should not exist" );
 }
 
 # 127 - 128  Test Log::Dispatch::File - close_after_write & permissions
@@ -486,8 +484,8 @@ else
 	or die "Can't read ./clse_test.log: $!";
 
     my @log = <LOG1>;
-    result( $log[0] eq "info\n",
-	    "First line in log file is '$log[0]', not 'info'\n" );
+    is( $log[0], "info\n",
+        "First line in log file should be 'info\\n'" );
 
     close LOG1;
 
@@ -495,29 +493,32 @@ else
         or die "Cannot stat ./close_test.log: $!";
 
     my $mode_string = sprintf( '%04o', $mode & 07777 );
-    result( $mode_string eq '0777',
-            "Mode should be 0777 but it is $mode_string\n" );
+    is( $mode_string, '0777',
+        "Mode should be 0777" );
 
     unlink './close_test.log'
-	or warn "Can't remove ./close_test.log: $!";
+	or diag( "Can't remove ./close_test.log: $!" );
 }
 
-sub fake_test
+# 129 - 131 - would_log
 {
-    my ($x, $pm) = @_;
+    my $dispatch = Log::Dispatch->new;
 
-    warn "Skipping $x test", ($x > 1 ? 's' : ''), " for $pm\n";
-    result($_) foreach 1 .. $x;
-}
+    $dispatch->add( Log::Dispatch::File->new( name => 'file1',
+					      min_level => 'warning',
+					      filename => './would_test.log' ) );
 
+    ok( !$dispatch->would_log('foo'),
+        "will not log 'foo'" );
 
-sub result
-{
-    my $ok = !!shift;
-    use vars qw($TESTNUM);
-    $TESTNUM++;
-    print "not "x!$ok, "ok $TESTNUM\n";
-    print @_ if !$ok;
+    ok( ! $dispatch->would_log('debug'),
+        "will not log 'debug'" );
+
+    ok( $dispatch->would_log('crit'),
+        "will log 'crit'" );
+
+    unlink './would_test.log'
+	or diag( "Can't remove ./would_test.log: $!" );
 }
 
 
