@@ -78,7 +78,7 @@ sub log_to
 
     $params{message} = $self->_apply_callbacks(%params)
 	if $self->{callbacks};
-    warn "LOG TO\n";
+
     $self->_log_to(%params);
 }
 
@@ -147,7 +147,9 @@ It's a hash in case I need to add parameters in the future.
 The callbacks are expected to modify the message and then return a
 single scalar containing that modified message.  These callbacks will
 be called when either the C<log> or C<log_to> methods are called and
-will only be applied to a given message once.
+will only be applied to a given message once.  If they do not return
+the message then you will get no output.  Make sure to return the
+message!
 
 =item * add( Log::Dispatch::* OBJECT )
 
