@@ -231,7 +231,7 @@ fake_test(1, 'Log::Dispatch::Syslog'), goto Screen
 	    "Log::Dispatch::Syslog test failed to write to $Install::TestConfig::config{syslog_file}\n" );
 }
 
-# 12  Log::Dispatch::Screen
+# 13  Log::Dispatch::Screen
 Screen:
 {
     my $dispatch = Log::Dispatch->new;
