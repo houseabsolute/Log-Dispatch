@@ -1,3 +1,9 @@
+2.11 Jul 27, 2005
+
+- In tests, make sure filehandles are closed before reading or
+unlinking the file.  Patch from on Savage.
+
+
 2.10 Feb 11, 2004
 
 - No changes to the core code, just a change to the included
