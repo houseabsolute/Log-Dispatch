@@ -94,12 +94,14 @@ ok( $dispatch, "Couldn't create Log::Dispatch object\n" );
 {
     my $dispatch = Log::Dispatch->new;
     $dispatch->add( Log::Dispatch::File->new( name => 'file1',
-					      min_level => 'debug',
-					      max_level => 'crit',
-					      filename => './max_test.log' ) );
+                                              min_level => 'debug',
+                                              max_level => 'crit',
+                                              filename => './max_test.log' ) );
 
     $dispatch->log( level => 'emerg', message => "emergency\n" );
     $dispatch->log( level => 'crit',  message => "critical\n" );
+
+    undef $dispatch; # close file handles
 
     open LOG, './max_test.log'
 	or die "Can't read ./max_test.log: $!";
@@ -126,8 +128,8 @@ ok( $dispatch, "Couldn't create Log::Dispatch object\n" );
 
     $dispatch->log( level => 'notice', message =>  "handle test\n" );
 
-    my $handle = $dispatch->remove('handle');
-    undef $handle;
+    # close file handles
+    undef $dispatch;
     undef $fh;
 
     open LOG, './handle_test.log'
@@ -135,11 +137,13 @@ ok( $dispatch, "Couldn't create Log::Dispatch object\n" );
 
     my @log = <LOG>;
 
+    close LOG;
+
     is( $log[0], "handle test\n",
         "Log::Dispatch::Handle created log file should contain 'handle test\\n'" );
 
     unlink './handle_test.log'
-	or diag( "Can't temove ./handle_test.log: $!" );
+	or diag( "Can't remove ./handle_test.log: $!" );
 }
 
 # 9  Log::Dispatch::Email::MailSend
@@ -525,6 +529,8 @@ SKIP:
 
     ok( $dispatch->would_log('crit'),
         "will log 'crit'" );
+
+    undef $dispatch; # close file handles
 
     unlink './would_test.log'
 	or diag( "Can't remove ./would_test.log: $!" );
