@@ -1,7 +1,7 @@
 2.11 Jul 27, 2005
 
 - In tests, make sure filehandles are closed before reading or
-unlinking the file.  Patch from on Savage.
+unlinking the file.  Patch from Ron Savage.
 
 
 2.10 Feb 11, 2004
