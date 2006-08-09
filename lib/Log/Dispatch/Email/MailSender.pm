@@ -12,7 +12,6 @@ use Log::Dispatch::Email;
 use base qw( Log::Dispatch::Email );
 use fields qw( buffer buffered from subject to smtp );
 
-use Carp ();
 use Mail::Sender ();
 
 use vars qw[ $VERSION ];
