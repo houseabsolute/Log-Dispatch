@@ -27,6 +27,7 @@ sub send_email
     # Does this ever work for this module?
     $msg->set('From', $self->{from}) if $self->{from};
 
+    local $?;
     eval
     {
 	my $fh = $msg->open
