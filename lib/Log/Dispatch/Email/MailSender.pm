@@ -16,7 +16,7 @@ use Mail::Sender ();
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = '1.04';
 
 1;
 

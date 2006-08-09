@@ -13,7 +13,7 @@ use vars qw[ $VERSION ];
 
 use Carp ();
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.26 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = '1.26';
 
 1;
 

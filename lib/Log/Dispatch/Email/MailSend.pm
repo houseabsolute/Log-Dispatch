@@ -6,12 +6,11 @@ use Log::Dispatch::Email;
 
 use base qw( Log::Dispatch::Email );
 
-use Carp ();
 use Mail::Send;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.19 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = '1.19';
 
 1;
 

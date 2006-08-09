@@ -16,7 +16,7 @@ require 'syslog.ph' if $] < 5.006;
 
 use vars qw[ $VERSION ];
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.18 $ =~ /: (\d+)\.(\d+)/;
+$VERSION = '1.18';
 
 1;
 
