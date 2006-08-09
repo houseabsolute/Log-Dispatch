@@ -41,6 +41,7 @@ sub send_email
     my $self = shift;
     my %p = @_;
 
+    local $?;
     eval
     {
         my $sender =

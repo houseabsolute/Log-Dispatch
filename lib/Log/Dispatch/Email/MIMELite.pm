@@ -27,6 +27,7 @@ sub send_email
 
     $mail{From} = $self->{from} if defined $self->{from};
 
+    local $?;
     unless ( MIME::Lite->new(%mail)->send )
     {
 	warn "Error sending mail with MIME::Lite" if $^W;
