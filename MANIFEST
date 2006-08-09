@@ -22,3 +22,5 @@ t/02-email-exit.t
 t/99-pod.t
 t/email-exit-helper.pl
 t/sendmail
+Makefile.PL
+META.yml
