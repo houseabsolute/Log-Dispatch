@@ -4,6 +4,9 @@
   buffered mode and they sent mail as a script exited. Reported by
   Dean Kopesky.
 
+- Doc tweaks. Make reference to "Log Levels" section in output module
+  docs more explicit. RT #11224.
+
 
 2.11 Jul 27, 2005
 
