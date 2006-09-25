@@ -1,3 +1,9 @@
+2.13 Sep 25, 2006
+
+- No code changes, just added a SUPPORT section to the docs referring
+  folks to RT for bug reports & patch.es
+
+
 2.12 Aug 9, 2006
 
 - The various email sending modules could overwrite if they were in
