@@ -390,7 +390,7 @@ Log::Dispatch does.  Originally written by Raphael Manfredi.
 
 =head1 COPYRIGHT
 
-Copyright (c) 1999-2003 David Rolsky.  All rights reserved.  This
+Copyright (c) 1999-2006 David Rolsky.  All rights reserved.  This
 program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
