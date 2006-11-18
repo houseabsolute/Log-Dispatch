@@ -1,3 +1,13 @@
+2.14
+
+This release only involves changes to the test suite.
+
+- Make sure we don't fail if Apache::Log is not installed on the
+  system. RT #22791. Reported by Lee Goddard.
+
+- Separated out compilation tests from other tests.
+
+
 2.13 Sep 25, 2006
 
 - No code changes, just added a SUPPORT section to the docs referring

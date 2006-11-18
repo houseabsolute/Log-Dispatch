@@ -2,9 +2,9 @@
 
 use strict;
 
-use Test::More tests => 131;
+use Test::More tests => 130;
 
-use_ok('Log::Dispatch');
+use Log::Dispatch;
 
 
 my %tests;
@@ -34,10 +34,6 @@ use Log::Dispatch::Screen;
 
 use IO::File;
 
-if ( eval { require mod_perl } )
-{
-    require Log::Dispatch::ApacheLog;
-}
 
 my $dispatch = Log::Dispatch->new;
 ok( $dispatch, "Couldn't create Log::Dispatch object\n" );
