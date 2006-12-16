@@ -3,6 +3,9 @@
 - Don't try to test compilation of L::D::Syslog unless Sys::Syslog is
   available. Patch by Kenichi Ishigaki. RT #23751.
 
+- Allow a subroutine reference as a log message when callin
+  Log::Dispatch->log(). Suggested by Craig Manley. RT #23913.
+
 
 2.14 Nov 18, 2006
 
