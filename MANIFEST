@@ -11,6 +11,7 @@ lib/Log/Dispatch/Email/MIMELite.pm
 lib/Log/Dispatch/File.pm
 lib/Log/Dispatch/File/Locked.pm
 lib/Log/Dispatch/Handle.pm
+lib/Log/Dispatch/Null.pm
 lib/Log/Dispatch/Output.pm
 lib/Log/Dispatch/Screen.pm
 lib/Log/Dispatch/Syslog.pm
