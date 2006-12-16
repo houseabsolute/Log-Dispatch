@@ -65,6 +65,11 @@ sub log
     my $self = shift;
     my %p = @_;
 
+    return unless $self->would_log( $p{level} );
+
+    $p{message} = $p{message}->()
+        if ref $p{message} eq 'CODE';
+
     $p{message} = $self->_apply_callbacks(%p)
 	if $self->{callbacks};
 
@@ -206,11 +211,20 @@ Removes the object that matches the name given to the remove method.
 The return value is the object being removed or undef if no object
 matched this.
 
-=item * log( level => $, message => $ )
+=item * log( level => $, message => $ or \& )
 
 Sends the message (at the appropriate level) to all the
 Log::Dispatch::* objects that the dispatcher contains (by calling the
 C<log_to> method repeatedly).
+
+This method also accepts a subroutine reference as the message
+argument. This reference will be called only if there is an output
+that will accept a message of the specified level.
+
+B<WARNING>: This is the only logging method that does something
+intelligent with a subroutine reference as the message. Other methods,
+like C<log_to()> or the C<log()> method of an output object, will just
+stringify the reference.
 
 =item * log_to( name => $, level => $, message => $ )
 

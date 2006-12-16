@@ -1,4 +1,10 @@
-2.14
+2.15
+
+- Don't try to test compilation of L::D::Syslog unless Sys::Syslog is
+  available. Patch by Kenichi Ishigaki. RT #23751.
+
+
+2.14 Nov 18, 2006
 
 This release only involves changes to the test suite.
 

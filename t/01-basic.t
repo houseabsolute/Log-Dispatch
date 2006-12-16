@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 130;
+use Test::More tests => 134;
 
 use Log::Dispatch;
 
@@ -30,13 +30,15 @@ if ( -d '.svn' )
 
 use Log::Dispatch::File;
 use Log::Dispatch::Handle;
+use Log::Dispatch::Null;
 use Log::Dispatch::Screen;
 
 use IO::File;
+use IO::String;
 
 
 my $dispatch = Log::Dispatch->new;
-ok( $dispatch, "Couldn't create Log::Dispatch object\n" );
+ok( $dispatch, "created Log::Dispatch object" );
 
 # 3-6  Test Log::Dispatch::File
 {
@@ -160,7 +162,7 @@ SKIP:
     diag( "Sending email with Mail::Send to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    ok(1);
+    ok( 1, 'sent email via MailSend' );
 }
 
 
@@ -182,7 +184,7 @@ SKIP:
     diag( "Sending email with Mail::Sendmail to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    ok(1);
+    ok( 1, 'sent email via MailSendmail' );
 }
 
 # 11  Log::Dispatch::Email::MIMELite
@@ -204,7 +206,7 @@ SKIP:
     diag( "Sending email with MIME::Lite to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    ok(1);
+    ok( 1, 'sent mail via MIMELite' );
 }
 
 # 12  Log::Dispatch::Screen
@@ -251,17 +253,18 @@ SKIP:
     my $reverse = sub { my %p = @_;  return reverse $p{message}; };
     my $dispatch = Log::Dispatch->new( callbacks => $reverse );
 
-    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+    my $string;
+    my $fh = IO::String->new($string);
+
+    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
+                                                handle => $fh,
 						min_level => 'warning',
 						max_level => 'alert',
-						stderr => 0 ) );
+                                              ) );
 
-    my $text;
-    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
     $dispatch->log( level => 'warning', message => 'esrever' );
-    untie *STDOUT;
 
-    is( $text, 'reverse',
+    is( $string, 'reverse',
         "callback to reverse text" );
 }
 
@@ -272,17 +275,18 @@ SKIP:
 
     my $dispatch = Log::Dispatch->new( callbacks => [ $reverse, $uc ] );
 
-    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+    my $string;
+    my $fh = IO::String->new($string);
+
+    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
+                                                handle => $fh,
 						min_level => 'warning',
 						max_level => 'alert',
-						stderr => 0 ) );
+                                              ) );
 
-    my $text;
-    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
     $dispatch->log( level => 'warning', message => 'esrever' );
-    untie *STDOUT;
 
-    is( $text, 'REVERSE',
+    is( $string, 'REVERSE',
         "callback to reverse and uppercase text" );
 }
 
@@ -292,18 +296,18 @@ SKIP:
 
     my $dispatch = Log::Dispatch->new;
 
-    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+    my $string;
+    my $fh = IO::String->new($string);
+
+    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
+                                                handle => $fh,
 						min_level => 'warning',
 						max_level => 'alert',
-						stderr => 0,
 						callbacks => $reverse ) );
 
-    my $text;
-    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
     $dispatch->log( level => 'warning', message => 'esrever' );
-    untie *STDOUT;
 
-    is( $text, 'reverse',
+    is( $string, 'reverse',
         "Log::Dispatch::Output callback to reverse text" );
 }
 
@@ -314,18 +318,18 @@ SKIP:
 
     my $dispatch = Log::Dispatch->new;
 
-    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+    my $string;
+    my $fh = IO::String->new($string);
+
+    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
+                                                handle => $fh,
 						min_level => 'warning',
 						max_level => 'alert',
-						stderr => 0,
 						callbacks => [ $reverse, $uc ] ) );
 
-    my $text;
-    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
     $dispatch->log( level => 'warning', message => 'esrever' );
-    untie *STDOUT;
 
-    is( $text, 'REVERSE',
+    is( $string, 'REVERSE',
         "Log::Dispatch::Output callbacks to reverse and uppercase text" );
 }
 
@@ -335,17 +339,18 @@ SKIP:
 
     my $dispatch = Log::Dispatch->new( callbacks => $level );
 
-    $dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+    my $string;
+    my $fh = IO::String->new($string);
+
+    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
+                                                handle => $fh,
 						min_level => 'warning',
 						max_level => 'alert',
 						stderr => 0 ) );
 
-    my $text;
-    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
     $dispatch->log( level => 'warning', message => 'esrever' );
-    untie *STDOUT;
 
-    is( $text, 'WARNING',
+    is( $string, 'WARNING',
         "Log::Dispatch callback to uppercase the level parameter" );
 }
 
@@ -358,28 +363,30 @@ SKIP:
     {
 	my $dispatch = Log::Dispatch->new;
 
-	$dispatch->add( Log::Dispatch::Screen->new( name => 'foo',
+        my $string;
+        my $fh = IO::String->new($string);
+
+	$dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
+                                                    handle => $fh,
 						    min_level => $allowed_level,
 						    max_level => $allowed_level,
-						    stderr => 0 ) );
+                                                  ) );
 
 	foreach my $test_level ( qw( debug info notice warning err
                                      error crit critical alert emerg emergency ) )
 	{
-	    my $text;
-	    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
+            $fh->truncate(0);
 	    $dispatch->$test_level( $test_level, 'test' );
-	    untie *STDOUT;
 
 	    if ( $levels{$test_level} eq $allowed_level )
 	    {
 		my $expect = join $", $test_level, 'test';
-		is( $text, $expect,
-                    "Calling $test_level method should send message '$expect'\n" );
+		is( $string, $expect,
+                    "Calling $test_level method should send message '$expect'" );
 	    }
 	    else
 	    {
-		ok( ! $text,
+		ok( ! length $string,
                     "Calling $test_level method should not log anything" );
 	    }
 	}
@@ -450,7 +457,7 @@ SKIP:
     diag( "Sending email with Mail::Sender to $TestConfig{email_address}.\nIf you get it then the test succeeded (PID $$)\n" );
     undef $dispatch;
 
-    ok(1);
+    ok( 1, 'sent email via MailSender' );
 }
 
 # 125 - 126 dispatcher exists
@@ -513,11 +520,11 @@ SKIP:
 {
     my $dispatch = Log::Dispatch->new;
 
-    $dispatch->add( Log::Dispatch::File->new( name => 'file1',
+    $dispatch->add( Log::Dispatch::Null->new( name => 'null',
 					      min_level => 'warning',
-					      filename => './would_test.log' ) );
+                                            ) );
 
-    ok( !$dispatch->would_log('foo'),
+    ok( ! $dispatch->would_log('foo'),
         "will not log 'foo'" );
 
     ok( ! $dispatch->would_log('debug'),
@@ -525,13 +532,46 @@ SKIP:
 
     ok( $dispatch->would_log('crit'),
         "will log 'crit'" );
-
-    undef $dispatch; # close file handles
-
-    unlink './would_test.log'
-	or diag( "Can't remove ./would_test.log: $!" );
 }
 
+{
+    my $dispatch = Log::Dispatch->new;
+
+    $dispatch->add( Log::Dispatch::Null->new( name => 'null',
+                                              min_level => 'info',
+                                              max_level => 'critical',
+                                            ) );
+
+    my $called = 0;
+    my $message = sub { $called = 1 };
+
+    $dispatch->log( level => 'debug', message => $message );
+    ok( ! $called, 'subref is not called if the message would not be logged' );
+
+    $called = 0;
+    $dispatch->log( level => 'warning', message => $message );
+    ok( $called, 'subref is called when message is logged' );
+
+    $called = 0;
+    $dispatch->log( level => 'emergency', message => $message );
+    ok( ! $called, 'subref is not called when message would not be logged' );
+}
+
+{
+    my $string;
+    my $fh = IO::String->new($string);
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::Handle->new( name => 'handle',
+						min_level => 'debug',
+						handle => $fh ) );
+
+    $dispatch->log( level => 'debug',
+                    message => sub { 'this is my message' },
+                  );
+
+    is( $string, 'this is my message', 'message returned by subref is logged' );
+}
 
 # Used for testing Log::Dispatch::Screen
 package Test::Tie::STDOUT;
