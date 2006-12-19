@@ -34,7 +34,6 @@ use Log::Dispatch::Null;
 use Log::Dispatch::Screen;
 
 use IO::File;
-use IO::String;
 
 
 my $dispatch = Log::Dispatch->new;
@@ -254,10 +253,8 @@ SKIP:
     my $dispatch = Log::Dispatch->new( callbacks => $reverse );
 
     my $string;
-    my $fh = IO::String->new($string);
-
-    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
-                                                handle => $fh,
+    $dispatch->add( Log::Dispatch::String->new( name => 'foo',
+                                                string => \$string,
 						min_level => 'warning',
 						max_level => 'alert',
                                               ) );
@@ -276,10 +273,8 @@ SKIP:
     my $dispatch = Log::Dispatch->new( callbacks => [ $reverse, $uc ] );
 
     my $string;
-    my $fh = IO::String->new($string);
-
-    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
-                                                handle => $fh,
+    $dispatch->add( Log::Dispatch::String->new( name => 'foo',
+                                                string => \$string,
 						min_level => 'warning',
 						max_level => 'alert',
                                               ) );
@@ -297,10 +292,8 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     my $string;
-    my $fh = IO::String->new($string);
-
-    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
-                                                handle => $fh,
+    $dispatch->add( Log::Dispatch::String->new( name => 'foo',
+                                                string => \$string,
 						min_level => 'warning',
 						max_level => 'alert',
 						callbacks => $reverse ) );
@@ -319,10 +312,8 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     my $string;
-    my $fh = IO::String->new($string);
-
-    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
-                                                handle => $fh,
+    $dispatch->add( Log::Dispatch::String->new( name => 'foo',
+                                                string => \$string,
 						min_level => 'warning',
 						max_level => 'alert',
 						callbacks => [ $reverse, $uc ] ) );
@@ -340,10 +331,8 @@ SKIP:
     my $dispatch = Log::Dispatch->new( callbacks => $level );
 
     my $string;
-    my $fh = IO::String->new($string);
-
-    $dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
-                                                handle => $fh,
+    $dispatch->add( Log::Dispatch::String->new( name => 'foo',
+                                                string => \$string,
 						min_level => 'warning',
 						max_level => 'alert',
 						stderr => 0 ) );
@@ -364,10 +353,8 @@ SKIP:
 	my $dispatch = Log::Dispatch->new;
 
         my $string;
-        my $fh = IO::String->new($string);
-
-	$dispatch->add( Log::Dispatch::Handle->new( name => 'foo',
-                                                    handle => $fh,
+	$dispatch->add( Log::Dispatch::String->new( name => 'foo',
+                                                    string => \$string,
 						    min_level => $allowed_level,
 						    max_level => $allowed_level,
                                                   ) );
@@ -375,7 +362,7 @@ SKIP:
 	foreach my $test_level ( qw( debug info notice warning err
                                      error crit critical alert emerg emergency ) )
 	{
-            $fh->truncate(0);
+            $string = '';
 	    $dispatch->$test_level( $test_level, 'test' );
 
 	    if ( $levels{$test_level} eq $allowed_level )
@@ -559,12 +546,12 @@ SKIP:
 
 {
     my $string;
-    my $fh = IO::String->new($string);
 
     my $dispatch = Log::Dispatch->new;
-    $dispatch->add( Log::Dispatch::Handle->new( name => 'handle',
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
 						min_level => 'debug',
-						handle => $fh ) );
+                                              ) );
 
     $dispatch->log( level => 'debug',
                     message => sub { 'this is my message' },
@@ -572,6 +559,37 @@ SKIP:
 
     is( $string, 'this is my message', 'message returned by subref is logged' );
 }
+
+package Log::Dispatch::String;
+
+use strict;
+
+use Log::Dispatch::Output;
+
+use base qw( Log::Dispatch::Output );
+
+
+sub new
+{
+    my $proto = shift;
+    my $class = ref $proto || $proto;
+    my %p = @_;
+
+    my $self = bless { string => $p{string} }, $class;
+
+    $self->_basic_init(%p);
+
+    return $self;
+}
+
+sub log_message
+{
+    my $self = shift;
+    my %p = @_;
+
+    ${ $self->{string} } .= $p{message};
+}
+
 
 # Used for testing Log::Dispatch::Screen
 package Test::Tie::STDOUT;

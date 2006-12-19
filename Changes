@@ -1,3 +1,12 @@
+2.16 Dec 19, 2006 (Happy Birthday, Dad!)
+
+- Don't require IO::String for running the tests. Reported by Andreas
+  Koenig. RT #23973.
+
+- Moved Test::More to build_requires. Suggested by Andreas Koenig. RT
+  #23973.
+
+
 2.15 Dec 16, 2006
 
 - Don't try to test compilation of L::D::Syslog unless Sys::Syslog is
