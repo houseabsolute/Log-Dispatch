@@ -1,3 +1,9 @@
+2.17 Mar 31, 2007
+
+- Log::Dispatch::ApacheLog should now work under mod_perl 2, as well
+  as mod_perl 1.
+
+
 2.16 Dec 19, 2006 (Happy Birthday, Dad!)
 
 - Don't require IO::String for running the tests. Reported by Andreas
