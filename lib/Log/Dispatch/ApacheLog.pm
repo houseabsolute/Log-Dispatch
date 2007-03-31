@@ -9,13 +9,22 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use Apache::Log;
-
 use vars qw[ $VERSION ];
 
 $VERSION = '1.09';
 
-1;
+BEGIN
+{
+    if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /^2/ )
+    {
+        require Apache2::Log;
+    }
+    else
+    {
+        require Apache::Log;
+    }
+}
+
 
 sub new
 {
@@ -32,37 +41,27 @@ sub new
     return $self;
 }
 
-sub log_message
 {
-    my $self = shift;
-    my %p = @_;
+    my %methods =
+        ( emergency => 'emerg',
+          critical  => 'crit',
+          warning   => 'warn',
+        );
+    sub log_message
+    {
+        my $self = shift;
+        my %p = @_;
 
-    my $method;
+        my $level = $self->_level_as_name($p{level});
 
-    my $level = $self->_level_as_name($p{level});
-    if ($level eq 'emergency')
-    {
-	$method = 'emerg';
-    }
-    elsif ( $level eq 'critical' )
-    {
-	$method = 'crit';
-    }
-    elsif( $level eq 'err' )
-    {
-	$method = 'error';
-    }
-    elsif( $level eq 'warning' )
-    {
-	$method = 'warn';
-    }
-    else
-    {
-	$method = $level;
-    }
+        my $method = $methods{$level} || $level;
 
-    $self->{apache_log}->$method( $p{message} );
+        $self->{apache_log}->$method( $p{message} );
+    }
 }
+
+
+1;
 
 __END__
 
