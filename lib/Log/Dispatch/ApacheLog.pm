@@ -15,7 +15,7 @@ $VERSION = '1.09';
 
 BEGIN
 {
-    if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /^2/ )
+    if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /2\./ )
     {
         require Apache2::Log;
     }
