@@ -1,3 +1,9 @@
+2.18 May 12, 2007
+
+- Log::Dispatch::ApacheLog should really now work under mod_perl 2, as
+  well as mod_perl 1. RT #26910.
+
+
 2.17 Mar 31, 2007
 
 - Log::Dispatch::ApacheLog should now work under mod_perl 2, as well
