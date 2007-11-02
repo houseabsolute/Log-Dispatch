@@ -22,7 +22,5 @@ META.yml
 README
 t/00-compile.t
 t/01-basic.t
-t/02-email-exit.t
-t/99-pod.t
-t/email-exit-helper.pl
-t/sendmail
+t/pod-coverage.t
+t/pod.t

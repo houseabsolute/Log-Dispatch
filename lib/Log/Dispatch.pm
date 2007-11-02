@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Base );
 
 use Carp ();
 
-our $VERSION = '2.18';
+our $VERSION = '2.19';
 our %LEVELS;
 
 
@@ -289,14 +289,25 @@ The log levels that Log::Dispatch uses are taken directly from the
 syslog man pages (except that I expanded them to full words).  Valid
 levels are:
 
- debug
- info
- notice
- warning
- error
- critical
- alert
- emergency
+=over 4
+
+=item debug
+
+=item info
+
+=item notice
+
+=item warning
+
+=item error
+
+=item critical
+
+=item alert
+
+=item emergency
+
+=back
 
 Alternately, the numbers 0 through 7 may be used (debug is 0 and
 emergency is 7).  The syslog standard of 'err', 'crit', and 'emerg'

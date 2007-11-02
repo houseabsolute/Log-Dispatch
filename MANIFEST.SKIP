@@ -10,3 +10,7 @@ MANIFEST.SKIP
 ^blib/
 .*\.svn.*
 ^Install/
+
+t/02-email-exit.t
+t/email-exit-helper.pl
+t/sendmail
