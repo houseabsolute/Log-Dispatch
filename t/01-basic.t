@@ -518,7 +518,11 @@ SKIP:
 }
 
 
+SKIP:
 {
+    skip "Cannot test utf8 files with this version of Perl ($])", 1
+        unless $] >= 5.008;
+
     my $dispatch = Log::Dispatch->new;
 
     my $utf8_log = File::Spec->catfile( $tempdir, 'utf8.log' );
