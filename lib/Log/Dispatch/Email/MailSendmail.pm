@@ -27,7 +27,7 @@ sub send_email
     local $?;
     unless ( Mail::Sendmail::sendmail(%mail) )
     {
-	warn "Error sending mail: $Mail::Sendmail::error" if $^W;
+	warn "Error sending mail: $Mail::Sendmail::error" if warnings::enabled();
     }
 }
 
