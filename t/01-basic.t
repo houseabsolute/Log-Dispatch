@@ -2,7 +2,7 @@
 
 use strict;
 
-use Test::More tests => 135;
+use Test::More tests => 136;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -515,6 +515,29 @@ SKIP:
 
     ok( ! scalar @chmod,
         'chmod() was not called when permissions already matched what was specified' );
+}
+
+
+{
+    my $dispatch = Log::Dispatch->new;
+
+    my $utf8_log = File::Spec->catfile( $tempdir, 'utf8.log' );
+
+    $dispatch->add( Log::Dispatch::File->new( name => 'utf8',
+					      min_level => 'info',
+					      filename => $utf8_log,
+                                              binmode => ':utf8',
+                                            ) );
+
+    my @warnings;
+
+    {
+        local $SIG{__WARN__} = sub { push @warnings, @_ };
+        $dispatch->warning("\x{999A}");
+    }
+
+    ok( ! scalar @warnings,
+        'utf8 binmode was applied to file and no warnings were issued' );
 }
 
 # would_log

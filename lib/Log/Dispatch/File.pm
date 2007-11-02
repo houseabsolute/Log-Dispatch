@@ -40,6 +40,8 @@ sub _make_handle
     my %p = validate( @_, { filename  => { type => SCALAR },
 			    mode      => { type => SCALAR,
 					   default => '>' },
+                            binmode   => { type => SCALAR,
+                                           default => undef },
 			    autoflush => { type => BOOLEAN,
 					   default => 1 },
           		    close_after_write => { type => BOOLEAN,
@@ -48,9 +50,10 @@ sub _make_handle
                                              optional => 1 },
 			  } );
 
-    $self->{filename} = $p{filename};
-    $self->{close} = $p{close_after_write};
+    $self->{filename}    = $p{filename};
+    $self->{close}       = $p{close_after_write};
     $self->{permissions} = $p{permissions};
+    $self->{binmode}     = $p{binmode};
 
     if ( $self->{close} )
     {
@@ -98,6 +101,11 @@ sub _open_file
         }
 
         $self->{chmodded} = 1;
+    }
+
+    if ( $self->{binmode} )
+    {
+        binmode $fh, $self->{binmode};
     }
 
     $self->{fh} = $fh;
@@ -200,6 +208,10 @@ The filename to be opened for writing.
 The mode the file should be opened with.  Valid options are 'write',
 '>', 'append', '>>', or the relevant constants from Fcntl.  The
 default is 'write'.
+
+=item * binmode ($)
+
+A layer name to be passed to binmode, like ":utf8" or ":raw".
 
 =item * close_after_write ($)
 

@@ -1,13 +1,21 @@
-2.19
+2.19 Nov 1, 2007
 
 - Switched to providing a traditional Makefile.PL as well as a
   Build.PL file. RT #27208.
 
 - When permissions are specified for a Log::Dispatch::File object,
   don't try to chmod the file unless the permissions of the file
-  differ from what the file already has.
+  differ from what the file already has. Based on a patch by Kevin. RT
+  #28151.
 
 - Require at least Perl 5.6.0.
+
+- Remove the tests for the email sending and exit codes, since the
+  test had a heisenbug I could not understand. I _think_ the code in
+  the email modules is correct, but the test isn't proving anything.
+
+- Added a binmode parameter for Log::Dispatch::File. Based on a patch
+  by Angelo. RT #26063.
 
 
 2.18 May 12, 2007
