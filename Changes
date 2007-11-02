@@ -1,3 +1,15 @@
+2.19
+
+- Switched to providing a traditional Makefile.PL as well as a
+  Build.PL file. RT #27208.
+
+- When permissions are specified for a Log::Dispatch::File object,
+  don't try to chmod the file unless the permissions of the file
+  differ from what the file already has.
+
+- Require at least Perl 5.6.0.
+
+
 2.18 May 12, 2007
 
 - Log::Dispatch::ApacheLog should really now work under mod_perl 2, as

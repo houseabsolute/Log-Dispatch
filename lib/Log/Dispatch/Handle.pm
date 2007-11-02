@@ -1,6 +1,7 @@
 package Log::Dispatch::Handle;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 
@@ -9,11 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use vars qw[ $VERSION ];
-
-$VERSION = '1.16';
-
-1;
+our $VERSION = '1.16';
 
 sub new
 {
@@ -38,6 +35,9 @@ sub log_message
     $self->{handle}->print($p{message})
         or die "Cannot write to handle: $!";
 }
+
+
+1;
 
 __END__
 

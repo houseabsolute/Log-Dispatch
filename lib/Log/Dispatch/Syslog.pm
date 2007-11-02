@@ -1,6 +1,7 @@
 package Log::Dispatch::Syslog;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 
@@ -11,14 +12,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use Sys::Syslog ();
 
-# This is old school!
-require 'syslog.ph' if $] < 5.006;
-
-use vars qw[ $VERSION ];
-
-$VERSION = '1.18';
-
-1;
+our $VERSION = '1.18';
 
 sub new
 {
@@ -77,6 +71,9 @@ sub log_message
     Sys::Syslog::syslog($self->{priorities}[$pri], '%s', $p{message});
     Sys::Syslog::closelog;
 }
+
+
+1;
 
 __END__
 

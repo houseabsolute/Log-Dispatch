@@ -1,17 +1,17 @@
 package Log::Dispatch;
 
-require 5.005;
+use 5.006;
 
 use strict;
-use vars qw[ $VERSION %LEVELS ];
+use warnings;
 
 use base qw( Log::Dispatch::Base );
 
 use Carp ();
 
-$VERSION = '2.18';
+our $VERSION = '2.18';
+our %LEVELS;
 
-1;
 
 BEGIN
 {
@@ -137,6 +137,9 @@ sub would_log
 
     return 0;
 }
+
+
+1;
 
 __END__
 

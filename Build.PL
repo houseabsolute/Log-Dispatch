@@ -1,4 +1,5 @@
 use strict;
+use warnings;
 
 use Module::Build;
 
@@ -7,12 +8,12 @@ my $build =
                         license     => 'perl',
                         requires    => { 'Params::Validate' => 0.15,
                                        },
-                        build_requires => { 'Module::Build' => 0,
+                        build_requires => { 'File::Temp'    => 0,
+                                            'Module::Build' => 0,
                                             'Test::More'    => 0,
                                           },
-                        sign        => 1,
-                        create_makefile_pl => 'passthrough',
+                        sign               => 1,
+                        create_makefile_pl => 'traditional',
                       );
 
-$build->add_to_cleanup('write_mode.tst');
-$build->create_build_script;
+$build->create_build_script();

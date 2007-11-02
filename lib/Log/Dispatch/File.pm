@@ -1,6 +1,7 @@
 package Log::Dispatch::File;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 
@@ -9,16 +10,13 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use vars qw[ $VERSION ];
-
-$VERSION = '1.22';
+our $VERSION = '1.22';
 
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;
 
 sub APPEND { 0 }
 
-1;
 
 sub new
 {
@@ -81,9 +79,7 @@ sub _open_file
 {
     my $self = shift;
 
-    my $fh = do { local *FH; *FH; };
-
-    open $fh, "$self->{mode}$self->{filename}"
+    open my $fh, $self->{mode}, $self->{filename}
         or die "Cannot write to '$self->{filename}': $!";
 
     if ( $self->{autoflush} )
@@ -91,10 +87,16 @@ sub _open_file
         my $oldfh = select $fh; $| = 1; select $oldfh;
     }
 
-    if ( $self->{permissions} && ! $self->{chmodded} )
+    if ( $self->{permissions}
+         && ! $self->{chmodded} )
     {
-        chmod $self->{permissions}, $self->{filename}
-            or die "Cannot chmod $self->{filename} to $self->{permissions}: $!";
+        my $current_mode = ( stat $self->{filename} )[2] & 07777;
+        if ( $current_mode ne $self->{permissions} )
+        {
+            chmod $self->{permissions}, $self->{filename}
+                or die "Cannot chmod $self->{filename} to $self->{permissions}: $!";
+        }
+
         $self->{chmodded} = 1;
     }
 
@@ -126,7 +128,6 @@ sub log_message
     }
 }
 
-
 sub DESTROY
 {
     my $self = shift;
@@ -137,6 +138,9 @@ sub DESTROY
 	close $fh;
     }
 }
+
+
+1;
 
 __END__
 

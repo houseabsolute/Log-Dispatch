@@ -1,6 +1,7 @@
 package Log::Dispatch::Email::MIMELite;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Email;
 
@@ -8,11 +9,8 @@ use base qw( Log::Dispatch::Email );
 
 use MIME::Lite;
 
-use vars qw[ $VERSION ];
+our $VERSION = '1.19';
 
-$VERSION = '1.19';
-
-1;
 
 sub send_email
 {
@@ -33,6 +31,9 @@ sub send_email
 	warn "Error sending mail with MIME::Lite" if $^W;
     }
 }
+
+
+1;
 
 __END__
 

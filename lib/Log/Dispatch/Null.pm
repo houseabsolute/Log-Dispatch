@@ -1,6 +1,7 @@
 package Log::Dispatch::Null;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 

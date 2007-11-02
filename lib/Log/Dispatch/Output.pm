@@ -1,6 +1,7 @@
 package Log::Dispatch::Output;
 
 use strict;
+use warnings;
 
 use Log::Dispatch;
 
@@ -9,13 +10,10 @@ use base qw( Log::Dispatch::Base );
 use Params::Validate qw(validate SCALAR ARRAYREF CODEREF);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use vars qw[ $VERSION ];
-
 use Carp ();
 
-$VERSION = '1.26';
+our $VERSION = '1.26';
 
-1;
 
 sub new
 {
@@ -153,6 +151,8 @@ sub _level_as_name
     return $self->{level_names}[$level];
 }
 
+
+1;
 
 __END__
 

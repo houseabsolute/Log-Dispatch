@@ -1,6 +1,7 @@
 package Log::Dispatch::File::Locked;
 
 use strict;
+use warnings;
 
 use base qw( Log::Dispatch::File );
 

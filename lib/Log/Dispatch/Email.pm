@@ -1,6 +1,7 @@
 package Log::Dispatch::Email;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 
@@ -9,11 +10,8 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use vars qw[ $VERSION ];
+our $VERSION = '1.19';
 
-$VERSION = '1.19';
-
-1;
 
 sub new
 {
@@ -87,6 +85,9 @@ sub DESTROY
 
     $self->flush;
 }
+
+
+1;
 
 __END__
 

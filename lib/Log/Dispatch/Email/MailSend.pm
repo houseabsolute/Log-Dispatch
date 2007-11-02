@@ -1,6 +1,7 @@
 package Log::Dispatch::Email::MailSend;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Email;
 
@@ -8,11 +9,7 @@ use base qw( Log::Dispatch::Email );
 
 use Mail::Send;
 
-use vars qw[ $VERSION ];
-
-$VERSION = '1.19';
-
-1;
+our $VERSION = '1.19';
 
 sub send_email
 {
@@ -43,6 +40,8 @@ sub send_email
     warn $@ if $@ && $^W;
 }
 
+
+1;
 
 __END__
 

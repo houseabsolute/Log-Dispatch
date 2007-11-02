@@ -6,19 +6,15 @@ package Log::Dispatch::Email::MailSender;
 #
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Email;
 
 use base qw( Log::Dispatch::Email );
-use fields qw( buffer buffered from subject to smtp );
 
 use Mail::Sender ();
 
-use vars qw[ $VERSION ];
-
-$VERSION = '1.04';
-
-1;
+our $VERSION = '1.04';
 
 sub new
 {
@@ -61,6 +57,9 @@ sub send_email
 
     warn $@ if $@ && $^W;
 }
+
+
+1;
 
 __END__
 

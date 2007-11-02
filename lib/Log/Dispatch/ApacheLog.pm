@@ -1,6 +1,7 @@
 package Log::Dispatch::ApacheLog;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 
@@ -9,9 +10,8 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use vars qw[ $VERSION ];
+our $VERSION = '1.09';
 
-$VERSION = '1.09';
 
 BEGIN
 {

@@ -1,6 +1,7 @@
 package Log::Dispatch::Screen;
 
 use strict;
+use warnings;
 
 use Log::Dispatch::Output;
 
@@ -9,11 +10,8 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use vars qw[ $VERSION ];
+our $VERSION = '1.17';
 
-$VERSION = '1.17';
-
-1;
 
 sub new
 {
@@ -46,6 +44,9 @@ sub log_message
 	print STDOUT $p{message};
     }
 }
+
+
+1;
 
 __END__
 

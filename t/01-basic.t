@@ -2,8 +2,10 @@
 
 use strict;
 
-use Test::More tests => 134;
+use Test::More tests => 135;
 
+use File::Spec;
+use File::Temp qw( tempdir );
 use Log::Dispatch;
 
 
@@ -21,7 +23,7 @@ BEGIN
 }
 
 my %TestConfig;
-if ( -d '.svn' )
+if ( -d '.svn' && 0)
 {
     %TestConfig = ( email_address => 'autarch@urth.org',
                     syslog_file   => '/var/log/messages',
@@ -35,22 +37,27 @@ use Log::Dispatch::Screen;
 
 use IO::File;
 
+my $tempdir = tempdir( CLEANUP => 1 );
 
 my $dispatch = Log::Dispatch->new;
 ok( $dispatch, "created Log::Dispatch object" );
 
-# 3-6  Test Log::Dispatch::File
+# Test Log::Dispatch::File
 {
+    my $emerg_log = File::Spec->catdir( $tempdir, 'emerg.log' );
+
     $dispatch->add( Log::Dispatch::File->new( name => 'file1',
 					      min_level => 'emerg',
-					      filename => './emerg_test.log' ) );
+					      filename => $emerg_log ) );
 
     $dispatch->log( level => 'info', message => "info level 1\n" );
     $dispatch->log( level => 'emerg', message => "emerg level 1\n" );
 
+    my $debug_log = File::Spec->catdir( $tempdir, 'debug.log' );
+
     $dispatch->add( Log::Dispatch::File->new( name => 'file2',
 					      min_level => 'debug',
-					      filename => 'debug_test.log' ) );
+					      filename => $debug_log ) );
 
     $dispatch->log( level => 'info', message => "info level 2\n" );
     $dispatch->log( level => 'emerg', message => "emerg level 2\n" );
@@ -58,65 +65,55 @@ ok( $dispatch, "created Log::Dispatch object" );
     # This'll close them filehandles!
     undef $dispatch;
 
-    open LOG1, './emerg_test.log'
-	or die "Can't read ./emerg_test.log: $!";
-    open LOG2, './debug_test.log'
-	or die "Can't read ./debug_test.log: $!";
+    open my $emerg_fh, '<', $emerg_log
+	or die "Can't read $emerg_log: $!";
+    open my $debug_fh, '<', $debug_log
+	or die "Can't read $debug_log: $!";
 
-    my @log = <LOG1>;
+    my @log = <$emerg_fh>;
     is( $log[0], "emerg level 1\n",
         "First line in log file set to level 'emerg' is 'emerg level 1'" );
 
     is( $log[1], "emerg level 2\n",
         "Second line in log file set to level 'emerg' is 'emerg level 2'" );
 
-    @log = <LOG2>;
+    @log = <$debug_fh>;
     is( $log[0], "info level 2\n",
         "First line in log file set to level 'debug' is 'info level 2'" );
 
     is( $log[1], "emerg level 2\n",
         "Second line in log file set to level 'debug' is 'emerg level 2'" );
-
-    close LOG1;
-    close LOG2;
-
-    unlink './emerg_test.log'
-	or diag( "Can't remove ./emerg_test.log: $!" );
-
-    unlink './debug_test.log'
-	or diag( "Can't remove ./debug_test.log: $!" );
 }
 
-# 7  max_level test
+# max_level test
 {
+    my $max_log = File::Spec->catfile( $tempdir, 'max.log' );
+
     my $dispatch = Log::Dispatch->new;
     $dispatch->add( Log::Dispatch::File->new( name => 'file1',
                                               min_level => 'debug',
                                               max_level => 'crit',
-                                              filename => './max_test.log' ) );
+                                              filename => $max_log ) );
 
     $dispatch->log( level => 'emerg', message => "emergency\n" );
     $dispatch->log( level => 'crit',  message => "critical\n" );
 
     undef $dispatch; # close file handles
 
-    open LOG, './max_test.log'
-	or die "Can't read ./max_test.log: $!";
-    my @log = <LOG>;
+    open my $fh, '<', $max_log
+	or die "Can't read $max_log: $!";
+    my @log = <$fh>;
 
     is( $log[0], "critical\n",
         "First line in log file with a max level of 'crit' is 'critical'" );
-
-    close LOG;
-
-    unlink './max_test.log'
-	or diag( "Can't remove ./max_test.log: $!" );
 }
 
-# 8  Log::Dispatch::Handle test
+# Log::Dispatch::Handle test
 {
-    my $fh = IO::File->new('>./handle_test.log')
-	or die "Can't write to ./handle_test.log: $!";
+    my $handle_log = File::Spec->catfile( $tempdir, 'handle.log' );
+
+    my $fh = IO::File->new( $handle_log, 'w' )
+	or die "Can't write to $handle_log: $!";
 
     my $dispatch = Log::Dispatch->new;
     $dispatch->add( Log::Dispatch::Handle->new( name => 'handle',
@@ -129,21 +126,18 @@ ok( $dispatch, "created Log::Dispatch object" );
     undef $dispatch;
     undef $fh;
 
-    open LOG, './handle_test.log'
-	or die "Can't open ./handle_test.log: $!";
+    open $fh, '<', $handle_log
+	or die "Can't open $handle_log: $!";
 
-    my @log = <LOG>;
+    my @log = <$fh>;
 
-    close LOG;
+    close $fh;
 
     is( $log[0], "handle test\n",
         "Log::Dispatch::Handle created log file should contain 'handle test\\n'" );
-
-    unlink './handle_test.log'
-	or diag( "Can't remove ./handle_test.log: $!" );
 }
 
-# 9  Log::Dispatch::Email::MailSend
+# Log::Dispatch::Email::MailSend
 SKIP:
 {
     skip "Cannot do MailSend tests", 1
@@ -165,7 +159,7 @@ SKIP:
 }
 
 
-# 10  Log::Dispatch::Email::MailSendmail
+# Log::Dispatch::Email::MailSendmail
 SKIP:
 {
     skip "Cannot do MailSendmail tests", 1
@@ -186,7 +180,7 @@ SKIP:
     ok( 1, 'sent email via MailSendmail' );
 }
 
-# 11  Log::Dispatch::Email::MIMELite
+# Log::Dispatch::Email::MIMELite
 SKIP:
 {
 
@@ -208,7 +202,7 @@ SKIP:
     ok( 1, 'sent mail via MIMELite' );
 }
 
-# 12  Log::Dispatch::Screen
+# Log::Dispatch::Screen
 {
     my $dispatch = Log::Dispatch->new;
 
@@ -225,7 +219,7 @@ SKIP:
         "Log::Dispatch::Screen outputs to STDOUT" );
 }
 
-# 13-14  Log::Dispatch::Output->accepted_levels
+# Log::Dispatch::Output->accepted_levels
 {
     my $l = Log::Dispatch::Screen->new( name => 'foo',
 					min_level => 'warning',
@@ -247,7 +241,7 @@ SKIP:
     ok( $pass, "levels matched" );
 }
 
-# 15:  Log::Dispatch single callback
+# Log::Dispatch single callback
 {
     my $reverse = sub { my %p = @_;  return reverse $p{message}; };
     my $dispatch = Log::Dispatch->new( callbacks => $reverse );
@@ -265,7 +259,7 @@ SKIP:
         "callback to reverse text" );
 }
 
-# 16:  Log::Dispatch multiple callbacks
+# Log::Dispatch multiple callbacks
 {
     my $reverse = sub { my %p = @_;  return reverse $p{message}; };
     my $uc = sub { my %p = @_; return uc $p{message}; };
@@ -285,7 +279,7 @@ SKIP:
         "callback to reverse and uppercase text" );
 }
 
-# 17:  Log::Dispatch::Output single callback
+# Log::Dispatch::Output single callback
 {
     my $reverse = sub { my %p = @_;  return reverse $p{message}; };
 
@@ -304,7 +298,7 @@ SKIP:
         "Log::Dispatch::Output callback to reverse text" );
 }
 
-# 18:  Log::Dispatch::Output multiple callbacks
+# Log::Dispatch::Output multiple callbacks
 {
     my $reverse = sub { my %p = @_;  return reverse $p{message}; };
     my $uc = sub { my %p = @_; return uc $p{message}; };
@@ -324,7 +318,7 @@ SKIP:
         "Log::Dispatch::Output callbacks to reverse and uppercase text" );
 }
 
-# 19:  test level paramter to callbacks
+# test level paramter to callbacks
 {
     my $level = sub { my %p = @_; return uc $p{level}; };
 
@@ -343,7 +337,7 @@ SKIP:
         "Log::Dispatch callback to uppercase the level parameter" );
 }
 
-# 20 - 107: Comprehensive test of new methods that match level names
+# Comprehensive test of new methods that match level names
 {
     my %levels = map { $_ => $_ } ( qw( debug info notice warning error critical alert emergency ) );
     @levels{ qw( err crit emerg ) } = ( qw( error critical emergency ) );
@@ -380,7 +374,7 @@ SKIP:
     }
 }
 
-# 108 - 122:  Log::Dispatch->level_is_valid method
+# Log::Dispatch->level_is_valid method
 {
     foreach my $l ( qw( debug info notice warning err error
                         crit critical alert emerg emergency ) )
@@ -394,17 +388,13 @@ SKIP:
     }
 }
 
-# 123: make sure passing mode as write works
+# make sure passing mode as write works
 {
-    local *F;
-    open F, '>./write_mode.tst'
-	or die "Cannot open ./write_mode.tst: $!";
-    print F "test1\n";
-    close F;
+    my $mode_log = File::Spec->catfile( $tempdir, 'mode.log' );
 
     my $f1 = Log::Dispatch::File->new( name => 'file',
 				       min_level => 1,
-				       filename => './write_mode.tst',
+				       filename => $mode_log,
 				       mode => 'write',
 				      );
     $f1->log( level => 'emerg',
@@ -412,18 +402,15 @@ SKIP:
 
     undef $f1;
 
-    open F, '<./write_mode.tst'
-	or die "Cannot read ./wr_mode.tst: $!";
-    my $data = join '', <F>;
-    close F;
+    open my $fh, '<', $mode_log
+	or die "Cannot read $mode_log: $!";
+    my $data = join '', <$fh>;
+    close $fh;
 
     like( $data, qr/^test2/, "test write mode" );
-
-    unlink './write_mode.tst'
-	or diag( "Can't remove ./write_mode.tst: $!" );
 }
 
-# 124  Log::Dispatch::Email::MailSender
+# Log::Dispatch::Email::MailSender
 SKIP:
 {
     skip "Cannot do MailSender tests", 1
@@ -447,7 +434,7 @@ SKIP:
     ok( 1, 'sent email via MailSender' );
 }
 
-# 125 - 126 dispatcher exists
+# dispatcher exists
 {
     my $dispatch = Log::Dispatch->new;
 
@@ -462,29 +449,31 @@ SKIP:
         "nomama output should not exist" );
 }
 
-# 127 - 128  Test Log::Dispatch::File - close_after_write & permissions
+# Test Log::Dispatch::File - close_after_write & permissions
 {
     my $dispatch = Log::Dispatch->new;
 
+    my $close_log = File::Spec->catfile( $tempdir, 'close.log' );
+
     $dispatch->add( Log::Dispatch::File->new( name => 'close',
 					      min_level => 'info',
-					      filename => './close_test.log',
+					      filename => $close_log,
                                               permissions => 0777,
                                               close_after_write => 1 ) );
 
     $dispatch->log( level => 'info', message => "info\n" );
 
-    open LOG1, './close_test.log'
-	or die "Can't read ./clse_test.log: $!";
+    open my $fh, '<', $close_log
+	or die "Can't read $close_log: $!";
 
-    my @log = <LOG1>;
+    my @log = <$fh>;
+    close $fh;
+
     is( $log[0], "info\n",
         "First line in log file should be 'info\\n'" );
 
-    close LOG1;
-
-    my $mode = (stat('./close_test.log'))[2]
-        or die "Cannot stat ./close_test.log: $!";
+    my $mode = ( stat $close_log )[2]
+        or die "Cannot stat $close_log: $!";
 
     my $mode_string = sprintf( '%04o', $mode & 07777 );
 
@@ -498,12 +487,37 @@ SKIP:
         is( $mode_string, '0777',
             "Mode should be 0777" );
     }
-
-    unlink './close_test.log'
-	or diag( "Can't remove ./close_test.log: $!" );
 }
 
-# 129 - 131 - would_log
+{
+    my $dispatch = Log::Dispatch->new;
+
+    my $chmod_log = File::Spec->catfile( $tempdir, 'chmod.log' );
+
+    open my $fh, '>', $chmod_log
+        or die "Cannot write to $chmod_log: $!";
+    close $fh;
+
+    chmod 0777, $chmod_log
+        or die "Cannot chmod 0777 $chmod_log: $!";
+
+    my @chmod;
+    no warnings 'once';
+    local *CORE::chmod = sub { @chmod = @_; warn @chmod };
+
+    $dispatch->add( Log::Dispatch::File->new( name => 'chmod',
+					      min_level => 'info',
+					      filename => $chmod_log,
+                                              permissions => 0777,
+                                            ) );
+
+    $dispatch->warning('test');
+
+    ok( ! scalar @chmod,
+        'chmod() was not called when permissions already matched what was specified' );
+}
+
+# would_log
 {
     my $dispatch = Log::Dispatch->new;
 

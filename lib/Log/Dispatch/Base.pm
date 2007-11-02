@@ -1,11 +1,10 @@
 package Log::Dispatch::Base;
 
 use strict;
-use vars qw($VERSION @EXPORT_OK);
+use warnings;
 
-$VERSION = '1.09';
+our $VERSION = '1.09';
 
-1;
 
 sub _get_callbacks
 {
@@ -36,6 +35,9 @@ sub _apply_callbacks
 
     return $msg;
 }
+
+
+1;
 
 __END__
 
