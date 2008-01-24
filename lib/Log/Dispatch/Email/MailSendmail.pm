@@ -18,16 +18,16 @@ sub send_email
     my %p = @_;
 
     my %mail = ( To      => (join ',', @{ $self->{to} }),
-		 Subject => $self->{subject},
-		 Message => $p{message},
-		 # Mail::Sendmail insists on having this parameter.
-		 From    => $self->{from} || 'LogDispatch@foo.bar',
-	       );
+                 Subject => $self->{subject},
+                 Message => $p{message},
+                 # Mail::Sendmail insists on having this parameter.
+                 From    => $self->{from} || 'LogDispatch@foo.bar',
+               );
 
     local $?;
     unless ( Mail::Sendmail::sendmail(%mail) )
     {
-	warn "Error sending mail: $Mail::Sendmail::error" if warnings::enabled();
+        warn "Error sending mail: $Mail::Sendmail::error" if warnings::enabled();
     }
 }
 

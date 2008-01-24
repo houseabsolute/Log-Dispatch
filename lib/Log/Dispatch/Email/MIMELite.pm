@@ -18,17 +18,17 @@ sub send_email
     my %p = @_;
 
     my %mail = ( To      => (join ',', @{ $self->{to} }),
-		 Subject => $self->{subject},
-		 Type    => 'TEXT',
-		 Data    => $p{message},
-	       );
+                 Subject => $self->{subject},
+                 Type    => 'TEXT',
+                 Data    => $p{message},
+               );
 
     $mail{From} = $self->{from} if defined $self->{from};
 
     local $?;
     unless ( MIME::Lite->new(%mail)->send )
     {
-	warn "Error sending mail with MIME::Lite" if warnings::enabled();
+        warn "Error sending mail with MIME::Lite" if warnings::enabled();
     }
 }
 

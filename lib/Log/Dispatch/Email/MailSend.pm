@@ -27,14 +27,14 @@ sub send_email
     local $?;
     eval
     {
-	my $fh = $msg->open
-	    or die "Cannot open handle to mail program";
+        my $fh = $msg->open
+            or die "Cannot open handle to mail program";
 
-	$fh->print( $p{message} )
-	    or die "Cannot print message to mail program handle";
+        $fh->print( $p{message} )
+            or die "Cannot print message to mail program handle";
 
-	$fh->close
-	    or die "Cannot close handle to mail program";
+        $fh->close
+            or die "Cannot close handle to mail program";
     };
 
     warn $@ if $@ && warnings::enabled();

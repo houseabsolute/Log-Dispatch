@@ -19,13 +19,13 @@ sub new
     my $class = ref $proto || $proto;
 
     my %p = validate( @_, { subject  => { type => SCALAR,
-					  default => "$0: log email" },
-			    to       => { type => SCALAR | ARRAYREF },
-			    from     => { type => SCALAR,
-					  optional => 1 },
-			    buffered => { type => BOOLEAN,
-					  default => 1 },
-			  } );
+                                          default => "$0: log email" },
+                            to       => { type => SCALAR | ARRAYREF },
+                            from     => { type => SCALAR,
+                                          optional => 1 },
+                            buffered => { type => BOOLEAN,
+                                          default => 1 },
+                          } );
 
     my $self = bless {}, $class;
 
@@ -50,11 +50,11 @@ sub log_message
 
     if ($self->{buffered})
     {
-	push @{ $self->{buffer} }, $p{message};
+        push @{ $self->{buffer} }, $p{message};
     }
     else
     {
-	$self->send_email(@_);
+        $self->send_email(@_);
     }
 }
 
@@ -72,9 +72,9 @@ sub flush
 
     if ($self->{buffered} && @{ $self->{buffer} })
     {
-	my $message = join '', @{ $self->{buffer} };
+        my $message = join '', @{ $self->{buffer} };
 
-	$self->send_email( message => $message );
+        $self->send_email( message => $message );
         $self->{buffer} = [];
     }
 }

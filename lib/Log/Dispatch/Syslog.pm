@@ -34,14 +34,14 @@ sub _init
     my $self = shift;
 
     my %p = validate( @_, { ident    => { type => SCALAR,
-					  default => $0 },
-			    logopt   => { type => SCALAR,
-					  default => '' },
-			    facility => { type => SCALAR,
-					  default => 'user' },
-			    socket   => { type => SCALAR,
-					  default => 'unix' },
-			  } );
+                                          default => $0 },
+                            logopt   => { type => SCALAR,
+                                          default => '' },
+                            facility => { type => SCALAR,
+                                          default => 'user' },
+                            socket   => { type => SCALAR,
+                                          default => 'unix' },
+                          } );
 
     $self->{ident}    = $p{ident};
     $self->{logopt}   = $p{logopt};
@@ -49,13 +49,13 @@ sub _init
     $self->{socket}   = $p{socket};
 
     $self->{priorities} = [ 'DEBUG',
-			    'INFO',
-			    'NOTICE',
-			    'WARNING',
-			    'ERR',
-			    'CRIT',
-			    'ALERT',
-			    'EMERG' ];
+                            'INFO',
+                            'NOTICE',
+                            'WARNING',
+                            'ERR',
+                            'CRIT',
+                            'ALERT',
+                            'EMERG' ];
 
     Sys::Syslog::setlogsock $self->{socket};
 }

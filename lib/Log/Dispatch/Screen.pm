@@ -19,8 +19,8 @@ sub new
     my $class = ref $proto || $proto;
 
     my %p = validate( @_, { stderr => { type => BOOLEAN,
-					default => 1 },
-			  } );
+                                        default => 1 },
+                          } );
 
     my $self = bless {}, $class;
 
@@ -37,11 +37,11 @@ sub log_message
 
     if ($self->{stderr})
     {
-	print STDERR $p{message};
+        print STDERR $p{message};
     }
     else
     {
-	print STDOUT $p{message};
+        print STDOUT $p{message};
     }
 }
 

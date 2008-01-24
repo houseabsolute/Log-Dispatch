@@ -13,8 +13,8 @@ BEGIN
 {
     foreach ( qw( MailSend MIMELite MailSendmail MailSender ) )
     {
-	eval "use Log::Dispatch::Email::$_";
-	$tests{$_} = ! $@;
+        eval "use Log::Dispatch::Email::$_";
+        $tests{$_} = ! $@;
     }
 
     eval "use Log::Dispatch::Syslog";
@@ -46,8 +46,8 @@ ok( $dispatch, "created Log::Dispatch object" );
     my $emerg_log = File::Spec->catdir( $tempdir, 'emerg.log' );
 
     $dispatch->add( Log::Dispatch::File->new( name => 'file1',
-					      min_level => 'emerg',
-					      filename => $emerg_log ) );
+                                              min_level => 'emerg',
+                                              filename => $emerg_log ) );
 
     $dispatch->log( level => 'info', message => "info level 1\n" );
     $dispatch->log( level => 'emerg', message => "emerg level 1\n" );
@@ -55,8 +55,8 @@ ok( $dispatch, "created Log::Dispatch object" );
     my $debug_log = File::Spec->catdir( $tempdir, 'debug.log' );
 
     $dispatch->add( Log::Dispatch::File->new( name => 'file2',
-					      min_level => 'debug',
-					      filename => $debug_log ) );
+                                              min_level => 'debug',
+                                              filename => $debug_log ) );
 
     $dispatch->log( level => 'info', message => "info level 2\n" );
     $dispatch->log( level => 'emerg', message => "emerg level 2\n" );
@@ -65,9 +65,9 @@ ok( $dispatch, "created Log::Dispatch object" );
     undef $dispatch;
 
     open my $emerg_fh, '<', $emerg_log
-	or die "Can't read $emerg_log: $!";
+        or die "Can't read $emerg_log: $!";
     open my $debug_fh, '<', $debug_log
-	or die "Can't read $debug_log: $!";
+        or die "Can't read $debug_log: $!";
 
     my @log = <$emerg_fh>;
     is( $log[0], "emerg level 1\n",
@@ -100,7 +100,7 @@ ok( $dispatch, "created Log::Dispatch object" );
     undef $dispatch; # close file handles
 
     open my $fh, '<', $max_log
-	or die "Can't read $max_log: $!";
+        or die "Can't read $max_log: $!";
     my @log = <$fh>;
 
     is( $log[0], "critical\n",
@@ -112,12 +112,12 @@ ok( $dispatch, "created Log::Dispatch object" );
     my $handle_log = File::Spec->catfile( $tempdir, 'handle.log' );
 
     my $fh = IO::File->new( $handle_log, 'w' )
-	or die "Can't write to $handle_log: $!";
+        or die "Can't write to $handle_log: $!";
 
     my $dispatch = Log::Dispatch->new;
     $dispatch->add( Log::Dispatch::Handle->new( name => 'handle',
-						min_level => 'debug',
-						handle => $fh ) );
+                                                min_level => 'debug',
+                                                handle => $fh ) );
 
     $dispatch->log( level => 'notice', message =>  "handle test\n" );
 
@@ -126,7 +126,7 @@ ok( $dispatch, "created Log::Dispatch object" );
     undef $fh;
 
     open $fh, '<', $handle_log
-	or die "Can't open $handle_log: $!";
+        or die "Can't open $handle_log: $!";
 
     my @log = <$fh>;
 
@@ -145,9 +145,9 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MailSend->new( name => 'Mail::Send',
-							 min_level => 'debug',
-							 to => $TestConfig{email_address},
-							 subject => 'Log::Dispatch test suite' ) );
+                                                         min_level => 'debug',
+                                                         to => $TestConfig{email_address},
+                                                         subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "Mail::Send test - If you can read this then the test succeeded (PID $$)" );
 
@@ -167,9 +167,9 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MailSendmail->new( name => 'Mail::Sendmail',
-							     min_level => 'debug',
-							     to => $TestConfig{email_address},
-							     subject => 'Log::Dispatch test suite' ) );
+                                                             min_level => 'debug',
+                                                             to => $TestConfig{email_address},
+                                                             subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "Mail::Sendmail test - If you can read this then the test succeeded (PID $$)" );
 
@@ -189,9 +189,9 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Email::MIMELite->new( name => 'Mime::Lite',
-							 min_level => 'debug',
-							 to => $TestConfig{email_address},
-							 subject => 'Log::Dispatch test suite' ) );
+                                                         min_level => 'debug',
+                                                         to => $TestConfig{email_address},
+                                                         subject => 'Log::Dispatch test suite' ) );
 
     $dispatch->log( level => 'emerg', message => "MIME::Lite - If you can read this then the test succeeded (PID $$)" );
 
@@ -206,8 +206,8 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Screen->new( name => 'screen',
-						min_level => 'debug',
-					        stderr => 0 ) );
+                                                min_level => 'debug',
+                                                stderr => 0 ) );
 
     my $text;
     tie *STDOUT, 'Test::Tie::STDOUT', \$text;
@@ -221,9 +221,9 @@ SKIP:
 # Log::Dispatch::Output->accepted_levels
 {
     my $l = Log::Dispatch::Screen->new( name => 'foo',
-					min_level => 'warning',
-					max_level => 'alert',
-					stderr => 0 );
+                                        min_level => 'warning',
+                                        max_level => 'alert',
+                                        stderr => 0 );
 
     my @expected = qw(warning error critical alert);
     my @levels = $l->accepted_levels;
@@ -231,7 +231,7 @@ SKIP:
     my $pass = 1;
     for (my $x = 0; $x < scalar @expected; $x++)
     {
-	$pass = 0 unless $expected[$x] eq $levels[$x];
+        $pass = 0 unless $expected[$x] eq $levels[$x];
     }
 
     is( scalar @expected, scalar @levels,
@@ -248,8 +248,8 @@ SKIP:
     my $string;
     $dispatch->add( Log::Dispatch::String->new( name => 'foo',
                                                 string => \$string,
-						min_level => 'warning',
-						max_level => 'alert',
+                                                min_level => 'warning',
+                                                max_level => 'alert',
                                               ) );
 
     $dispatch->log( level => 'warning', message => 'esrever' );
@@ -268,8 +268,8 @@ SKIP:
     my $string;
     $dispatch->add( Log::Dispatch::String->new( name => 'foo',
                                                 string => \$string,
-						min_level => 'warning',
-						max_level => 'alert',
+                                                min_level => 'warning',
+                                                max_level => 'alert',
                                               ) );
 
     $dispatch->log( level => 'warning', message => 'esrever' );
@@ -287,9 +287,9 @@ SKIP:
     my $string;
     $dispatch->add( Log::Dispatch::String->new( name => 'foo',
                                                 string => \$string,
-						min_level => 'warning',
-						max_level => 'alert',
-						callbacks => $reverse ) );
+                                                min_level => 'warning',
+                                                max_level => 'alert',
+                                                callbacks => $reverse ) );
 
     $dispatch->log( level => 'warning', message => 'esrever' );
 
@@ -307,9 +307,9 @@ SKIP:
     my $string;
     $dispatch->add( Log::Dispatch::String->new( name => 'foo',
                                                 string => \$string,
-						min_level => 'warning',
-						max_level => 'alert',
-						callbacks => [ $reverse, $uc ] ) );
+                                                min_level => 'warning',
+                                                max_level => 'alert',
+                                                callbacks => [ $reverse, $uc ] ) );
 
     $dispatch->log( level => 'warning', message => 'esrever' );
 
@@ -326,9 +326,9 @@ SKIP:
     my $string;
     $dispatch->add( Log::Dispatch::String->new( name => 'foo',
                                                 string => \$string,
-						min_level => 'warning',
-						max_level => 'alert',
-						stderr => 0 ) );
+                                                min_level => 'warning',
+                                                max_level => 'alert',
+                                                stderr => 0 ) );
 
     $dispatch->log( level => 'warning', message => 'esrever' );
 
@@ -343,33 +343,33 @@ SKIP:
 
     foreach my $allowed_level ( qw( debug info notice warning error critical alert emergency ) )
     {
-	my $dispatch = Log::Dispatch->new;
+        my $dispatch = Log::Dispatch->new;
 
         my $string;
-	$dispatch->add( Log::Dispatch::String->new( name => 'foo',
+        $dispatch->add( Log::Dispatch::String->new( name => 'foo',
                                                     string => \$string,
-						    min_level => $allowed_level,
-						    max_level => $allowed_level,
+                                                    min_level => $allowed_level,
+                                                    max_level => $allowed_level,
                                                   ) );
 
-	foreach my $test_level ( qw( debug info notice warning err
+        foreach my $test_level ( qw( debug info notice warning err
                                      error crit critical alert emerg emergency ) )
-	{
+        {
             $string = '';
-	    $dispatch->$test_level( $test_level, 'test' );
+            $dispatch->$test_level( $test_level, 'test' );
 
-	    if ( $levels{$test_level} eq $allowed_level )
-	    {
-		my $expect = join $", $test_level, 'test';
-		is( $string, $expect,
+            if ( $levels{$test_level} eq $allowed_level )
+            {
+                my $expect = join $", $test_level, 'test';
+                is( $string, $expect,
                     "Calling $test_level method should send message '$expect'" );
-	    }
-	    else
-	    {
-		ok( ! length $string,
+            }
+            else
+            {
+                ok( ! length $string,
                     "Calling $test_level method should not log anything" );
-	    }
-	}
+            }
+        }
     }
 }
 
@@ -378,12 +378,12 @@ SKIP:
     foreach my $l ( qw( debug info notice warning err error
                         crit critical alert emerg emergency ) )
     {
-	ok( Log::Dispatch->level_is_valid($l), "$l is valid level" );
+        ok( Log::Dispatch->level_is_valid($l), "$l is valid level" );
     }
 
     foreach my $l ( qw( debu inf foo bar ) )
     {
-	ok( ! Log::Dispatch->level_is_valid($l), "$l is not valid level" );
+        ok( ! Log::Dispatch->level_is_valid($l), "$l is not valid level" );
     }
 }
 
@@ -392,17 +392,17 @@ SKIP:
     my $mode_log = File::Spec->catfile( $tempdir, 'mode.log' );
 
     my $f1 = Log::Dispatch::File->new( name => 'file',
-				       min_level => 1,
-				       filename => $mode_log,
-				       mode => 'write',
-				      );
+                                       min_level => 1,
+                                       filename => $mode_log,
+                                       mode => 'write',
+                                      );
     $f1->log( level => 'emerg',
-	      message => "test2\n" );
+              message => "test2\n" );
 
     undef $f1;
 
     open my $fh, '<', $mode_log
-	or die "Cannot read $mode_log: $!";
+        or die "Cannot read $mode_log: $!";
     my $data = join '', <$fh>;
     close $fh;
 
@@ -455,15 +455,15 @@ SKIP:
     my $close_log = File::Spec->catfile( $tempdir, 'close.log' );
 
     $dispatch->add( Log::Dispatch::File->new( name => 'close',
-					      min_level => 'info',
-					      filename => $close_log,
+                                              min_level => 'info',
+                                              filename => $close_log,
                                               permissions => 0777,
                                               close_after_write => 1 ) );
 
     $dispatch->log( level => 'info', message => "info\n" );
 
     open my $fh, '<', $close_log
-	or die "Can't read $close_log: $!";
+        or die "Can't read $close_log: $!";
 
     my @log = <$fh>;
     close $fh;
@@ -505,8 +505,8 @@ SKIP:
     local *CORE::chmod = sub { @chmod = @_; warn @chmod };
 
     $dispatch->add( Log::Dispatch::File->new( name => 'chmod',
-					      min_level => 'info',
-					      filename => $chmod_log,
+                                              min_level => 'info',
+                                              filename => $chmod_log,
                                               permissions => 0777,
                                             ) );
 
@@ -527,8 +527,8 @@ SKIP:
     my $utf8_log = File::Spec->catfile( $tempdir, 'utf8.log' );
 
     $dispatch->add( Log::Dispatch::File->new( name => 'utf8',
-					      min_level => 'info',
-					      filename => $utf8_log,
+                                              min_level => 'info',
+                                              filename => $utf8_log,
                                               binmode => ':utf8',
                                             ) );
 
@@ -548,7 +548,7 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
 
     $dispatch->add( Log::Dispatch::Null->new( name => 'null',
-					      min_level => 'warning',
+                                              min_level => 'warning',
                                             ) );
 
     ok( ! $dispatch->would_log('foo'),
@@ -590,7 +590,7 @@ SKIP:
     my $dispatch = Log::Dispatch->new;
     $dispatch->add( Log::Dispatch::String->new( name => 'handle',
                                                 string => \$string,
-						min_level => 'debug',
+                                                min_level => 'debug',
                                               ) );
 
     $dispatch->log( level => 'debug',

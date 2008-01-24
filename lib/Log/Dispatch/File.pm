@@ -38,17 +38,17 @@ sub _make_handle
     my $self = shift;
 
     my %p = validate( @_, { filename  => { type => SCALAR },
-			    mode      => { type => SCALAR,
-					   default => '>' },
+                            mode      => { type => SCALAR,
+                                           default => '>' },
                             binmode   => { type => SCALAR,
                                            default => undef },
-			    autoflush => { type => BOOLEAN,
-					   default => 1 },
-          		    close_after_write => { type => BOOLEAN,
+                            autoflush => { type => BOOLEAN,
+                                           default => 1 },
+                            close_after_write => { type => BOOLEAN,
                                                    default => 0 },
                             permissions => { type => SCALAR,
                                              optional => 1 },
-			  } );
+                          } );
 
     $self->{filename}    = $p{filename};
     $self->{close}       = $p{close_after_write};
@@ -60,16 +60,16 @@ sub _make_handle
         $self->{mode} = '>>';
     }
     elsif ( exists $p{mode} &&
-	 defined $p{mode} &&
-	 ( $p{mode} =~ /^(?:>>|append)$/ ||
-	   ( $p{mode} =~ /^\d+$/ &&
-	     $p{mode} == O_APPEND() ) ) )
+         defined $p{mode} &&
+         ( $p{mode} =~ /^(?:>>|append)$/ ||
+           ( $p{mode} =~ /^\d+$/ &&
+             $p{mode} == O_APPEND() ) ) )
     {
-	$self->{mode} = '>>';
+        $self->{mode} = '>>';
     }
     else
     {
-	$self->{mode} = '>';
+        $self->{mode} = '>';
     }
 
     $self->{autoflush} = $p{autoflush};
@@ -120,12 +120,12 @@ sub log_message
 
     if ( $self->{close} )
     {
-      	$self->_open_file;
-	$fh = $self->{fh};
-      	print $fh $p{message}
+        $self->_open_file;
+        $fh = $self->{fh};
+        print $fh $p{message}
             or die "Cannot write to '$self->{filename}': $!";
 
-      	close $fh
+        close $fh
             or die "Cannot close '$self->{filename}': $!";
     }
     else
@@ -142,8 +142,8 @@ sub DESTROY
 
     if ( $self->{fh} )
     {
-	my $fh = $self->{fh};
-	close $fh;
+        my $fh = $self->{fh};
+        close $fh;
     }
 }
 
@@ -272,4 +272,3 @@ be called directly but should be called through the C<log()> method
 Dave Rolsky, <autarch@urth.org>
 
 =cut
-

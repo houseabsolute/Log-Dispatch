@@ -18,9 +18,9 @@ BEGIN
     no strict 'refs';
     foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
     {
-	*{$l} = sub { my $self = shift;
-		      $self->log( level => $l, message => "@_" ); };
-	$LEVELS{$l} = 1;
+        *{$l} = sub { my $self = shift;
+                      $self->log( level => $l, message => "@_" ); };
+        $LEVELS{$l} = 1;
     }
 }
 
@@ -46,7 +46,7 @@ sub add
     # Once 5.6 is more established start using the warnings module.
     if (exists $self->{outputs}{$object->name} && $^W)
     {
-	Carp::carp("Log::Dispatch::* object ", $object->name, " already exists.");
+        Carp::carp("Log::Dispatch::* object ", $object->name, " already exists.");
     }
 
     $self->{outputs}{$object->name} = $object;
@@ -71,12 +71,12 @@ sub log
         if ref $p{message} eq 'CODE';
 
     $p{message} = $self->_apply_callbacks(%p)
-	if $self->{callbacks};
+        if $self->{callbacks};
 
     foreach (keys %{ $self->{outputs} })
     {
-	$p{name} = $_;
-	$self->_log_to(%p);
+        $p{name} = $_;
+        $self->_log_to(%p);
     }
 }
 
@@ -86,7 +86,7 @@ sub log_to
     my %p = @_;
 
     $p{message} = $self->_apply_callbacks(%p)
-	if $self->{callbacks};
+        if $self->{callbacks};
 
     $self->_log_to(%p);
 }
@@ -99,11 +99,11 @@ sub _log_to
 
     if (exists $self->{outputs}{$name})
     {
-	$self->{outputs}{$name}->log(@_);
+        $self->{outputs}{$name}->log(@_);
     }
     elsif ($^W)
     {
-	Carp::carp("Log::Dispatch::* object named '$name' not in dispatcher\n");
+        Carp::carp("Log::Dispatch::* object named '$name' not in dispatcher\n");
     }
 }
 
@@ -132,7 +132,7 @@ sub would_log
 
     foreach ( values %{ $self->{outputs} } )
     {
-	return 1 if $_->_should_log($level);
+        return 1 if $_->_should_log($level);
     }
 
     return 0;
