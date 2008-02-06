@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 136;
+use Test::More tests => 140;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -598,6 +598,30 @@ SKIP:
                   );
 
     is( $string, 'this is my message', 'message returned by subref is logged' );
+}
+
+{
+    my $string;
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
+                                                min_level => 'debug',
+                                              ) );
+
+    eval {
+        $dispatch->log_and_die( level => 'error',
+                                message => 'this is my message',
+                              );
+    };
+
+    my $e = $@;
+
+    ok( $e, "got an error" );
+    like( $e, qr(this is my message), "contains message" );
+    like( $e, qr(01-basic\.t line 613), "croaked" );
+
+    is( $string, 'this is my message', 'message is logged' );
 }
 
 package Log::Dispatch::String;

@@ -1,3 +1,9 @@
+2.21 Feb 6, 2008
+
+- Added log_and_die() and log_and_croak() methods. Patch by Yuval
+  Kogman.
+
+
 2.20 Nov 2, 2007
 
 - One of the tests failed on Perl 5.6.x. Thanks to Slaven Rezic for

@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Base );
 
 use Carp ();
 
-our $VERSION = '2.20';
+our $VERSION = '2.21';
 our %LEVELS;
 
 
@@ -67,17 +67,64 @@ sub log
 
     return unless $self->would_log( $p{level} );
 
+    $self->_log_to_outputs( $self->_prepare_message(%p) );
+}
+
+sub _prepare_message
+{
+    my $self = shift;
+    my %p = @_;
+
     $p{message} = $p{message}->()
         if ref $p{message} eq 'CODE';
 
     $p{message} = $self->_apply_callbacks(%p)
         if $self->{callbacks};
 
+    return %p;
+}
+
+sub _log_to_outputs
+{
+    my $self = shift;
+    my %p = @_;
+
     foreach (keys %{ $self->{outputs} })
     {
         $p{name} = $_;
         $self->_log_to(%p);
     }
+}
+
+sub log_and_die
+{
+    my $self = shift;
+
+    my %p = $self->_prepare_message(@_);
+
+    $self->_log_to_outputs(%p) if $self->would_log($p{level});
+
+    $self->_die_with_message(%p);
+}
+
+sub log_and_croak
+{
+    my $self = shift;
+
+    $self->log_and_die( @_, carp_level => 3 );
+}
+
+sub _die_with_message
+{
+    my $self = shift;
+    my %p = @_;
+
+    my $msg = $p{message};
+
+    local $Carp::CarpLevel = ($Carp::CarpLevel || 0) + $p{carp_level}
+	if exists $p{carp_level};
+
+    Carp::croak($msg);
 }
 
 sub log_to
@@ -224,10 +271,32 @@ This method also accepts a subroutine reference as the message
 argument. This reference will be called only if there is an output
 that will accept a message of the specified level.
 
-B<WARNING>: This is the only logging method that does something
-intelligent with a subroutine reference as the message. Other methods,
-like C<log_to()> or the C<log()> method of an output object, will just
+B<WARNING>: This logging method does something intelligent with a
+subroutine reference as the message but other methods, like
+C<log_to()> or the C<log()> method of an output object, will just
 stringify the reference.
+
+=item * log_and_die( level => $, message => $ or \& )
+
+Has the same behavior as calling C<log()> but calls
+C<_die_with_message()> at the end.
+
+=item * log_and_croak( level => $, message => $ or \& )
+
+This method adjusts the C<$Carp::CarpLevel> scalar so that the croak
+comes from the context in which it is called.
+
+=item * _die_with_message( message => $, carp_level => $ )
+
+This method is used by C<log_and_die> and will either die() or croak()
+depending on the value of C<message>: if it's a reference or it ends
+with a new line then a plain die will be used, otherwise it will
+croak.
+
+You can throw exception objects by subclassing this method.
+
+If the C<carp_level> parameter is present its value will be added to
+the current value of C<$Carp::CarpLevel>.
 
 =item * log_to( name => $, level => $, message => $ )
 

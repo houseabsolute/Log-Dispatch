@@ -22,5 +22,6 @@ META.yml
 README
 t/00-compile.t
 t/01-basic.t
+t/kwalitee.t
 t/pod-coverage.t
 t/pod.t
