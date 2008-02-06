@@ -631,7 +631,7 @@ SKIP:
         Croaker::croak($dispatch);
     };
 
-    my $e = $@;
+    $e = $@;
 
     ok( $e, 'died when calling log_and_croak()' );
     like( $e, qr{croak}, 'error contains expected message' );
