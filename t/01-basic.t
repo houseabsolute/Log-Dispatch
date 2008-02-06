@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 140;
+use Test::More tests => 144;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -609,7 +609,8 @@ SKIP:
                                                 min_level => 'debug',
                                               ) );
 
-    eval {
+    eval
+    {
         $dispatch->log_and_die( level => 'error',
                                 message => 'this is my message',
                               );
@@ -617,11 +618,26 @@ SKIP:
 
     my $e = $@;
 
-    ok( $e, "got an error" );
-    like( $e, qr(this is my message), "contains message" );
-    like( $e, qr(01-basic\.t line 613), "croaked" );
+    ok( $e, 'died when calling log_and_die()' );
+    like( $e, qr{this is my message}, 'error contains expected message' );
+    like( $e, qr{01-basic\.t line 614}, 'error croaked' );
 
     is( $string, 'this is my message', 'message is logged' );
+
+    undef $string;
+
+    eval
+    {
+        Croaker::croak($dispatch);
+    };
+
+    my $e = $@;
+
+    ok( $e, 'died when calling log_and_croak()' );
+    like( $e, qr{croak}, 'error contains expected message' );
+    like( $e, qr{01-basic\.t line 680}, 'error croaked from perspective of caller' );
+
+    is( $string, 'croak', 'message is logged' );
 }
 
 package Log::Dispatch::String;
@@ -654,6 +670,15 @@ sub log_message
     ${ $self->{string} } .= $p{message};
 }
 
+
+package Croaker;
+
+sub croak
+{
+    my $log = shift;
+
+    $log->log_and_croak( level => 'error', message => 'croak' );
+}
 
 # Used for testing Log::Dispatch::Screen
 package Test::Tie::STDOUT;
