@@ -43,8 +43,7 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch::Handle - Object for logging to IO::Handle objects (and
-subclasses thereof)
+Log::Dispatch::Handle - Object for logging to IO::Handle classes
 
 =head1 SYNOPSIS
 
