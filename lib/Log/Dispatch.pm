@@ -15,12 +15,15 @@ our %LEVELS;
 
 BEGIN
 {
-    no strict 'refs';
     foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
     {
-        *{$l} = sub { my $self = shift;
-                      $self->log( level => $l, message => "@_" ); };
+        my $sub = sub { my $self = shift;
+                        $self->log( level => $l, message => "@_" ); };
+
         $LEVELS{$l} = 1;
+
+        no strict 'refs';
+        *{$l} = $sub
     }
 }
 
