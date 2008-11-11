@@ -642,7 +642,7 @@ SKIP:
     skip 'Cannot do syslog tests without Sys::Syslog 0.16+', 2
         unless eval "use Log::Dispatch::Syslog; 1;";
 
-    no warnings 'redefine';
+    no warnings 'redefine', 'once';
 
     my $sock;
     local *Sys::Syslog::setlogsock = sub { $sock = shift };
