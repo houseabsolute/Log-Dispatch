@@ -15,17 +15,14 @@ BEGIN
     {
         eval "use Log::Dispatch::Email::$_";
         $tests{$_} = ! $@;
+        $tests{$_} = 0 if $ENV{LD_NO_MAIL};
     }
-
-    eval "use Log::Dispatch::Syslog";
-    $tests{Syslog} = ! $@;
 }
 
 my %TestConfig;
 if ( -d '.svn' )
 {
     %TestConfig = ( email_address => 'autarch@urth.org',
-                    syslog_file   => '/var/log/messages',
                   );
 }
 
