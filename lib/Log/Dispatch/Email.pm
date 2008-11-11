@@ -12,6 +12,8 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 our $VERSION = '1.19';
 
+# need to untaint this value
+my ($program) = $0 =~ /(.+)/;
 
 sub new
 {
@@ -19,7 +21,7 @@ sub new
     my $class = ref $proto || $proto;
 
     my %p = validate( @_, { subject  => { type => SCALAR,
-                                          default => "$0: log email" },
+                                          default => "$program: log email" },
                             to       => { type => SCALAR | ARRAYREF },
                             from     => { type => SCALAR,
                                           optional => 1 },
