@@ -294,6 +294,9 @@ you simply copy the code in the SYNOPSIS and then put some
 functionality into the C<log_message> method then you should be all
 set.  Please make sure to use the C<_basic_init> method as directed.
 
+The actual logging implementation should be done in a C<log_message>
+method that you write. B<Do not override C<log>!>.
+
 =head1 AUTHOR
 
 Dave Rolsky, <autarch@urth.org>
