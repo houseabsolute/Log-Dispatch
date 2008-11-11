@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use Sys::Syslog ();
+use Sys::Syslog 0.16 ();
 
 our $VERSION = '1.18';
 
@@ -40,7 +40,7 @@ sub _init
                             facility => { type => SCALAR,
                                           default => 'user' },
                             socket   => { type => SCALAR,
-                                          default => 'unix' },
+                                          default => undef },
                           } );
 
     $self->{ident}    = $p{ident};
@@ -57,7 +57,8 @@ sub _init
                             'ALERT',
                             'EMERG' ];
 
-    Sys::Syslog::setlogsock $self->{socket};
+    Sys::Syslog::setlogsock( $self->{socket} )
+        if defined $self->{socket};
 }
 
 sub log_message
@@ -68,7 +69,10 @@ sub log_message
     my $pri = $self->_level_as_number($p{level});
 
     Sys::Syslog::openlog($self->{ident}, $self->{logopt}, $self->{facility});
-    Sys::Syslog::syslog($self->{priorities}[$pri], '%s', $p{message});
+
+    eval { Sys::Syslog::syslog($self->{priorities}[$pri], $p{message}) };
+    warn $@ if $@ and $^W;
+
     Sys::Syslog::closelog;
 }
 
@@ -95,6 +99,10 @@ Log::Dispatch::Syslog - Object for logging to system log.
 
 This module provides a simple object for sending messages to the
 system log (via UNIX syslog calls).
+
+Note that logging may fail if you try to pass UTF-8 characters in the
+log message. If logging fails and warnings are enabled, the error
+message will be output using Perl's C<warn>.
 
 =head1 METHODS
 
@@ -131,10 +139,8 @@ Defaults to $0.
 =item * logopt ($)
 
 A string containing the log options (separated by any separator you
-like).  Valid options are 'cons', 'pid', 'ndelay', and 'nowait'.  See
-the openlog(3) and Sys::Syslog docs for more details.  I would suggest
-not using 'cons' but instead using Log::Dispatch::Screen.  Defaults to
-''.
+like).  See the openlog(3) and Sys::Syslog docs for more details.
+Defaults to ''.
 
 =item * facility ($)
 
@@ -146,7 +152,11 @@ Valid options are 'auth', 'authpriv', 'cron', 'daemon', 'kern',
 =item * socket ($)
 
 Tells what type of socket to use for sending syslog messages.  Valid
-options are 'unix' or 'inet'.  Defaults to 'unix'.
+options are listed in C<Sys::Syslog>.
+
+If you don't provide this, then we let C<Sys::Syslog> simply pick one
+that works, which is the preferred option, as it makes your code more
+portable.
 
 =item * callbacks( \& or [ \&, \&, ... ] )
 

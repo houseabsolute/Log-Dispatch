@@ -3,6 +3,23 @@
 - Fixed a bug where Log::Dispatch::Email would die when it tried to
   log under taint mode. Patch by Neil Hemingway. RT #40042.
 
+- Fixed a misuse of warnings::enabled(). Reported by Darian
+  Patrick. RT #39784.
+
+- Syslog logging now requires Sys::Syslog 0.16+.
+
+- If you don't pass a socket argument to Log::Dispatch::Syslog, it
+  does not call Sys::Syslog::setlogsock(), which is the preferred
+  option for portability.
+
+* If the call to syslog dies, it is trapped and the error is output as
+  a warning if warnings are on. This is mostly a workaround for
+  Sys::Sylog not handle utf-8. RT #37397.
+
+  This isn't backwards-compatible, but I'm of the opinion that the
+  logging code should never die when logging a message (as opposed to
+  in its constructor).
+
 
 2.21 Feb 6, 2008
 
