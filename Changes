@@ -1,4 +1,4 @@
-2.22
+2.22 Nov 11, 2008
 
 - Fixed a bug where Log::Dispatch::Email would die when it tried to
   log under taint mode. Patch by Neil Hemingway. RT #40042.
