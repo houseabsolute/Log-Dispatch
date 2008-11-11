@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 144;
+use Test::More tests => 146;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -617,7 +617,7 @@ SKIP:
 
     ok( $e, 'died when calling log_and_die()' );
     like( $e, qr{this is my message}, 'error contains expected message' );
-    like( $e, qr{01-basic\.t line 614}, 'error croaked' );
+    like( $e, qr{01-basic\.t line 611}, 'error croaked' );
 
     is( $string, 'this is my message', 'message is logged' );
 
@@ -632,9 +632,41 @@ SKIP:
 
     ok( $e, 'died when calling log_and_croak()' );
     like( $e, qr{croak}, 'error contains expected message' );
-    like( $e, qr{01-basic\.t line 680}, 'error croaked from perspective of caller' );
+    like( $e, qr{01-basic\.t line 10006}, 'error croaked from perspective of caller' );
 
     is( $string, 'croak', 'message is logged' );
+}
+
+SKIP:
+{
+    skip 'Cannot do syslog tests without Sys::Syslog 0.16+', 2
+        unless eval "use Log::Dispatch::Syslog; 1;";
+
+    no warnings 'redefine';
+
+    my $sock;
+    local *Sys::Syslog::setlogsock = sub { $sock = shift };
+
+    local *Sys::Syslog::openlog = sub { return 1 };
+    local *Sys::Syslog::closelog = sub { return 1 };
+
+    my @log;
+    local *Sys::Syslog::syslog = sub { push @log, [@_] };
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::Syslog->new( name      => 'syslog',
+                                                min_level => 'debug',
+                                              )
+                  );
+
+    ok( ! defined $sock,
+        'no call to stelogsock unless socket is set explicitly' );
+
+    $dispatch->info('Foo');
+
+    is_deeply( \@log,
+               [ [ 'INFO', 'Foo' ] ],
+               'passed message to syslog' );
 }
 
 package Log::Dispatch::String;
@@ -667,16 +699,6 @@ sub log_message
     ${ $self->{string} } .= $p{message};
 }
 
-
-package Croaker;
-
-sub croak
-{
-    my $log = shift;
-
-    $log->log_and_croak( level => 'error', message => 'croak' );
-}
-
 # Used for testing Log::Dispatch::Screen
 package Test::Tie::STDOUT;
 
@@ -701,4 +723,14 @@ sub PRINTF
     my $self = shift;
     my $format = shift;
     ${ $self->{string} } .= sprintf($format, @_);
+}
+
+#line 10000
+package Croaker;
+
+sub croak
+{
+    my $log = shift;
+
+    $log->log_and_croak( level => 'error', message => 'croak' );
 }
