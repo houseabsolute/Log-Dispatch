@@ -68,12 +68,14 @@ sub log_message
 
     my $pri = $self->_level_as_number($p{level});
 
-    Sys::Syslog::openlog($self->{ident}, $self->{logopt}, $self->{facility});
+    eval
+    {
+        Sys::Syslog::openlog($self->{ident}, $self->{logopt}, $self->{facility});
+        Sys::Syslog::syslog($self->{priorities}[$pri], $p{message});
+        Sys::Syslog::closelog;
+    };
 
-    eval { Sys::Syslog::syslog($self->{priorities}[$pri], $p{message}) };
     warn $@ if $@ and $^W;
-
-    Sys::Syslog::closelog;
 }
 
 

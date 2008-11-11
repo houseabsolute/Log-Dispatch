@@ -12,13 +12,13 @@
   does not call Sys::Syslog::setlogsock(), which is the preferred
   option for portability.
 
-* If the call to syslog dies, it is trapped and the error is output as
-  a warning if warnings are on. This is mostly a workaround for
-  Sys::Sylog not handle utf-8. RT #37397.
+* If any of the syslog calls die, this is trapped and the error is
+  output as a warning if warnings are on. This is mostly a workaround
+  for Sys::Sylog not handling utf-8. RT #35270 & #37397.
 
-  This isn't backwards-compatible, but I'm of the opinion that the
-  logging code should never die when logging a message (as opposed to
-  in its constructor).
+  This isn't backwards-compatible, but it's probably wrong for the
+  logging code to die because it can't log (even though some other
+  output modules still do).
 
 
 2.21 Feb 6, 2008
