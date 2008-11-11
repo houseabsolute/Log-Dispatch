@@ -37,7 +37,7 @@ sub send_email
             or die "Cannot close handle to mail program";
     };
 
-    warn $@ if $@ && warnings::enabled();
+    warn $@ if $@ && $^W;
 }
 
 
