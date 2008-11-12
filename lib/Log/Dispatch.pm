@@ -412,8 +412,8 @@ well ("error").
 =head2 Making your own logging objects
 
 Making your own logging object is generally as simple as subclassing
-Log::Dispatch::Output and overriding the C<new> and C<log> methods.
-See the L<Log::Dispatch::Output> docs for more details.
+Log::Dispatch::Output and overriding the C<new> and C<log_message>
+methods.  See the L<Log::Dispatch::Output> docs for more details.
 
 If you would like to create your own subclass for sending email then
 it is even simpler.  Simply subclass L<Log::Dispatch::Email> and
