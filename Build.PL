@@ -9,7 +9,6 @@ my $build =
                         requires    => { 'Params::Validate' => 0.15,
                                        },
                         build_requires => { 'File::Temp'    => 0,
-                                            'Module::Build' => 0,
                                             'Test::More'    => 0,
                                           },
                         sign               => 1,
