@@ -29,7 +29,7 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch::File - Object that accepts messages and does nothing
+Log::Dispatch::Null - Object that accepts messages and does nothing
 
 =head1 SYNOPSIS
 
