@@ -20,10 +20,8 @@ BEGIN
 }
 
 my %TestConfig;
-if ( -d '.svn' )
-{
-    %TestConfig = ( email_address => 'autarch@urth.org',
-                  );
+if (my $email_address = $ENV{LOG_DISPATCH_TEST_EMAIL}) {
+    %TestConfig = ( email_address => $email_address );
 }
 
 use Log::Dispatch::File;
