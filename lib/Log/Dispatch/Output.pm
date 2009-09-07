@@ -43,7 +43,7 @@ sub _basic_init
 {
     my $self = shift;
 
-    my %p = validate( @_, { name => { type => SCALAR },
+    my %p = validate( @_, { name => { type => SCALAR, optional => 1 },
                             min_level => { type => SCALAR },
                             max_level => { type => SCALAR,
                                            optional => 1 },
@@ -60,7 +60,7 @@ sub _basic_init
                                crit  => 5,
                                emerg => 7 };
 
-    $self->{name} = $p{name};
+    $self->{name} = $p{name} || $self->_unique_name();
 
     $self->{min_level} = $self->_level_as_number($p{min_level});
     die "Invalid level specified for min_level" unless defined $self->{min_level};
@@ -151,6 +151,13 @@ sub _level_as_name
     return $self->{level_names}[$level];
 }
 
+my $_unique_name_counter = 0;
+sub _unique_name {
+    my ( $self ) = @_;
+
+    return "_anon_" . $_unique_name_counter++;
+}
+
 
 1;
 
@@ -207,7 +214,7 @@ parameters:
 
 =item * name ($)
 
-The name of the object (not the filename!).  Required.
+The name of the object (not the filename!). By default a unique name will be generated.
 
 =item * min_level ($)
 

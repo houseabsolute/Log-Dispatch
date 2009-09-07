@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 146;
+use Test::More tests => 147;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -615,7 +615,7 @@ SKIP:
 
     ok( $e, 'died when calling log_and_die()' );
     like( $e, qr{this is my message}, 'error contains expected message' );
-    like( $e, qr{01-basic\.t line 611}, 'error croaked' );
+    like( $e, qr{01-basic\.t line 6\d\d}, 'error croaked' );
 
     is( $string, 'this is my message', 'message is logged' );
 
@@ -666,6 +666,11 @@ SKIP:
                [ [ 'INFO', 'Foo' ] ],
                'passed message to syslog' );
 }
+
+{
+    like(Log::Dispatch::Screen->new( min_level => 'debug' )->name, qr/anon/, 'generated anon name');
+}
+
 
 package Log::Dispatch::String;
 
