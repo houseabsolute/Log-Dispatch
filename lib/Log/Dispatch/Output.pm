@@ -7,7 +7,7 @@ use Log::Dispatch;
 
 use base qw( Log::Dispatch::Base );
 
-use Params::Validate qw(validate SCALAR ARRAYREF CODEREF);
+use Params::Validate qw(validate SCALAR ARRAYREF CODEREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
 use Carp ();
@@ -49,6 +49,7 @@ sub _basic_init
                                            optional => 1 },
                             callbacks => { type => ARRAYREF | CODEREF,
                                            optional => 1 },
+                            newline => { type => BOOLEAN, optional => 1 },
                           } );
 
     # Map the names to numbers so they can be compared.
@@ -77,6 +78,10 @@ sub _basic_init
 
     my @cb = $self->_get_callbacks(%p);
     $self->{callbacks} = \@cb if @cb;
+
+    if ($p{newline}) {
+        push(@{$self->{callbacks}}, \&_add_newline_callback);
+    }
 }
 
 sub name
@@ -158,6 +163,10 @@ sub _unique_name {
     return "_anon_" . $_unique_name_counter++;
 }
 
+sub _add_newline_callback {
+    my %params = @_;
+    return $params{message} . "\n";
+}
 
 1;
 
@@ -223,7 +232,7 @@ Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more
 
 =item * max_level ($)
 
-The maximum logging level this obejct will accept.  See the
+The maximum logging level this object will accept.  See the
 Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.  This is not
 required.  By default the maximum is the highest possible level (which
 means functionally that the object has no maximum).
@@ -242,6 +251,12 @@ be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.  If they do not return
 the message then you will get no output.  Make sure to return the
 message!
+
+=item * newline (0|1)
+
+If true, a callback will be added to the end of the callbacks list that adds
+a newline to the end of each message. Default is false, but some
+Log::Dispatch::* classes may decide to make the default true.
 
 =back
 

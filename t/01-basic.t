@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 147;
+use Test::More tests => 148;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -593,6 +593,21 @@ SKIP:
                   );
 
     is( $string, 'this is my message', 'message returned by subref is logged' );
+}
+
+{
+    my $string;
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
+                                                min_level => 'debug',
+                                                newline => 1,
+                                              ) );
+    $dispatch->debug('hello');
+    $dispatch->debug('goodbye');
+
+    is( $string, "hello\ngoodbye\n", 'added newlines');
 }
 
 {
