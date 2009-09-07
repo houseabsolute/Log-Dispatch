@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 148;
+use Test::More tests => 150;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -683,7 +683,11 @@ SKIP:
 }
 
 {
-    like(Log::Dispatch::Screen->new( min_level => 'debug' )->name, qr/anon/, 'generated anon name');
+    # Test defaults
+    my $dispatch = Log::Dispatch::Null->new();
+    like($dispatch->name, qr/anon/, 'generated anon name');
+    is($dispatch->min_level, 'debug');
+    is($dispatch->max_level, 'emergency');
 }
 
 

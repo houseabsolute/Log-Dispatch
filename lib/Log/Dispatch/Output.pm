@@ -51,7 +51,7 @@ sub _basic_init
     my $self = shift;
 
     my %p = validate( @_, { name => { type => SCALAR, optional => 1 },
-                            min_level => { type => SCALAR },
+                            min_level => { type => SCALAR, optional => 1 },
                             max_level => { type => SCALAR,
                                            optional => 1 },
                             callbacks => { type => ARRAYREF | CODEREF,
@@ -64,11 +64,14 @@ sub _basic_init
 
     $self->{name} = $p{name} || $self->_unique_name();
 
-    $self->{min_level} = $self->_level_as_number($p{min_level});
-    die "Invalid level specified for min_level" unless defined $self->{min_level};
+    # Either use the parameter supplied or just the lowest possible level.
+    $self->{min_level} =
+        ( exists $p{min_level} ?
+          $self->_level_as_number($p{min_level}) :
+          0
+        );
 
-    # Either use the parameter supplies or just the highest possible
-    # level.
+    # Either use the parameter supplied or just the highest possible level.
     $self->{max_level} =
         ( exists $p{max_level} ?
           $self->_level_as_number($p{max_level}) :
@@ -229,13 +232,15 @@ The name of the object (not the filename!). By default a unique name will be gen
 =item * min_level ($)
 
 The minimum logging level this object will accept.  See the
-Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.  Required.
+Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.
+By default the minimum is the lowest possible level (which
+means functionally that the object has no minimum).
 
 =item * max_level ($)
 
 The maximum logging level this object will accept.  See the
-Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.  This is not
-required.  By default the maximum is the highest possible level (which
+Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.
+By default the maximum is the highest possible level (which
 means functionally that the object has no maximum).
 
 =item * callbacks( \& or [ \&, \&, ... ] )
