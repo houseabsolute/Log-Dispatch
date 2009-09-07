@@ -14,6 +14,13 @@ use Carp ();
 
 our $VERSION = '1.26';
 
+# Map the names to numbers so they can be compared.
+my $level_names = [ qw( debug info notice warning error critical alert emergency ) ];
+my $ln = 0;
+my $level_numbers = { ( map { $_ => $ln++ } @{ $level_names } ),
+                           err   => 4,
+                           crit  => 5,
+                           emerg => 7 };
 
 sub new
 {
@@ -52,14 +59,8 @@ sub _basic_init
                             newline => { type => BOOLEAN, optional => 1 },
                           } );
 
-    # Map the names to numbers so they can be compared.
-    $self->{level_names} = [ qw( debug info notice warning error critical alert emergency ) ];
-
-    my $x = 0;
-    $self->{level_numbers} = { ( map { $_ => $x++ } @{ $self->{level_names} } ),
-                               err   => 4,
-                               crit  => 5,
-                               emerg => 7 };
+    $self->{level_names} = $level_names;
+    $self->{level_numbers} = $level_numbers;
 
     $self->{name} = $p{name} || $self->_unique_name();
 
