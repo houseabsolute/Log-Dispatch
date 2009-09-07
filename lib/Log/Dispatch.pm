@@ -8,6 +8,7 @@ use warnings;
 use base qw( Log::Dispatch::Base );
 
 use Carp ();
+use Log::Dispatch::Util qw(require_dynamic);
 
 our $VERSION = '2.22';
 our %LEVELS;
@@ -37,6 +38,17 @@ sub new
 
     my @cb = $self->_get_callbacks(%p);
     $self->{callbacks} = \@cb if @cb;
+
+    if (my $outputs = $p{outputs}) {
+        die "odd number of elements found in outputs" unless (@$outputs %2 == 0);
+        while (my ($class, $params) = splice(@$outputs, 0, 2)) {
+            die "expected hashref, not '$params'" unless ref($params) eq 'HASH';
+            my $full_class = (substr($class, 0, 1) eq '+' ? substr($class, 1) : "Log::Dispatch::$class");
+            require_dynamic($full_class);
+            my $output_object = $full_class->new(%$params);
+            $self->add($output_object);
+        }
+    }
 
     return $self;
 }
@@ -199,19 +211,34 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch;
+   use Log::Dispatch;
+   
+   # Shorter syntax
+   #
+   my $dispatcher =
+     Log::Dispatch->new(
+       outputs => [ 'File' => { min_level => 'debug', filename => 'logfile' } ] );
 
-  my $dispatcher = Log::Dispatch->new;
-
-  $dispatcher->add( Log::Dispatch::File->new( name => 'file1',
-                                              min_level => 'debug',
-                                              filename => 'logfile' ) );
-
-  $dispatcher->log( level => 'info',
-                    message => 'Blah, blah' );
-
-  my $sub = sub { my %p = @_;  return reverse $p{message}; };
-  my $reversing_dispatcher = Log::Dispatch->new( callbacks => $sub );
+   $dispatcher->info('Blah, blah');
+   
+   # Longer syntax
+   #
+   my $dispatcher = Log::Dispatch->new;
+   $dispatcher->add(
+       Log::Dispatch::File->new(
+           name      => 'file1',
+           min_level => 'debug',
+           filename  => 'logfile'
+       )
+   );
+   
+   $dispatcher->log(
+       level   => 'info',
+       message => 'Blah, blah'
+   );
+   
+   my $sub = sub { my %p = @_; return reverse $p{message}; };
+   my $reversing_dispatcher = Log::Dispatch->new( callbacks => $sub );
 
 =head1 DESCRIPTION
 
@@ -224,10 +251,26 @@ add and remove output objects as desired.
 
 =item * new
 
-Returns a new Log::Dispatch object.  This method takes one optional
-parameter:
+Returns a new Log::Dispatch object.  This method takes the following optional
+parameters:
 
 =over 8
+
+=item * outputs(class =E<gt> params, class =E<gt> params, ...) 
+
+This parameter is a reference to a list of pairs, where each pair is a class
+and a params hash. e.g.
+
+The class is automatically prefixed with 'Log::Dispatch::', unless it begins
+with '+', in which case the string following '+' is taken to be a full
+classname.
+
+e.g.
+
+    outputs => [ 'File'          => { min_level => 'debug', filename => 'logfile' },
+                 '+My::Dispatch' => { min_level => 'info' } ]
+
+For each pair, a new object is created and added to the dispatcher (via L</add>).
 
 =item * callbacks( \& or [ \&, \&, ... ] )
 
