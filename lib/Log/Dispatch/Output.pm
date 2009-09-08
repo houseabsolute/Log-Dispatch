@@ -214,14 +214,10 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* object
 This module is the base class from which all Log::Dispatch::* objects
 should be derived.
 
-=head1 METHODS
+=head1 CONSTRUCTOR
 
-=over 4
-
-=item * new(%p)
-
-This must be overridden in a subclass.  Takes the following
-parameters:
+The constructor, C<new>, must be overridden in a subclass.  It takes the
+following parameters:
 
 =over 4
 
@@ -265,6 +261,10 @@ a newline to the end of each message. Default is false, but some
 Log::Dispatch::* classes may decide to make the default true.
 
 =back
+
+=head1 METHODS
+
+=over 4
 
 =item * _basic_init(%p)
 

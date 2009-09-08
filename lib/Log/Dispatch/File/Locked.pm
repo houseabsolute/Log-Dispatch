@@ -31,7 +31,7 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch::File::Locked - Extension to Log::Dispatch::File to facilitate locking
+Log::Dispatch::File::Locked - Subclass of Log::Dispatch::File to facilitate locking
 
 =head1 SYNOPSIS
 
@@ -46,12 +46,8 @@ Log::Dispatch::File::Locked - Extension to Log::Dispatch::File to facilitate loc
 
 =head1 DESCRIPTION
 
-This module acts exactly like Log::Dispatch::File except that it
+This module acts exactly like L<Log::Dispatch::File|Log::Dispatch::File> except that it
 obtains an exclusive lock on the file before writing to it.
-
-=head1 METHODS
-
-All methods are inherited from Log::Dispatch::File.
 
 =head1 AUTHOR
 
