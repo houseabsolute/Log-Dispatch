@@ -56,18 +56,19 @@ Log::Dispatch::Screen - Object for logging to the screen
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::Screen;
-
-  my $screen = Log::Dispatch::Screen->new( name      => 'screen',
-                                           min_level => 'debug',
-                                           stderr    => 1 );
-
-  $screen->log( level => 'alert', message => "I'm searching the city for sci-fi wasabi\n" );
+  use Log::Dispatch;
+  my $log = Log::Dispatch->new( outputs => [ Screen => { min_level => 'debug',
+                                                         stderr    => 1,
+                                                         newline   => 1 }]);
+  $log->alert("I'm searching the city for sci-fi wasabi");
 
 =head1 DESCRIPTION
 
 This module provides an object for logging to the screen (really
 STDOUT or STDERR).
+
+Note that a newline will I<not> be added automatically at the end of a
+message by default.  To do that, pass C<newline =E<gt> 1>.
 
 =head1 CONSTRUCTOR
 

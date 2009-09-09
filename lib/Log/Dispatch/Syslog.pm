@@ -89,13 +89,9 @@ Log::Dispatch::Syslog - Object for logging to system log.
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::Syslog;
-
-  my $file = Log::Dispatch::Syslog->new( name      => 'file1',
-                                         min_level => 'info',
-                                         ident     => 'Yadda yadda' );
-
-  $file->log( level => 'emerg', message => "Time to die." );
+  use Log::Dispatch;
+  my $log = Log::Dispatch->new( outputs => [Syslog => { min_level => 'info', ident => 'Yadda yadda' }]);
+  $log->emerg( "Time to die." );
 
 =head1 DESCRIPTION
 

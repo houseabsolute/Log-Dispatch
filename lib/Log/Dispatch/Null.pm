@@ -33,12 +33,9 @@ Log::Dispatch::Null - Object that accepts messages and does nothing
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::Null;
-
-  my $null = Log::Dispatch::Null->new( name      => 'null',
-                                       min_level => 'info' );
-
-  $null->log( level => 'emerg', message => "I've fallen and I can't get up\n" );
+  use Log::Dispatch;
+  my $null = Log::Dispatch->new(outputs => [Null => {}]);
+  $null->emerg( "I've fallen and I can't get up" );
 
 =head1 DESCRIPTION
 

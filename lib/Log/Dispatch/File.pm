@@ -158,19 +158,22 @@ Log::Dispatch::File - Object for logging to files
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::File;
-
-  my $file = Log::Dispatch::File->new( name      => 'file1',
-                                       min_level => 'info',
-                                       filename  => 'Somefile.log',
-                                       mode      => 'append' );
-
-  $file->log( level => 'emerg', message => "I've fallen and I can't get up\n" );
+  use Log::Dispatch;
+  my log = Log::Dispatch->new(outputs => [File => {
+                                                   min_level => 'info',
+                                                   filename  => 'Somefile.log',
+                                                   mode      => '>>',
+                                                   newline   => 1,
+                                                  }]);
+  $log->emerg("I've fallen and I can't get up");
 
 =head1 DESCRIPTION
 
 This module provides a simple object for logging to files under the
 Log::Dispatch::* system.
+
+Note that a newline will I<not> be added automatically at the end of a
+message by default.  To do that, pass C<newline =E<gt> 1>.
 
 =head1 CONSTRUCTOR
 
