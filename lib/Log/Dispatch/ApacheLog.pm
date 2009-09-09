@@ -71,18 +71,14 @@ Log::Dispatch::ApacheLog - Object for logging to Apache::Log objects
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::ApacheLog;
-
-  my $handle = Log::Dispatch::ApacheLog->new( name      => 'apache log',
-                                              min_level => 'emerg',
-                                              apache    => $r );
-
-  $handle->log( level => 'emerg', message => 'Kaboom' );
+  use Log::Dispatch;
+  my $log = Log::Dispatch->new(outputs => [ApacheLog => {apache => $r}]);
+  $log->emerg('Kaboom');
 
 =head1 DESCRIPTION
 
 This module allows you to pass messages to Apache's log object,
-represented by the Apache::Log class.
+represented by the L<Apache::Log|Apache::Log> class.
 
 =head1 CONSTRUCTOR
 

@@ -42,16 +42,12 @@ Log::Dispatch::Email::MailSendmail - Subclass of Log::Dispatch::Email that uses 
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::Email::MailSendmail;
-
-  my $email =
-      Log::Dispatch::Email::MailSendmail->new
-          ( name => 'email',
+  my $log = Log::Dispatch->new(outputs => ['Email::MailSendmail' => { 
             min_level => 'emerg',
             to => [ qw( foo@bar.com bar@baz.org ) ],
-            subject => 'Oh no!!!!!!!!!!!', );
-
-  $email->log( message => 'Something bad is happening', level => 'emerg' );
+            subject => 'Oh no!!!!!!!!!!!''.
+    }]);
+  $log->emerg("Something bad is happening");
 
 =head1 DESCRIPTION
 

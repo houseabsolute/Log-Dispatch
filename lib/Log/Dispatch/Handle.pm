@@ -47,13 +47,10 @@ Log::Dispatch::Handle - Object for logging to IO::Handle classes
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::Handle;
-
-  my $handle = Log::Dispatch::Handle->new( name      => 'a handle',
-                                           min_level => 'emerg',
-                                           handle    => $io_socket_object );
-
-  $handle->log( level => 'emerg', message => 'I am the Lizard King!' );
+  use Log::Dispatch;
+  my $log = Log::Dispatch->new( outputs => [ Handle => { min_level => 'emerg',
+                                                         handle    => $io_socket_object }]);
+  $log->emerg( 'I am the Lizard King!' );
 
 =head1 DESCRIPTION
 

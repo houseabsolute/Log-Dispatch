@@ -69,17 +69,12 @@ Log::Dispatch::Email::MailSender - Subclass of Log::Dispatch::Email that uses th
 
 =head1 SYNOPSIS
 
-  use Log::Dispatch::Email::MailSender;
-
-  my $email =
-      Log::Dispatch::Email::MailSender->new
-          ( name => 'email',
+  my $log = Log::Dispatch->new(outputs => ['Email::MailSender' => { 
             min_level => 'emerg',
             to => [ qw( foo@bar.com bar@baz.org ) ],
-            subject => 'Oh no!!!!!!!!!!!',
-            smtp => 'mail.foo.bar' );
-
-  $email->log( message => 'Something bad is happening', level => 'emerg' );
+            subject => 'Oh no!!!!!!!!!!!''.
+    }]);
+  $log->emerg("Something bad is happening");
 
 =head1 DESCRIPTION
 
