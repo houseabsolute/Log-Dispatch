@@ -1,3 +1,18 @@
+2.23 Sep 8, 2009
+
+- Added new shorter syntax - Log::Dispatch->new(outputs => [ class => params, ... ]);
+
+- Made name parameter optional; will auto-generate a unique name if one is not given.
+
+- Made min_level parameter optional; will default to lowest possible level.
+
+- Added a newline parameter that causes a newline to be added to each message,
+  and updated the documentation regarding newlines.
+
+- Removed repetitive boilerplate documentation from each output class.
+
+- level_names and level_numbers are now computed once and shared between output objects.
+
 2.22 Nov 11, 2008
 
 - Fixed a bug where Log::Dispatch::Email would die when it tried to
