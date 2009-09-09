@@ -178,7 +178,7 @@ __END__
 
 =head1 NAME
 
-Log::Dispatch::Output - Base class for all Log::Dispatch::* object
+Log::Dispatch::Output - Base class for all Log::Dispatch::* objects
 
 =head1 SYNOPSIS
 
@@ -216,51 +216,9 @@ should be derived.
 
 =head1 CONSTRUCTOR
 
-The constructor, C<new>, must be overridden in a subclass.  It takes the
-following parameters:
-
-=over 4
-
-=item * name ($)
-
-The name of the object (not the filename!). By default a unique name will be generated.
-
-=item * min_level ($)
-
-The minimum logging level this object will accept.  See the
-Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.
-By default the minimum is the lowest possible level (which
-means functionally that the object has no minimum).
-
-=item * max_level ($)
-
-The maximum logging level this object will accept.  See the
-Log::Dispatch documentation on L<Log Levels|Log::Dispatch/"Log Levels"> for more information.
-By default the maximum is the highest possible level (which
-means functionally that the object has no maximum).
-
-=item * callbacks( \& or [ \&, \&, ... ] )
-
-This parameter may be a single subroutine reference or an array
-reference of subroutine references.  These callbacks will be called in
-the order they are given and passed a hash containing the following keys:
-
- ( message => $log_message, level => $log_level )
-
-The callbacks are expected to modify the message and then return a
-single scalar containing that modified message.  These callbacks will
-be called when either the C<log> or C<log_to> methods are called and
-will only be applied to a given message once.  If they do not return
-the message then you will get no output.  Make sure to return the
-message!
-
-=item * newline (0|1)
-
-If true, a callback will be added to the end of the callbacks list that adds
-a newline to the end of each message. Default is false, but some
-Log::Dispatch::* classes may decide to make the default true.
-
-=back
+The constructor, C<new>, must be overridden in a subclass. See L<Output
+Classes|Log::Dispatch/OUTPUT CLASSES> for a description of the common
+parameters accepted by this constructor.
 
 =head1 METHODS
 
