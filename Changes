@@ -34,6 +34,8 @@
 - The Log::Dispatch docs mistakenly told you to provide a log() method when
   creating a new output class. RT #40561.
 
+- Made all modules have the same version as Log::Dispatch itself.
+
 
 2.22 Nov 11, 2008
 
