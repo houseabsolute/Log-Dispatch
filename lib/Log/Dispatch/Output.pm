@@ -193,11 +193,13 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* objects
 
       my %p = @_;
 
-      my $self = bless {}, $class
+      my $self = bless {}, $class;
 
       $self->_basic_init(%p);
 
       # Do more if you like
+
+      return $self;
   }
 
   sub log_message
@@ -207,6 +209,8 @@ Log::Dispatch::Output - Base class for all Log::Dispatch::* objects
 
       # Do something with message in $p{message}
   }
+
+  1;
 
 =head1 DESCRIPTION
 
