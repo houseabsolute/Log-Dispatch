@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '1.09';
+our $VERSION = '2.22';
 
 
 BEGIN

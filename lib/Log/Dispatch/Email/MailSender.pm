@@ -14,7 +14,7 @@ use base qw( Log::Dispatch::Email );
 
 use Mail::Sender ();
 
-our $VERSION = '1.04';
+our $VERSION = '2.22';
 
 sub new
 {

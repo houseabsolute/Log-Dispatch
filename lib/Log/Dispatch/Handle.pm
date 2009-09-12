@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '1.16';
+our $VERSION = '2.22';
 
 sub new
 {
