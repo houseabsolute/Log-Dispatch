@@ -516,10 +516,10 @@ also allow 'warn' as a synonym for 'warning'.
 =head1 SUBCLASSING
 
 This module was designed to be easy to subclass. If you want to handle
-messaging in a way not implemented in this package, you should be able to
-add this with minimal effort. It is generally as simple as subclassing
+messaging in a way not implemented in this package, you should be able to add
+this with minimal effort. It is generally as simple as subclassing
 Log::Dispatch::Output and overriding the C<new> and C<log_message>
-methods.  See the L<Log::Dispatch::Output> docs for more details.
+methods. See the L<Log::Dispatch::Output> docs for more details.
 
 If you would like to create your own subclass for sending email then
 it is even simpler.  Simply subclass L<Log::Dispatch::Email> and

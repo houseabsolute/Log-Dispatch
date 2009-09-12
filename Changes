@@ -31,6 +31,9 @@
   Log::Dispatch::Output. This lets you add a new formatting callback after an
   object is created. Based on a patch from Ricardo Signes. RT #48283.
 
+- The Log::Dispatch docs mistakenly told you to provide a log() method when
+  creating a new output class. RT #40561.
+
 
 2.22 Nov 11, 2008
 
