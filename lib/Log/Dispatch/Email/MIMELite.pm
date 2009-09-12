@@ -52,7 +52,7 @@ Log::Dispatch::Email::MIMELite - Subclass of Log::Dispatch::Email that uses the 
 
 =head1 DESCRIPTION
 
-This is a subclass of L<Log::Dispatch::Email|Log::Dispatch::Email> that implements the
+This is a subclass of L<Log::Dispatch::Email> that implements the
 send_email method using the MIME::Lite module.
 
 =head1 AUTHOR

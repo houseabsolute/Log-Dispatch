@@ -411,8 +411,8 @@ list, depending on context, if the given output does not exist.
 
 =head1 OUTPUT CLASSES
 
-An output class - e.g. L<Log::Dispatch::File|Log::Dispatch::File> or
-L<Log::Dispatch::Screen|Log::Dispatch::Screen> - implements a particular way
+An output class - e.g. L<Log::Dispatch::File> or
+L<Log::Dispatch::Screen> - implements a particular way
 of dispatching logs. Many output classes come with this distribution,
 and others are available separately on CPAN.
 

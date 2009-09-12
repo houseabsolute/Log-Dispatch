@@ -78,12 +78,12 @@ Log::Dispatch::ApacheLog - Object for logging to Apache::Log objects
 =head1 DESCRIPTION
 
 This module allows you to pass messages to Apache's log object,
-represented by the L<Apache::Log|Apache::Log> class.
+represented by the L<Apache::Log> class.
 
 =head1 CONSTRUCTOR
 
 The constructor takes the following parameters in addition to the standard
-parameters documented in L<Log::Dispatch::Output|Log::Dispatch::Output>:
+parameters documented in L<Log::Dispatch::Output>:
 
 =over 4
 

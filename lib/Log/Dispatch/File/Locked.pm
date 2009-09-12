@@ -46,7 +46,7 @@ Log::Dispatch::File::Locked - Subclass of Log::Dispatch::File to facilitate lock
 
 =head1 DESCRIPTION
 
-This module acts exactly like L<Log::Dispatch::File|Log::Dispatch::File> except that it
+This module acts exactly like L<Log::Dispatch::File> except that it
 obtains an exclusive lock on the file before writing to it.
 
 =head1 AUTHOR

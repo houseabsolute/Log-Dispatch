@@ -178,7 +178,7 @@ message by default.  To do that, pass C<newline =E<gt> 1>.
 =head1 CONSTRUCTOR
 
 The constructor takes the following parameters in addition to the standard
-parameters documented in L<Log::Dispatch::Output|Log::Dispatch::Output>:
+parameters documented in L<Log::Dispatch::Output>:
 
 =over 4
 
