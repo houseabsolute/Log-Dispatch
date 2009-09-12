@@ -432,9 +432,7 @@ form of generated names, as they may change.
 
 =item * min_level ($)
 
-The minimum L<logging level|Log Levels> this object will accept.  By default
-the minimum is the lowest possible level (which means functionally that the
-object has no minimum).
+The minimum L<logging level|Log Levels> this object will accept. Required.
 
 =item * max_level ($)
 

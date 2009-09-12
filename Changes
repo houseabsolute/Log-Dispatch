@@ -4,14 +4,14 @@
 
 - Made name parameter optional; will auto-generate a unique name if one is not given.
 
-- Made min_level parameter optional; will default to lowest possible level.
-
 - Added a newline parameter that causes a newline to be added to each message,
   and updated the documentation regarding newlines.
 
 - Removed repetitive boilerplate documentation from each output class.
 
 - level_names and level_numbers are now computed once and shared between output objects.
+
+- Update repo url - now in http://hg.urth.org/hg/Log-Dispatch
 
 2.22 Nov 11, 2008
 

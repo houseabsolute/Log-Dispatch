@@ -51,7 +51,7 @@ sub _basic_init
     my $self = shift;
 
     my %p = validate( @_, { name => { type => SCALAR, optional => 1 },
-                            min_level => { type => SCALAR, optional => 1 },
+                            min_level => { type => SCALAR, required => 1 },
                             max_level => { type => SCALAR,
                                            optional => 1 },
                             callbacks => { type => ARRAYREF | CODEREF,
@@ -64,12 +64,8 @@ sub _basic_init
 
     $self->{name} = $p{name} || $self->_unique_name();
 
-    # Either use the parameter supplied or just the lowest possible level.
-    $self->{min_level} =
-        ( exists $p{min_level} ?
-          $self->_level_as_number($p{min_level}) :
-          0
-        );
+    $self->{min_level} = $self->_level_as_number($p{min_level});
+    die "Invalid level specified for min_level" unless defined $self->{min_level};
 
     # Either use the parameter supplied or just the highest possible level.
     $self->{max_level} =

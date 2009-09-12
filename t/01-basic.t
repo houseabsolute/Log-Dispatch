@@ -684,7 +684,7 @@ SKIP:
 
 {
     # Test defaults
-    my $dispatch = Log::Dispatch::Null->new();
+    my $dispatch = Log::Dispatch::Null->new(min_level => 'debug');
     like($dispatch->name, qr/anon/, 'generated anon name');
     is($dispatch->min_level, 'debug');
     is($dispatch->max_level, 'emergency');
