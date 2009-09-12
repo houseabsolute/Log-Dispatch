@@ -7,6 +7,7 @@ my $build =
     Module::Build->new( module_name => 'Log::Dispatch',
                         license     => 'perl',
                         requires    => { 'Params::Validate' => 0.15,
+                                         'Sys::Syslog'      => 0.16,
                                        },
                         build_requires => { 'File::Temp'    => 0,
                                             'Test::More'    => 0,
