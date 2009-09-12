@@ -3,7 +3,7 @@ package Log::Dispatch::Base;
 use strict;
 use warnings;
 
-our $VERSION = '2.22';
+our $VERSION = '2.23';
 
 
 sub _get_callbacks

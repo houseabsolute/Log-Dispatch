@@ -8,7 +8,7 @@ use warnings;
 use base qw( Log::Dispatch::Base );
 use Carp ();
 
-our $VERSION = '2.22';
+our $VERSION = '2.23';
 our %LEVELS;
 
 

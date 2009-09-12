@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Email );
 
 use Mail::Send;
 
-our $VERSION = '2.22';
+our $VERSION = '2.23';
 
 sub send_email
 {
