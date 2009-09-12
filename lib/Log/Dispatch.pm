@@ -6,9 +6,7 @@ use strict;
 use warnings;
 
 use base qw( Log::Dispatch::Base );
-
 use Carp ();
-use Log::Dispatch::Util qw(require_dynamic);
 
 our $VERSION = '2.22';
 our %LEVELS;
@@ -44,7 +42,7 @@ sub new
         while (my ($class, $params) = splice(@$outputs, 0, 2)) {
             die "expected hashref, not '$params'" unless ref($params) eq 'HASH';
             my $full_class = (substr($class, 0, 1) eq '+' ? substr($class, 1) : "Log::Dispatch::$class");
-            require_dynamic($full_class);
+            _require_dynamic($full_class);
             my $output_object = $full_class->new(%$params);
             $self->add($output_object);
         }
@@ -198,6 +196,15 @@ sub would_log
     }
 
     return 0;
+}
+
+sub _require_dynamic {
+    my ($class) = @_;
+
+    unless ( defined( eval "require $class" ) )
+    {    ## no critic (ProhibitStringyEval)
+        die $@;
+    }
 }
 
 1;

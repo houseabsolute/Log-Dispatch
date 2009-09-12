@@ -1,4 +1,4 @@
-package Log::Dispatch::Util;
+package Log::Dispatch::TestUtil;
 use Data::Dumper;
 use strict;
 use warnings;
@@ -7,7 +7,6 @@ use base qw(Exporter);
 our @EXPORT_OK = qw(
   cmp_deeply
   dump_one_line
-  require_dynamic
 );
 
 sub cmp_deeply {
@@ -24,22 +23,13 @@ sub dump_one_line {
       ->Terse(1)->Dump();
 }
 
-sub require_dynamic {
-    my ($class) = @_;
-
-    unless ( defined( eval "require $class" ) )
-    {    ## no critic (ProhibitStringyEval)
-        die $@;
-    }
-}
-
 1;
 
 __END__
 
 =head1 NAME
 
-Log::Dispatch::Util - Utilities used internally by Log::Dispatch
+Log::Dispatch::TestUtil - Utilities used internally by Log::Dispatch for testing
 
 =head1 METHODS
 
@@ -52,9 +42,5 @@ A cheap version of Test::Deep::cmp_deeply.
 =item dump_one_line
 
 Dump a value to a single line using Data::Dumper.
-
-=item require_dynamic
-
-Require a module dynamically.
 
 =cut

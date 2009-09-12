@@ -1,8 +1,9 @@
 use strict;
 use warnings;
+use lib qw(t/lib);
 use Test::More tests => 3;
 use Log::Dispatch;
-use Log::Dispatch::Util qw(cmp_deeply);
+use Log::Dispatch::TestUtil qw(cmp_deeply);
 use File::Temp qw( tempdir );
 
 my $tempdir = tempdir( CLEANUP => 1 );
