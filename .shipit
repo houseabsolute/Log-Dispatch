@@ -1,7 +1,7 @@
 # auto-generated shipit config file.
 steps = FindVersion, ChangeVersion, CheckChangeLog, CheckVersionsMatch, DistTest, Commit, Tag, MakeDist, DistClean
 
-svn.tagpattern = %v
-svn.tagpattern = https://svn.urth.org/svn/Log-Dispatch/tags/%v
+hg.tagpattern = %v
+hg.push = 1
 
 CheckChangeLog.files = Changes
