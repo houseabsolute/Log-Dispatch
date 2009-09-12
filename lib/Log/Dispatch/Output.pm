@@ -273,6 +273,11 @@ the number of that log level.  If not given an argument, it returns
 the calling object's log level instead.  If it cannot determine the
 level then it will issue a warning and return undef.
 
+=item * add_callback( $code )
+
+Adds a callback (like those given during construction). It is added to the end
+of the list of callbacks.
+
 =back
 
 =head2 Subclassing

@@ -36,6 +36,19 @@ sub _apply_callbacks
     return $msg;
 }
 
+sub add_callback
+{
+    my $self = shift;
+    my $value = shift;
+
+    Carp::carp("given value $value is not a valid callback")
+        unless ref $value eq 'CODE';
+
+    $self->{callbacks} ||= [];
+    push @{ $self->{callbacks} }, $value;
+
+    return;
+}
 
 1;
 

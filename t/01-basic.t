@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 157;
+use Test::More tests => 165;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -648,6 +648,82 @@ SKIP:
     like( $e, qr{01-basic\.t line 10006}, 'error croaked from perspective of caller' );
 
     is( $string, 'croak', 'message is logged' );
+}
+
+{
+    my $string;
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
+                                                min_level => 'debug',
+                                              ) );
+
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'foo', 'first test w/o callback');
+
+    $string = '';
+    $dispatch->add_callback(sub { return 'bar' });
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'bar', 'second call, callback overrides message');
+}
+
+{
+    my $string;
+
+    my $dispatch = Log::Dispatch->new(
+        callbacks => sub { return 'baz' },
+    );
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
+                                                min_level => 'debug',
+                                              ) );
+
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'baz', 'first test gets orig callback result');
+
+    $string = '';
+    $dispatch->add_callback(sub { return 'bar' });
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'bar', 'second call, callback overrides message');
+}
+
+{
+    my $string;
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
+                                                min_level => 'debug',
+                                              ) );
+
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'foo', 'first test w/o callback');
+
+    $string = '';
+    $dispatch->add_callback(sub { return 'bar' });
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'bar', 'second call, callback overrides message');
+}
+
+{
+    my $string;
+
+    my $dispatch = Log::Dispatch->new(
+        callbacks => sub { return 'baz' },
+    );
+    $dispatch->add( Log::Dispatch::String->new( name => 'handle',
+                                                string => \$string,
+                                                min_level => 'debug',
+                                              ) );
+
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'baz', 'first test gets orig callback result');
+
+    $string = '';
+    $dispatch->add_callback(sub { return 'bar' });
+    $dispatch->log(level => 'debug', message => 'foo');
+    is($string, 'bar', 'second call, callback overrides message');
 }
 
 SKIP:

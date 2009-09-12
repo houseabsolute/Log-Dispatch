@@ -27,6 +27,11 @@
 
 - Added warn as a synonym for warning. RT #44821. Requested by Dylan Martin.
 
+- Added an add_callback method to Log::Dispatch and
+  Log::Dispatch::Output. This lets you add a new formatting callback after an
+  object is created. Based on a patch from Ricardo Signes. RT #48283.
+
+
 2.22 Nov 11, 2008
 
 - Fixed a bug where Log::Dispatch::Email would die when it tried to

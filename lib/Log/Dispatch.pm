@@ -314,6 +314,12 @@ will only be applied to a given message once.  If they do not return
 the message then you will get no output.  Make sure to return the
 message!
 
+=item * add_callback( $code )
+
+Adds a callback (like those given during construction). It is added to the end
+of the list of callbacks. Note that this can also be called on individual
+output objects.
+
 =back
 
 =head1 METHODS
