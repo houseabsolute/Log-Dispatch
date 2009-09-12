@@ -17,6 +17,7 @@ our $VERSION = '2.22';
 my $level_names = [ qw( debug info notice warning error critical alert emergency ) ];
 my $ln = 0;
 my $level_numbers = { ( map { $_ => $ln++ } @{ $level_names } ),
+                      warn  => 3,
                       err   => 4,
                       crit  => 5,
                       emerg => 7 };

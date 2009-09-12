@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 149;
+use Test::More tests => 157;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -334,7 +334,7 @@ SKIP:
 # Comprehensive test of new methods that match level names
 {
     my %levels = map { $_ => $_ } ( qw( debug info notice warning error critical alert emergency ) );
-    @levels{ qw( err crit emerg ) } = ( qw( error critical emergency ) );
+    @levels{ qw( warn err crit emerg ) } = ( qw( warning error critical emergency ) );
 
     foreach my $allowed_level ( qw( debug info notice warning error critical alert emergency ) )
     {
@@ -347,7 +347,7 @@ SKIP:
                                                     max_level => $allowed_level,
                                                   ) );
 
-        foreach my $test_level ( qw( debug info notice warning err
+        foreach my $test_level ( qw( debug info notice warn warning err
                                      error crit critical alert emerg emergency ) )
         {
             $string = '';

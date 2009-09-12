@@ -14,7 +14,7 @@ our %LEVELS;
 
 BEGIN
 {
-    foreach my $l ( qw( debug info notice warning err error crit critical alert emerg emergency ) )
+    foreach my $l ( qw( debug info notice warn warning err error crit critical alert emerg emergency ) )
     {
         my $sub = sub { my $self = shift;
                         $self->log( level => $l, message => "@_" ); };
@@ -503,9 +503,9 @@ levels are:
 
 =back
 
-Alternately, the numbers 0 through 7 may be used (debug is 0 and
-emergency is 7).  The syslog standard of 'err', 'crit', and 'emerg'
-is also acceptable.
+Alternately, the numbers 0 through 7 may be used (debug is 0 and emergency is
+7). The syslog standard of 'err', 'crit', and 'emerg' is also acceptable. We
+also allow 'warn' as a synonym for 'warning'.
 
 =head1 SUBCLASSING
 
