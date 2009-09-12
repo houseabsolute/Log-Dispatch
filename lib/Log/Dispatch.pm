@@ -37,12 +37,20 @@ sub new
     my @cb = $self->_get_callbacks(%p);
     $self->{callbacks} = \@cb if @cb;
 
-    if (my $outputs = $p{outputs}) {
-        die "odd number of elements found in outputs" unless (@$outputs %2 == 0);
-        while (my ($class, $params) = splice(@$outputs, 0, 2)) {
-            die "expected hashref, not '$params'" unless ref($params) eq 'HASH';
-            my $full_class = (substr($class, 0, 1) eq '+' ? substr($class, 1) : "Log::Dispatch::$class");
+    if ( my $outputs = $p{outputs} )
+    {
+        die "odd number of elements found in outputs" if @$outputs % 2;
+
+        while ( my ( $class, $params ) = splice @$outputs, 0, 2 )
+        {
+            die "expected hashref, not '$params'"
+                unless ref $params eq 'HASH';
+
+            my $full_class =
+                substr( $class, 0, 1 ) eq '+' ? substr( $class, 1 ) : "Log::Dispatch::$class";
+
             _require_dynamic($full_class);
+
             my $output_object = $full_class->new(%$params);
             $self->add($output_object);
         }
@@ -198,13 +206,13 @@ sub would_log
     return 0;
 }
 
-sub _require_dynamic {
+sub _require_dynamic
+{
     my ($class) = @_;
 
-    unless ( defined( eval "require $class" ) )
-    {    ## no critic (ProhibitStringyEval)
-        die $@;
-    }
+    local $@;
+    eval "require $class";
+    die $@ if $@;
 }
 
 1;
@@ -218,31 +226,35 @@ Log::Dispatch - Dispatches messages to one or more outputs
 =head1 SYNOPSIS
 
    use Log::Dispatch;
-   
-   # Shorter syntax
+
+   # Simple API
    #
    my $dispatcher =
-     Log::Dispatch->new(
-       outputs => [ 'File' => { min_level => 'debug', filename => 'logfile' } ] );
+     Log::Dispatch->new
+         ( outputs =>
+           [ 'File' =>
+                 { min_level => 'debug',
+                   filename  => 'logfile',
+                 }
+           ],
+         );
 
    $dispatcher->info('Blah, blah');
-   
-   # Longer syntax
+
+   # More verbose API
    #
    my $dispatcher = Log::Dispatch->new;
-   $dispatcher->add(
-       Log::Dispatch::File->new(
-           name      => 'file1',
-           min_level => 'debug',
-           filename  => 'logfile'
-       )
-   );
-   
-   $dispatcher->log(
-       level   => 'info',
-       message => 'Blah, blah'
-   );
-   
+   $dispatcher->add( Log::Dispatch::File->new
+                         ( name      => 'file1',
+                           min_level => 'debug',
+                           filename  => 'logfile'
+                         )
+                   );
+
+   $dispatcher->log( level   => 'info',
+                     message => 'Blah, blah'
+                   );
+
    my $sub = sub { my %p = @_; return reverse $p{message}; };
    my $reversing_dispatcher = Log::Dispatch->new( callbacks => $sub );
 
@@ -270,17 +282,19 @@ The constructor (C<new>) takes the following parameters:
 
 =item * outputs(class =E<gt> params, class =E<gt> params, ...) 
 
-This parameter is a reference to a list of pairs, where each pair is a class
-and a params hash. The class is automatically prefixed with
+This parameter is a reference to a list of pairs. Each pair consists of a
+class name and a params hash reference. The class is automatically prefixed with
 'Log::Dispatch::', unless it begins with '+', in which case the string
 following '+' is taken to be a full classname. e.g.
 
     outputs => [ 'File'          => { min_level => 'debug', filename => 'logfile' },
                  '+My::Dispatch' => { min_level => 'info' } ]
 
-For each pair, a new output object is created and added to the dispatcher (via L</add>).
+For each pair, a new output object is created and added to the dispatcher (via
+L</add>).
 
-See L<OUTPUT CLASSES> for the parameters that can be used when creating an output object.
+See L<OUTPUT CLASSES> for the parameters that can be used when creating an
+output object.
 
 =item * callbacks( \& or [ \&, \&, ... ] )
 
@@ -493,43 +507,6 @@ Alternately, the numbers 0 through 7 may be used (debug is 0 and
 emergency is 7).  The syslog standard of 'err', 'crit', and 'emerg'
 is also acceptable.
 
-=head1 NEWLINES
-
-Historically, Log::Dispatch has had a very off-hands philosophy regarding
-newlines. From the original docs:
-
-    A few people have written email to me asking me to add something that
-    would tack a newline onto the end of all messages that don't have one.
-    This will never happen...Log::Dispatch was designed as a simple system
-    to broadcast a message to multiple outputs.  It does not attempt to
-    understand the message in any way at all.  Adding a newline implies an
-    attempt to understand something about the message and I don't want to go
-    there.
-
-Unfortunately, for the common case of logging to a file or the screen, this
-leaves two unenviable choices: Either include a newline explicitly in each
-message string (which couples the logging code to the choice of output), or
-tell the output object to automatically add newlines via a cumbersome
-callback (which is easy to forget to do, resulting in comical one-line log
-files).
-
-In version 2.23, this was remedied as follows:
-
-=over
-
-=item *
-
-The flag C<newline=E<gt>1> can be passed to any output object constructor to make it add a newline
-at the end of each message.
-
-=item *
-
-The Log::Dispatch::Logfile, Log::Dispatch::Stdout, and Log::Dispatch::Stderr
-output classes were created as DWIM versions of Log::Dispatch::File and Log::Dispatch::Screen.
-They add newlines at the end of each message.
-
-=back
-
 =head1 SUBCLASSING
 
 This module was designed to be easy to subclass. If you want to handle
@@ -607,20 +584,20 @@ Dave Rolsky, <autarch@urth.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 1999-2006 David Rolsky.  All rights reserved.  This
-program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+Copyright (c) 1999-2009 David Rolsky.  All rights reserved.  This program is
+free software; you can redistribute it and/or modify it under the same terms
+as Perl itself.
 
-The full text of the license can be found in the LICENSE file included
-with this module.
+The full text of the license can be found in the LICENSE file included with
+this module.
 
 =head1 SEE ALSO
 
-Log::Dispatch::ApacheLog, Log::Dispatch::Email,
-Log::Dispatch::Email::MailSend, Log::Dispatch::Email::MailSender,
-Log::Dispatch::Email::MailSendmail, Log::Dispatch::Email::MIMELite,
-Log::Dispatch::File, Log::Dispatch::File::Locked,
-Log::Dispatch::Handle, Log::Dispatch::Output, Log::Dispatch::Screen,
-Log::Dispatch::Syslog
+L<Log::Dispatch::ApacheLog>, L<Log::Dispatch::Email>,
+L<Log::Dispatch::Email::MailSend>, L<Log::Dispatch::Email::MailSender>,
+L<Log::Dispatch::Email::MailSendmail>, L<Log::Dispatch::Email::MIMELite>,
+L<Log::Dispatch::File>, L<Log::Dispatch::File::Locked>,
+L<Log::Dispatch::Handle>, L<Log::Dispatch::Output>, L<Log::Dispatch::Screen>,
+L<Log::Dispatch::Syslog>
 
 =cut

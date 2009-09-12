@@ -51,38 +51,37 @@ Log::Dispatch::Email::MailSend - Subclass of Log::Dispatch::Email that uses the 
 
 =head1 SYNOPSIS
 
-  my $log = Log::Dispatch->new(outputs => ['Email::MailSend' => { 
-            min_level => 'emerg',
-            to => [ qw( foo@bar.com bar@baz.org ) ],
-            subject => 'Oh no!!!!!!!!!!!''.
-    }]);
+  my $log =
+      Log::Dispatch->new
+          ( outputs =>
+            [ 'Email::MailSend' =>
+                  { min_level => 'emerg',
+                    to        => [ qw( foo@example.com bar@example.org ) ],
+                    subject   => 'Big error!'.
+                  },
+            ],
+          );
+
   $log->emerg("Something bad is happening");
 
 =head1 DESCRIPTION
 
-This is a subclass of Log::Dispatch::Email that implements the
-send_email method using the Mail::Send module.
+This is a subclass of L<Log::Dispatch::Email> that implements the send_email
+method using the L<Mail::Send> module.
 
 =head1 CHANGING HOW MAIL IS SENT
 
-Since C<Mail::Send> is a subclass of C<Mail::Mailer>, you can change
-how mail is sent from this module by simply C<use>ing C<Mail::Mailer>
+Since L<Mail::Send> is a subclass of L<Mail::Mailer>, you can change
+how mail is sent from this module by simply C<use>ing L<Mail::Mailer>
 in your code before mail is sent.  For example, to send mail via smtp,
 you could do:
 
   use Mail::Mailer 'smtp', Server => 'foo.example.com';
 
-For more details, see the C<Mail::Mailer> docs.
+For more details, see the L<Mail::Mailer> docs.
 
 =head1 AUTHOR
 
 Dave Rolsky, <autarch@urth.org>
-
-=head1 SEE ALSO
-
-Log::Dispatch, Log::Dispatch::ApacheLog, Log::Dispatch::Email,
-Log::Dispatch::Email::MailSendmail, Log::Dispatch::Email::MIMELite,
-Log::Dispatch::File, Log::Dispatch::Handle, Log::Dispatch::Output,
-Log::Dispatch::Screen, Log::Dispatch::Syslog
 
 =cut

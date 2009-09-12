@@ -72,7 +72,8 @@ Log::Dispatch::ApacheLog - Object for logging to Apache::Log objects
 =head1 SYNOPSIS
 
   use Log::Dispatch;
-  my $log = Log::Dispatch->new(outputs => [ApacheLog => {apache => $r}]);
+  my $log = Log::Dispatch->new( outputs => [ ApacheLog => { apache => $r } ] );
+
   $log->emerg('Kaboom');
 
 =head1 DESCRIPTION
@@ -89,7 +90,7 @@ parameters documented in L<Log::Dispatch::Output>:
 
 =item * apache ($)
 
-An object of either the Apache or Apache::Server classes. Required.
+An object of either the L<Apache> or L<Apache::Server> classes. Required.
 
 =back
 

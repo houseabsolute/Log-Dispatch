@@ -14,13 +14,12 @@ use Carp ();
 
 our $VERSION = '1.26';
 
-# Map the names to numbers so they can be compared.
 my $level_names = [ qw( debug info notice warning error critical alert emergency ) ];
 my $ln = 0;
 my $level_numbers = { ( map { $_ => $ln++ } @{ $level_names } ),
-                           err   => 4,
-                           crit  => 5,
-                           emerg => 7 };
+                      err   => 4,
+                      crit  => 5,
+                      emerg => 7 };
 
 sub new
 {
@@ -79,8 +78,9 @@ sub _basic_init
     my @cb = $self->_get_callbacks(%p);
     $self->{callbacks} = \@cb if @cb;
 
-    if ($p{newline}) {
-        push(@{$self->{callbacks}}, \&_add_newline_callback);
+    if ( $p{newline} )
+    {
+        push @{$self->{callbacks}}, \&_add_newline_callback;
     }
 }
 
@@ -157,15 +157,18 @@ sub _level_as_name
 }
 
 my $_unique_name_counter = 0;
-sub _unique_name {
-    my ( $self ) = @_;
+sub _unique_name
+{
+    my $self = shift;
 
-    return "_anon_" . $_unique_name_counter++;
+    return '_anon_' . $_unique_name_counter++;
 }
 
-sub _add_newline_callback {
-    my %params = @_;
-    return $params{message} . "\n";
+sub _add_newline_callback
+{
+    my %p = @_;
+
+    return $p{message} . "\n";
 }
 
 1;
