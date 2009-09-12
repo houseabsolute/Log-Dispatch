@@ -8,7 +8,6 @@ MANIFEST.SKIP
 ^_build/
 .bak$
 ^blib/
-.*\.svn.*
 ^Install/
 
 t/02-email-exit.t

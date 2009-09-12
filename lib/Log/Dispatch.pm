@@ -601,7 +601,7 @@ or via email at bug-log-dispatch@rt.cpan.org.
 
 Support questions can be sent to me at my email address, shown below.
 
-The code repository is at https://svn.urth.org/svn/Log-Dispatch/
+The code repository is at http://hg.urth.org/hg/Log-Dispatch.
 
 =head1 AUTHOR
 
