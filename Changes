@@ -1,17 +1,27 @@
 2.23 Sep 8, 2009
 
-- Added new shorter syntax - Log::Dispatch->new(outputs => [ class => params, ... ]);
+- A new constructor API that simplifies creating your Log::Dispatch object:
 
-- Made name parameter optional; will auto-generate a unique name if one is not given.
+      Log::Dispatch->new( outputs => [ File   => { ... },
+                                       Screen => { ... },
+                                     ],
+                        );
+
+  Implemented by Jon Swartz.
+
+- Made name parameter optional. We now auto-generate a unique name if one is
+  not given. Implemented by Jon Swartz.
 
 - Added a newline parameter that causes a newline to be added to each message,
-  and updated the documentation regarding newlines.
+  and updated the documentation regarding newlines. Implemented by Jon Swartz.
 
-- Removed repetitive boilerplate documentation from each output class.
+- Removed repetitive boilerplate documentation from each output
+  class. Implemented by Jon Swartz.
 
-- level_names and level_numbers are now computed once and shared between output objects.
+- The level_names and level_numbers used internally are now computed once and
+  shared between output objects. Implemented by Jon Swartz.
 
-- Update repo url - now in http://hg.urth.org/hg/Log-Dispatch
+- Updated repo url - now at http://hg.urth.org/hg/Log-Dispatch
 
 2.22 Nov 11, 2008
 
