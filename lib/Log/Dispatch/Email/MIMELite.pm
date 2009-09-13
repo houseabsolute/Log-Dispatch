@@ -28,7 +28,7 @@ sub send_email
     local $?;
     unless ( MIME::Lite->new(%mail)->send )
     {
-        warn "Error sending mail with MIME::Lite" if warnings::enabled();
+        warn "Error sending mail with MIME::Lite";
     }
 }
 

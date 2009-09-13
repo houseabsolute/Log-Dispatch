@@ -55,7 +55,7 @@ sub send_email
             or die "Error sending mail: $Mail::Sender::Error";
     };
 
-    warn $@ if $@ && warnings::enabled();
+    warn $@ if $@;
 }
 
 
