@@ -10,6 +10,11 @@
 
   Implemented by Jon Swartz.
 
+- All of the mail sending modules now warn unconditionally if sending mail
+  fails. This removes the incorrect use of warnings::enabled() in some
+  modules. RT #43516.
+
+
 2.23 Sep 12, 2009
 
 - A new constructor API that simplifies creating your Log::Dispatch object:
