@@ -46,38 +46,47 @@ sub new
 
     if ( my $outputs = $p{outputs} )
     {
-        my $_add = sub {
-            my $class = shift;
-            my $full_class =
-                substr( $class, 0, 1 ) eq '+' ? substr( $class, 1 ) : "Log::Dispatch::$class";
-            _require_dynamic($full_class);
-            $self->add($full_class->new(@_));
-        };
-
-        if (ref($outputs->[1]) eq 'HASH') {
-            # 2.23 syntax
+        if ( ref $outputs->[1] eq 'HASH' )
+        {
+            # 2.23 API
             # outputs => [
             #   File => {min_level => 'debug', filename => 'logfile' },
             #   Screen => {min_level => 'warning' }
             # ]
-            while ( my ( $class, $params ) = splice @$outputs, 0, 2 ) {
-                $_add->($class, %$params);
+            while ( my ( $class, $params ) = splice @$outputs, 0, 2 )
+            {
+                $self->_add_output( $class, %$params );
             }
         }
-        else {
+        else
+        {
             # 2.24+ syntax
             # outputs => [
             #   [ 'File',   min_level => 'debug', filename => 'logfile' ],
             #   [ 'Screen', min_level => 'warning' ]
             # ]
-            foreach my $arr (@$outputs) {
+            foreach my $arr (@$outputs)
+            {
                 die "expected arrayref, not '$arr'" unless ref $arr eq 'ARRAY';
-                $_add->(@$arr);
+                $self->_add_output(@$arr);
             }
         }
     }
 
     return $self;
+}
+
+sub _add_output
+{
+    my $self = shift;
+    my $class = shift;
+
+    my $full_class =
+        substr( $class, 0, 1 ) eq '+' ? substr( $class, 1 ) : "Log::Dispatch::$class";
+
+    _require_dynamic($full_class);
+
+    $self->add( $full_class->new(@_) );
 }
 
 sub add
@@ -250,12 +259,13 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
    # Simple API
    #
-   my $dispatcher = Log::Dispatch->new(
-       outputs => [
-           [ 'File',   min_level => 'debug', filename => 'logfile' ],
-           [ 'Screen', min_level => 'warning' ]
-       ]
-   );
+   my $dispatcher =
+       Log::Dispatch->new
+           ( outputs =>
+                 [ [ 'File',   min_level => 'debug', filename => 'logfile' ],
+                   [ 'Screen', min_level => 'warning' ],
+                 ],
+           );
 
    $dispatcher->info('Blah, blah');
 
@@ -303,15 +313,15 @@ The constructor (C<new>) takes the following parameters:
 
 =over 4
 
-=item * outputs([[class, params, ...], [class, params, ...], ...]) 
+=item * outputs( [ [ class, params, ... ], [ class, params, ... ], ... ] )
 
-This parameter is a reference to a list of lists. Each inner list consists of a
-class name and params. The class is automatically prefixed with
-'Log::Dispatch::', unless it begins with '+', in which case the string
-following '+' is taken to be a full classname. e.g.
+This parameter is a reference to a list of lists. Each inner list consists of
+a class name and a set of constructor params. The class is automatically
+prefixed with 'Log::Dispatch::' unless it begins with '+', in which case the
+string following '+' is taken to be a full classname. e.g.
 
-    outputs => [[ 'File',          min_level => 'debug', filename => 'logfile' ],
-                [ '+My::Dispatch', min_level => 'info' ]]
+    outputs => [ [ 'File',          min_level => 'debug', filename => 'logfile' ],
+                 [ '+My::Dispatch', min_level => 'info' ] ]
 
 For each inner list, a new output object is created and added to the
 dispatcher (via L</add>).

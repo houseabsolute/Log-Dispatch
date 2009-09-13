@@ -1,10 +1,14 @@
 2.24 Sep 13, 2009
 
-- Simplified new constructor API (2.23 API is still silently supported but not documented):
+- Simplified new constructor API (the 2.23 API is still silently supported but
+  not documented):
 
-      Log::Dispatch->new( outputs => [[ 'File', ... ],
-                                      [ 'Screen', ... ]]
+      Log::Dispatch->new( outputs => [ [ 'File', ... ],
+                                       [ 'Screen', ... ],
+                                     ]
                         );
+
+  Implemented by Jon Swartz.
 
 2.23 Sep 12, 2009
 
