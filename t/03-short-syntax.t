@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use lib qw(t/lib);
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Log::Dispatch;
 use Log::Dispatch::TestUtil qw(cmp_deeply);
 use File::Temp qw( tempdir );
@@ -10,6 +10,14 @@ my $tempdir = tempdir( CLEANUP => 1 );
 
 {
     my $emerg_log = File::Spec->catdir( $tempdir, 'emerg.log' );
+
+    # Short syntax
+    my $dispatch0 = Log::Dispatch->new(
+        outputs => [[ 'File', name => 'file', min_level => 'emerg', filename => $emerg_log ],
+                    ['+Log::Dispatch::Screen', name => 'screen', min_level => 'debug']]
+        );
+
+    # Short syntax alternate (2.23)
     my $dispatch1 = Log::Dispatch->new(
         outputs => [
             'File' =>
@@ -18,6 +26,7 @@ my $tempdir = tempdir( CLEANUP => 1 );
         ]
     );
 
+    # Long syntax
     my $dispatch2 = Log::Dispatch->new;
     $dispatch2->add(
         Log::Dispatch::File->new(
@@ -29,13 +38,15 @@ my $tempdir = tempdir( CLEANUP => 1 );
     $dispatch2->add(
         Log::Dispatch::Screen->new( name => 'screen', min_level => 'debug' ) );
 
-    cmp_deeply( $dispatch1, $dispatch2, "created equivalent dispatchers" );
+    cmp_deeply( $dispatch0, $dispatch2, "created equivalent dispatchers - 0" );
+    cmp_deeply( $dispatch1, $dispatch2, "created equivalent dispatchers - 1" );
 }
 
 {
     eval { Log::Dispatch->new(outputs => ['File']) };
-    like($@, qr/odd number of elements/, "got error for odd number of elements");
-
-    eval { Log::Dispatch->new(outputs => ['File', 'foo.log']) };
-    like($@, qr/expected hashref/, "got error for expected hashref");
+    like($@, qr/expected arrayref/, "got error for expected inner arrayref");
+}
+{
+    eval { Log::Dispatch->new(outputs => 'File') };
+    like($@, qr/not one of the allowed types: arrayref/, "got error for expected outer arrayref");
 }

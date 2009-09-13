@@ -1,3 +1,11 @@
+2.24 Sep 13, 2009
+
+- Simplified new constructor API (2.23 API is still silently supported but not documented):
+
+      Log::Dispatch->new( outputs => [[ 'File', ... ],
+                                      [ 'Screen', ... ]]
+                        );
+
 2.23 Sep 12, 2009
 
 - A new constructor API that simplifies creating your Log::Dispatch object:

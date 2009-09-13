@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use base qw( Log::Dispatch::Base );
+use Params::Validate qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
 our $VERSION = '2.23';
@@ -30,7 +31,13 @@ sub new
 {
     my $proto = shift;
     my $class = ref $proto || $proto;
-    my %p = @_;
+
+    my %p = validate_with
+        ( params => \@_,
+          spec => { outputs => { type => ARRAYREF, optional => 1 },
+                   callbacks => { type => (ARRAYREF | CODEREF), optional => 1 }},
+          allow_extra => 1,  # for backward compatibility
+        );
 
     my $self = bless {}, $class;
 
@@ -39,20 +46,34 @@ sub new
 
     if ( my $outputs = $p{outputs} )
     {
-        die "odd number of elements found in outputs" if @$outputs % 2;
-
-        while ( my ( $class, $params ) = splice @$outputs, 0, 2 )
-        {
-            die "expected hashref, not '$params'"
-                unless ref $params eq 'HASH';
-
+        my $_add = sub {
+            my $class = shift;
             my $full_class =
                 substr( $class, 0, 1 ) eq '+' ? substr( $class, 1 ) : "Log::Dispatch::$class";
-
             _require_dynamic($full_class);
+            $self->add($full_class->new(@_));
+        };
 
-            my $output_object = $full_class->new(%$params);
-            $self->add($output_object);
+        if (ref($outputs->[1]) eq 'HASH') {
+            # 2.23 syntax
+            # outputs => [
+            #   File => {min_level => 'debug', filename => 'logfile' },
+            #   Screen => {min_level => 'warning' }
+            # ]
+            while ( my ( $class, $params ) = splice @$outputs, 0, 2 ) {
+                $_add->($class, %$params);
+            }
+        }
+        else {
+            # 2.24+ syntax
+            # outputs => [
+            #   [ 'File',   min_level => 'debug', filename => 'logfile' ],
+            #   [ 'Screen', min_level => 'warning' ]
+            # ]
+            foreach my $arr (@$outputs) {
+                die "expected arrayref, not '$arr'" unless ref $arr eq 'ARRAY';
+                $_add->(@$arr);
+            }
         }
     }
 
@@ -229,15 +250,12 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
    # Simple API
    #
-   my $dispatcher =
-     Log::Dispatch->new
-         ( outputs =>
-           [ 'File' =>
-                 { min_level => 'debug',
-                   filename  => 'logfile',
-                 }
-           ],
-         );
+   my $dispatcher = Log::Dispatch->new(
+       outputs => [
+           [ 'File',   min_level => 'debug', filename => 'logfile' ],
+           [ 'Screen', min_level => 'warning' ]
+       ]
+   );
 
    $dispatcher->info('Blah, blah');
 
@@ -248,6 +266,11 @@ Log::Dispatch - Dispatches messages to one or more outputs
                          ( name      => 'file1',
                            min_level => 'debug',
                            filename  => 'logfile'
+                         )
+                   );
+   $dispatcher->add( Log::Dispatch::Screen->new
+                         ( name      => 'screen',
+                           min_level => 'warning',
                          )
                    );
 
@@ -280,18 +303,18 @@ The constructor (C<new>) takes the following parameters:
 
 =over 4
 
-=item * outputs(class =E<gt> params, class =E<gt> params, ...) 
+=item * outputs([[class, params, ...], [class, params, ...], ...]) 
 
-This parameter is a reference to a list of pairs. Each pair consists of a
-class name and a params hash reference. The class is automatically prefixed with
+This parameter is a reference to a list of lists. Each inner list consists of a
+class name and params. The class is automatically prefixed with
 'Log::Dispatch::', unless it begins with '+', in which case the string
 following '+' is taken to be a full classname. e.g.
 
-    outputs => [ 'File'          => { min_level => 'debug', filename => 'logfile' },
-                 '+My::Dispatch' => { min_level => 'info' } ]
+    outputs => [[ 'File',          min_level => 'debug', filename => 'logfile' ],
+                [ '+My::Dispatch', min_level => 'info' ]]
 
-For each pair, a new output object is created and added to the dispatcher (via
-L</add>).
+For each inner list, a new output object is created and added to the
+dispatcher (via L</add>).
 
 See L<OUTPUT CLASSES> for the parameters that can be used when creating an
 output object.
@@ -313,12 +336,6 @@ be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once.  If they do not return
 the message then you will get no output.  Make sure to return the
 message!
-
-=item * add_callback( $code )
-
-Adds a callback (like those given during construction). It is added to the end
-of the list of callbacks. Note that this can also be called on individual
-output objects.
 
 =back
 
@@ -387,6 +404,12 @@ the current value of C<$Carp::CarpLevel>.
 
 Sends the message only to the named object. Note: this will not properly
 handle a subroutine reference as the message.
+
+=item * add_callback( $code )
+
+Adds a callback (like those given during construction). It is added to the end
+of the list of callbacks. Note that this can also be called on individual
+output objects.
 
 =back
 
