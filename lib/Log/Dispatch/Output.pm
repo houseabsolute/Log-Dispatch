@@ -12,7 +12,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use Carp ();
 
-our $VERSION = '2.23';
+our $VERSION = '2.24';
 
 my $level_names = [ qw( debug info notice warning error critical alert emergency ) ];
 my $ln = 0;

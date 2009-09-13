@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.23';
+our $VERSION = '2.24';
 
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;

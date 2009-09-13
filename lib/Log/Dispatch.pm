@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Base );
 use Params::Validate qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
-our $VERSION = '2.23';
+our $VERSION = '2.24';
 our %LEVELS;
 
 

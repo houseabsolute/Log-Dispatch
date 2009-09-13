@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.23';
+our $VERSION = '2.24';
 
 
 sub new
