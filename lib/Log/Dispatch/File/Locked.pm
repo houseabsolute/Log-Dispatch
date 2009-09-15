@@ -7,7 +7,7 @@ use base qw( Log::Dispatch::File );
 
 use Fcntl qw(:DEFAULT :flock);
 
-our $VERSION = '2.24';
+our $VERSION = '2.25';
 
 
 sub _open_file

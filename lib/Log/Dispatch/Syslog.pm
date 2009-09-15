@@ -12,7 +12,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use Sys::Syslog 0.16 ();
 
-our $VERSION = '2.24';
+our $VERSION = '2.25';
 
 sub new
 {
@@ -29,12 +29,13 @@ sub new
     return $self;
 }
 
+my ($Ident) = $0 =~ /(.+)/;
 sub _init
 {
     my $self = shift;
 
     my %p = validate( @_, { ident    => { type => SCALAR,
-                                          default => $0 },
+                                          default => $Ident },
                             logopt   => { type => SCALAR,
                                           default => '' },
                             facility => { type => SCALAR,

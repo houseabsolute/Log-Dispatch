@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.24';
+our $VERSION = '2.25';
 
 # need to untaint this value
 my ($program) = $0 =~ /(.+)/;

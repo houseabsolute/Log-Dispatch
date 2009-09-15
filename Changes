@@ -1,3 +1,11 @@
+2.25 Sep 15, 2009
+
+- Added a workaround for a weird tainting issue with Params::Validate. This
+  caused a taint exception when a Log::Dispatch::Syslog was created under
+  taint mode. Note that there is still a problem in Params::Validate itself,
+  this is just a hack.
+
+
 2.24 Sep 13, 2009
 
 - Simplified new constructor API (the 2.23 API is still silently supported but
