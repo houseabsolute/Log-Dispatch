@@ -72,12 +72,11 @@ Log::Dispatch::Email::MailSender - Subclass of Log::Dispatch::Email that uses th
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [ 'Email::MailSender' =>
-                  { min_level => 'emerg',
-                    to        => [ qw( foo@example.com bar@example.org ) ],
-                    subject   => 'Big error!'.
-                  },
-            ],
+            [[ 'Email::MailSender',
+               min_level => 'emerg',
+               to        => [ qw( foo@example.com bar@example.org ) ],
+               subject   => 'Big error!',
+            ]]
           );
 
   $log->emerg("Something bad is happening");
