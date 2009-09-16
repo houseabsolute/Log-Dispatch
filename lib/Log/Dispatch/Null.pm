@@ -37,7 +37,7 @@ Log::Dispatch::Null - Object that accepts messages and does nothing
 
   use Log::Dispatch;
 
-  my $null = Log::Dispatch->new( outputs => [ Null => {} ] );
+  my $null = Log::Dispatch->new( outputs => [[ 'Null' ]] );
 
   $null->emerg( "I've fallen and I can't get up" );
 

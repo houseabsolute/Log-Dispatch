@@ -52,11 +52,10 @@ Log::Dispatch::Handle - Object for logging to IO::Handle classes
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [ 'Handle' =>
-                  { min_level => 'emerg',
-                    handle    => $io_socket_object
-                  },
-            ],
+            [[ 'Handle',
+               min_level => 'emerg',
+               handle    => $io_socket_object
+            ]],
           );
 
   $log->emerg( 'I am the Lizard King!' );

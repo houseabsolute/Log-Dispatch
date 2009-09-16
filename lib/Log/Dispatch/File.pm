@@ -163,13 +163,12 @@ Log::Dispatch::File - Object for logging to files
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [ 'File' =>
-                  { min_level => 'info',
-                    filename  => 'Somefile.log',
-                    mode      => '>>',
-                    newline   => 1,
-                  },
-            ],
+            [[ 'File',
+               min_level => 'info',
+               filename  => 'Somefile.log',
+               mode      => '>>',
+               newline   => 1,
+            ]],
           );
 
   $log->emerg("I've fallen and I can't get up");

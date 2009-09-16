@@ -46,12 +46,11 @@ Log::Dispatch::Email::MIMELite - Subclass of Log::Dispatch::Email that uses the 
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [ 'Email::MIMELite' =>
-                  { min_level => 'emerg',
-                    to        => [ qw( foo@example.com bar@example.org ) ],
-                    subject   => 'Big error!'.
-                  },
-            ],
+            [[ 'Email::MIMELite',
+              min_level => 'emerg',
+              to => [ qw( foo@example.com bar@example.org ) ],
+              subject   => 'Big error!'
+            ]],
           );
 
   $log->emerg("Something bad is happening");

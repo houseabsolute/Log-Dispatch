@@ -42,13 +42,12 @@ Log::Dispatch::File::Locked - Subclass of Log::Dispatch::File to facilitate lock
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [ 'File::Locked' =>
-                  { min_level => 'info',
-                    filename  => 'Somefile.log',
-                    mode      => '>>',
-                    newline   => 1,
-                  },
-            ],
+            [[ 'File::Locked',
+               min_level => 'info',
+               filename  => 'Somefile.log',
+               mode      => '>>',
+               newline   => 1,
+            ]],
           );
 
   $file->log( level => 'emerg', message => "I've fallen and I can't get up\n" );

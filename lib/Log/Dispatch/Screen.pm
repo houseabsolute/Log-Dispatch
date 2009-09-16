@@ -61,12 +61,11 @@ Log::Dispatch::Screen - Object for logging to the screen
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [ 'Screen' =>
-                  { min_level => 'debug',
-                    stderr    => 1,
-                    newline   => 1
-                  },
-            ],
+            [[ 'Screen',
+               min_level => 'debug',
+               stderr    => 1,
+               newline   => 1
+            ]],
           );
 
   $log->alert("I'm searching the city for sci-fi wasabi");
