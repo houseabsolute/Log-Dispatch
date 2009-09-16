@@ -8,13 +8,7 @@
 
 2.23 Sep 12, 2009
 
-- A new constructor API that simplifies creating your Log::Dispatch object:
-
-      Log::Dispatch->new( outputs => [ File   => { ... },
-                                       Screen => { ... },
-                                     ],
-                        );
-
+- New constructor API that simplifies creating your Log::Dispatch object.
   Implemented by Jon Swartz.
 
 - Made name parameter optional. We now auto-generate a unique name if one is
