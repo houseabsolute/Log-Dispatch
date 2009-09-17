@@ -271,7 +271,7 @@ if the return value is false.
 This method will take a log level as a string (or a number) and return
 the number of that log level.  If not given an argument, it returns
 the calling object's log level instead.  If it cannot determine the
-level then it will issue a warning and return undef.
+level then it will croak
 
 =item * add_callback( $code )
 
