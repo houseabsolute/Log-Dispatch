@@ -1,6 +1,8 @@
 2.26 Sep 22, 2009
 
-- Fixed documentation in individual output classes to reflect 2.24 API
+- Doc updates. The 2.23 constructor API was still shown in all the output
+  subclasses. Fixed by Jon Swartz.
+
 
 2.25 Sep 15, 2009
 
