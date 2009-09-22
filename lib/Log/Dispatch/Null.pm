@@ -7,7 +7,7 @@ use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
 
-our $VERSION = '2.25';
+our $VERSION = '2.26';
 
 
 sub new

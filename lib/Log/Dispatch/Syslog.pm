@@ -12,7 +12,7 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use Sys::Syslog 0.16 ();
 
-our $VERSION = '2.25';
+our $VERSION = '2.26';
 
 sub new
 {

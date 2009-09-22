@@ -9,7 +9,7 @@ use base qw( Log::Dispatch::Email );
 
 use MIME::Lite;
 
-our $VERSION = '2.25';
+our $VERSION = '2.26';
 
 
 sub send_email
