@@ -95,10 +95,10 @@ Log::Dispatch::Syslog - Object for logging to system log.
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [[ 'Syslog',
-               min_level => 'info',
-               ident => 'Yadda yadda'
-            ]],
+                [ [ 'Syslog',
+                    min_level => 'info',
+                    ident => 'Yadda yadda' ]
+                ]
           );
 
   $log->emerg( "Time to die." );

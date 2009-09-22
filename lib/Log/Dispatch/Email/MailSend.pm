@@ -51,14 +51,16 @@ Log::Dispatch::Email::MailSend - Subclass of Log::Dispatch::Email that uses the 
 
 =head1 SYNOPSIS
 
+  use Log::Dispatch;
+
   my $log =
       Log::Dispatch->new
           ( outputs =>
-            [[ 'Email::MailSend', 
-               min_level => 'emerg',
-               to        => [ qw( foo@example.com bar@example.org ) ],
-               subject   => 'Big error!',
-            ]],
+                [ [ 'Email::MailSend',
+                    min_level => 'emerg',
+                    to => [ qw( foo@example.com bar@example.org ) ],
+                    subject   => 'Big error!' ]
+                ],
           );
 
   $log->emerg("Something bad is happening");

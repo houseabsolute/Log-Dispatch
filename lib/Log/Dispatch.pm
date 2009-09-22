@@ -259,7 +259,7 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
    # Simple API
    #
-   my $dispatcher =
+   my $log =
        Log::Dispatch->new
            ( outputs =>
                  [ [ 'File',   min_level => 'debug', filename => 'logfile' ],
@@ -267,26 +267,24 @@ Log::Dispatch - Dispatches messages to one or more outputs
                  ],
            );
 
-   $dispatcher->info('Blah, blah');
+   $log->info('Blah, blah');
 
    # More verbose API
    #
-   my $dispatcher = Log::Dispatch->new;
-   $dispatcher->add( Log::Dispatch::File->new
+   my $log = Log::Dispatch->new();
+   $log->add( Log::Dispatch::File->new
                          ( name      => 'file1',
                            min_level => 'debug',
                            filename  => 'logfile'
                          )
                    );
-   $dispatcher->add( Log::Dispatch::Screen->new
+   $log->add( Log::Dispatch::Screen->new
                          ( name      => 'screen',
                            min_level => 'warning',
                          )
                    );
 
-   $dispatcher->log( level   => 'info',
-                     message => 'Blah, blah'
-                   );
+   $log->log( level => 'info', message => 'Blah, blah' );
 
    my $sub = sub { my %p = @_; return reverse $p{message}; };
    my $reversing_dispatcher = Log::Dispatch->new( callbacks => $sub );
@@ -373,20 +371,20 @@ into a call to the C<log> method with the appropriate level.
 
 For example:
 
- $dispatcher->alert('Strange data in incoming request');
+ $log->alert('Strange data in incoming request');
 
 translates to:
 
- $dispatcher->log( level => 'alert', message => 'Strange data in incoming request' );
+ $log->log( level => 'alert', message => 'Strange data in incoming request' );
 
 These methods act like Perl's C<print> built-in when given a list of
 arguments.  Thus, the following calls are equivalent:
 
  my @array = ('Something', 'bad', 'is', here');
- $dispatcher->alert(@array);
+ $log->alert(@array);
 
  my $scalar = "@array";
- $dispatcher->alert($scalar);
+ $log->alert($scalar);
 
 =item * log_and_die( level => $, message => $ or \& )
 

@@ -72,7 +72,13 @@ Log::Dispatch::ApacheLog - Object for logging to Apache::Log objects
 =head1 SYNOPSIS
 
   use Log::Dispatch;
-  my $log = Log::Dispatch->new( outputs => [[ 'ApacheLog', apache => $r ]] );
+
+  my $log =
+      Log::Dispatch->new
+          ( outputs =>
+                [ [ 'ApacheLog', apache => $r ],
+                ],
+          );
 
   $log->emerg('Kaboom');
 
