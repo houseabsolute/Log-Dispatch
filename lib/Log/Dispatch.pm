@@ -50,8 +50,8 @@ sub new
         {
             # 2.23 API
             # outputs => [
-            #   File => {min_level => 'debug', filename => 'logfile' },
-            #   Screen => {min_level => 'warning' }
+            #   File => { min_level => 'debug', filename => 'logfile' },
+            #   Screen => { min_level => 'warning' }
             # ]
             while ( my ( $class, $params ) = splice @$outputs, 0, 2 )
             {
