@@ -591,8 +591,10 @@ Written by Arthur Bergman.  Logs messages to the Windows event log.
 
 =head2 Log::Log4perl
 
-An implementation of Java's log4j API in Perl, using Log::Dispatch to
-do the actual logging.  Created by Mike Schilli and Kevin Goess.
+An implementation of Java's log4j API in Perl. Log messages can be limited by
+fine-grained controls, and if they end up being logged, both native Log4perl
+and Log::Dispatch appenders can be used to perform the actual logging
+job. Created by Mike Schilli and Kevin Goess.
 
 =head2 Log::Dispatch::Config
 
