@@ -11,23 +11,21 @@ use MIME::Lite;
 
 our $VERSION = '2.26';
 
-
-sub send_email
-{
+sub send_email {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
-    my %mail = ( To      => (join ',', @{ $self->{to} }),
-                 Subject => $self->{subject},
-                 Type    => 'TEXT',
-                 Data    => $p{message},
-               );
+    my %mail = (
+        To      => ( join ',', @{ $self->{to} } ),
+        Subject => $self->{subject},
+        Type    => 'TEXT',
+        Data    => $p{message},
+    );
 
     $mail{From} = $self->{from} if defined $self->{from};
 
     local $?;
-    unless ( MIME::Lite->new(%mail)->send )
-    {
+    unless ( MIME::Lite->new(%mail)->send ) {
         warn "Error sending mail with MIME::Lite";
     }
 }
@@ -45,15 +43,16 @@ Log::Dispatch::Email::MIMELite - Subclass of Log::Dispatch::Email that uses the 
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-                [ [ 'Email::MIMELite',
-                    min_level => 'emerg',
-                    to => [ qw( foo@example.com bar@example.org ) ],
-                    subject   => 'Big error!' ]
-                ],
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [
+              'Email::MIMELite',
+              min_level => 'emerg',
+              to        => [qw( foo@example.com bar@example.org )],
+              subject   => 'Big error!'
+          ]
+      ],
+  );
 
   $log->emerg("Something bad is happening");
 

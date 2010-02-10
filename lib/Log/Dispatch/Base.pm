@@ -5,9 +5,7 @@ use warnings;
 
 our $VERSION = '2.26';
 
-
-sub _get_callbacks
-{
+sub _get_callbacks {
     shift;
     my %p = @_;
 
@@ -22,23 +20,20 @@ sub _get_callbacks
     return;
 }
 
-sub _apply_callbacks
-{
+sub _apply_callbacks {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
     my $msg = delete $p{message};
-    foreach my $cb ( @{ $self->{callbacks} } )
-    {
+    foreach my $cb ( @{ $self->{callbacks} } ) {
         $msg = $cb->( message => $msg, %p );
     }
 
     return $msg;
 }
 
-sub add_callback
-{
-    my $self = shift;
+sub add_callback {
+    my $self  = shift;
     my $value = shift;
 
     Carp::carp("given value $value is not a valid callback")

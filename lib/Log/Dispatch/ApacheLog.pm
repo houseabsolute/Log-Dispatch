@@ -12,22 +12,16 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 our $VERSION = '2.26';
 
-
-BEGIN
-{
-    if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /2\./ )
-    {
+BEGIN {
+    if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /2\./ ) {
         require Apache2::Log;
     }
-    else
-    {
+    else {
         require Apache::Log;
     }
 }
 
-
-sub new
-{
+sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
 
@@ -42,24 +36,23 @@ sub new
 }
 
 {
-    my %methods =
-        ( emergency => 'emerg',
-          critical  => 'crit',
-          warning   => 'warn',
-        );
-    sub log_message
-    {
-        my $self = shift;
-        my %p = @_;
+    my %methods = (
+        emergency => 'emerg',
+        critical  => 'crit',
+        warning   => 'warn',
+    );
 
-        my $level = $self->_level_as_name($p{level});
+    sub log_message {
+        my $self = shift;
+        my %p    = @_;
+
+        my $level = $self->_level_as_name( $p{level} );
 
         my $method = $methods{$level} || $level;
 
         $self->{apache_log}->$method( $p{message} );
     }
 }
-
 
 1;
 
@@ -73,12 +66,11 @@ Log::Dispatch::ApacheLog - Object for logging to Apache::Log objects
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-                [ [ 'ApacheLog', apache => $r ],
-                ],
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [ 'ApacheLog', apache => $r ],
+      ],
+  );
 
   $log->emerg('Kaboom');
 

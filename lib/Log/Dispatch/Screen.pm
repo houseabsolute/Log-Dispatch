@@ -12,15 +12,18 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 our $VERSION = '2.26';
 
-
-sub new
-{
+sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
 
-    my %p = validate( @_, { stderr => { type => BOOLEAN,
-                                        default => 1 },
-                          } );
+    my %p = validate(
+        @_, {
+            stderr => {
+                type    => BOOLEAN,
+                default => 1
+            },
+        }
+    );
 
     my $self = bless {}, $class;
 
@@ -30,17 +33,14 @@ sub new
     return $self;
 }
 
-sub log_message
-{
+sub log_message {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
-    if ($self->{stderr})
-    {
+    if ( $self->{stderr} ) {
         print STDERR $p{message};
     }
-    else
-    {
+    else {
         print STDOUT $p{message};
     }
 }
@@ -58,15 +58,16 @@ Log::Dispatch::Screen - Object for logging to the screen
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-            [ [ 'Screen',
-                min_level => 'debug',
-                stderr    => 1,
-                newline   => 1 ]
-            ],
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [
+              'Screen',
+              min_level => 'debug',
+              stderr    => 1,
+              newline   => 1
+          ]
+      ],
+  );
 
   $log->alert("I'm searching the city for sci-fi wasabi");
 

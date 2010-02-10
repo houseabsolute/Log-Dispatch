@@ -14,8 +14,7 @@ use Sys::Syslog 0.16 ();
 
 our $VERSION = '2.26';
 
-sub new
-{
+sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
 
@@ -30,49 +29,61 @@ sub new
 }
 
 my ($Ident) = $0 =~ /(.+)/;
-sub _init
-{
+
+sub _init {
     my $self = shift;
 
-    my %p = validate( @_, { ident    => { type => SCALAR,
-                                          default => $Ident },
-                            logopt   => { type => SCALAR,
-                                          default => '' },
-                            facility => { type => SCALAR,
-                                          default => 'user' },
-                            socket   => { type => SCALAR,
-                                          default => undef },
-                          } );
+    my %p = validate(
+        @_, {
+            ident => {
+                type    => SCALAR,
+                default => $Ident
+            },
+            logopt => {
+                type    => SCALAR,
+                default => ''
+            },
+            facility => {
+                type    => SCALAR,
+                default => 'user'
+            },
+            socket => {
+                type    => SCALAR,
+                default => undef
+            },
+        }
+    );
 
     $self->{ident}    = $p{ident};
     $self->{logopt}   = $p{logopt};
     $self->{facility} = $p{facility};
     $self->{socket}   = $p{socket};
 
-    $self->{priorities} = [ 'DEBUG',
-                            'INFO',
-                            'NOTICE',
-                            'WARNING',
-                            'ERR',
-                            'CRIT',
-                            'ALERT',
-                            'EMERG' ];
+    $self->{priorities} = [
+        'DEBUG',
+        'INFO',
+        'NOTICE',
+        'WARNING',
+        'ERR',
+        'CRIT',
+        'ALERT',
+        'EMERG'
+    ];
 
     Sys::Syslog::setlogsock( $self->{socket} )
         if defined $self->{socket};
 }
 
-sub log_message
-{
+sub log_message {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
-    my $pri = $self->_level_as_number($p{level});
+    my $pri = $self->_level_as_number( $p{level} );
 
-    eval
-    {
-        Sys::Syslog::openlog($self->{ident}, $self->{logopt}, $self->{facility});
-        Sys::Syslog::syslog($self->{priorities}[$pri], $p{message});
+    eval {
+        Sys::Syslog::openlog( $self->{ident}, $self->{logopt},
+            $self->{facility} );
+        Sys::Syslog::syslog( $self->{priorities}[$pri], $p{message} );
         Sys::Syslog::closelog;
     };
 
@@ -92,16 +103,17 @@ Log::Dispatch::Syslog - Object for logging to system log.
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-                [ [ 'Syslog',
-                    min_level => 'info',
-                    ident => 'Yadda yadda' ]
-                ]
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [
+              'Syslog',
+              min_level => 'info',
+              ident     => 'Yadda yadda'
+          ]
+      ]
+  );
 
-  $log->emerg( "Time to die." );
+  $log->emerg("Time to die.");
 
 =head1 DESCRIPTION
 

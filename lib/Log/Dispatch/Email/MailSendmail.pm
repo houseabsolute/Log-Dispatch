@@ -11,22 +11,21 @@ use Mail::Sendmail ();
 
 our $VERSION = '2.26';
 
-
-sub send_email
-{
+sub send_email {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
-    my %mail = ( To      => (join ',', @{ $self->{to} }),
-                 Subject => $self->{subject},
-                 Message => $p{message},
-                 # Mail::Sendmail insists on having this parameter.
-                 From    => $self->{from} || 'LogDispatch@foo.bar',
-               );
+    my %mail = (
+        To      => ( join ',', @{ $self->{to} } ),
+        Subject => $self->{subject},
+        Message => $p{message},
+
+        # Mail::Sendmail insists on having this parameter.
+        From => $self->{from} || 'LogDispatch@foo.bar',
+    );
 
     local $?;
-    unless ( Mail::Sendmail::sendmail(%mail) )
-    {
+    unless ( Mail::Sendmail::sendmail(%mail) ) {
         warn "Error sending mail: $Mail::Sendmail::error";
     }
 }
@@ -44,15 +43,16 @@ Log::Dispatch::Email::MailSendmail - Subclass of Log::Dispatch::Email that uses 
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-                [ [ 'Email::MailSendmail',
-                    min_level => 'emerg',
-                    to => [ qw( foo@example.com bar@example.org ) ],
-                    subject   => 'Big error!' ]
-                ],
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [
+              'Email::MailSendmail',
+              min_level => 'emerg',
+              to        => [qw( foo@example.com bar@example.org )],
+              subject   => 'Big error!'
+          ]
+      ],
+  );
 
   $log->emerg("Something bad is happening");
 

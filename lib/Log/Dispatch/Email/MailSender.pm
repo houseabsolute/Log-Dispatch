@@ -16,8 +16,7 @@ use Mail::Sender ();
 
 our $VERSION = '2.26';
 
-sub new
-{
+sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
 
@@ -32,21 +31,21 @@ sub new
     return $self;
 }
 
-sub send_email
-{
+sub send_email {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
     local $?;
-    eval
-    {
-        my $sender =
-            Mail::Sender->new( { from => $self->{from} || 'LogDispatch@foo.bar',
-                                 replyto => $self->{from} || 'LogDispatch@foo.bar',
-                                 to => ( join ',', @{ $self->{to} } ),
-                                 subject => $self->{subject},
-                                 smtp => $self->{smtp},
-                               } );
+    eval {
+        my $sender = Mail::Sender->new(
+            {
+                from    => $self->{from} || 'LogDispatch@foo.bar',
+                replyto => $self->{from} || 'LogDispatch@foo.bar',
+                to      => ( join ',', @{ $self->{to} } ),
+                subject => $self->{subject},
+                smtp    => $self->{smtp},
+            }
+        );
 
         die "Error sending mail ($sender): $Mail::Sender::Error"
             unless ref $sender;
@@ -71,15 +70,16 @@ Log::Dispatch::Email::MailSender - Subclass of Log::Dispatch::Email that uses th
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-                [ [ 'Email::MailSender',
-                    min_level => 'emerg',
-                    to => [ qw( foo@example.com bar@example.org ) ],
-                    subject   => 'Big error!' ]
-                ],
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [
+              'Email::MailSender',
+              min_level => 'emerg',
+              to        => [qw( foo@example.com bar@example.org )],
+              subject   => 'Big error!'
+          ]
+      ],
+  );
 
   $log->emerg("Something bad is happening");
 

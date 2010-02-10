@@ -11,10 +11,9 @@ use Mail::Send;
 
 our $VERSION = '2.26';
 
-sub send_email
-{
+sub send_email {
     my $self = shift;
-    my %p = @_;
+    my %p    = @_;
 
     my $msg = Mail::Send->new;
 
@@ -22,11 +21,10 @@ sub send_email
     $msg->subject( $self->{subject} );
 
     # Does this ever work for this module?
-    $msg->set('From', $self->{from}) if $self->{from};
+    $msg->set( 'From', $self->{from} ) if $self->{from};
 
     local $?;
-    eval
-    {
+    eval {
         my $fh = $msg->open
             or die "Cannot open handle to mail program";
 
@@ -53,15 +51,16 @@ Log::Dispatch::Email::MailSend - Subclass of Log::Dispatch::Email that uses the 
 
   use Log::Dispatch;
 
-  my $log =
-      Log::Dispatch->new
-          ( outputs =>
-                [ [ 'Email::MailSend',
-                    min_level => 'emerg',
-                    to => [ qw( foo@example.com bar@example.org ) ],
-                    subject   => 'Big error!' ]
-                ],
-          );
+  my $log = Log::Dispatch->new(
+      outputs => [
+          [
+              'Email::MailSend',
+              min_level => 'emerg',
+              to        => [qw( foo@example.com bar@example.org )],
+              subject   => 'Big error!'
+          ]
+      ],
+  );
 
   $log->emerg("Something bad is happening");
 
