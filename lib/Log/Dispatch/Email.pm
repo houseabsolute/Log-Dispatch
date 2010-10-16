@@ -89,12 +89,9 @@ sub DESTROY {
 
 1;
 
+# ABSTRACT: Base class for objects that send log messages via email
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Email - Base class for objects that send log messages
-via email
 
 =head1 SYNOPSIS
 
