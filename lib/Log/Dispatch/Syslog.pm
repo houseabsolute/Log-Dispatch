@@ -7,7 +7,7 @@ use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
 
-use Params::Validate qw(validate SCALAR);
+use Params::Validate qw(validate ARRAYREF SCALAR);
 Params::Validate::validation_options( allow_extra => 1 );
 
 use Sys::Syslog 0.16 ();
@@ -48,7 +48,7 @@ sub _init {
                 default => 'user'
             },
             socket => {
-                type    => SCALAR,
+                type    => SCALAR|ARRAYREF,
                 default => undef
             },
         }
@@ -70,7 +70,8 @@ sub _init {
         'EMERG'
     ];
 
-    Sys::Syslog::setlogsock( $self->{socket} )
+    Sys::Syslog::setlogsock(
+        ref $self->{socket} ? @{ $self->{socket} } : $self->{socket} )
         if defined $self->{socket};
 }
 
@@ -149,7 +150,7 @@ Valid options are 'auth', 'authpriv', 'cron', 'daemon', 'kern',
 'local0' through 'local7', 'mail, 'news', 'syslog', 'user',
 'uucp'.  Defaults to 'user'
 
-=item * socket ($)
+=item * socket ($ or \@)
 
 Tells what type of socket to use for sending syslog messages.  Valid
 options are listed in C<Sys::Syslog>.
@@ -157,6 +158,9 @@ options are listed in C<Sys::Syslog>.
 If you don't provide this, then we let C<Sys::Syslog> simply pick one
 that works, which is the preferred option, as it makes your code more
 portable.
+
+If you pass an array reference, it is dereferenced and passed to
+C<Sys::Syslog::setlogsock()>.
 
 =back
 

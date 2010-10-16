@@ -733,8 +733,8 @@ SKIP:
 
     no warnings 'redefine', 'once';
 
-    my $sock;
-    local *Sys::Syslog::setlogsock = sub { $sock = shift };
+    my @sock;
+    local *Sys::Syslog::setlogsock = sub { @sock = @_ };
 
     local *Sys::Syslog::openlog = sub { return 1 };
     local *Sys::Syslog::closelog = sub { return 1 };
@@ -748,7 +748,7 @@ SKIP:
                                               )
                   );
 
-    ok( ! defined $sock,
+    ok( ! @sock,
         'no call to stelogsock unless socket is set explicitly' );
 
     $dispatch->info('Foo');
