@@ -1,4 +1,4 @@
-2.27
+2.27   2010-10-16
 
 - Fix docs on handling of arrays passed to ->debug, ->error, etc. Requested by
   Andrew Hanenkamp. RT #61400.
