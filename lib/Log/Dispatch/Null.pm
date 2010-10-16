@@ -22,7 +22,6 @@ sub new {
 
 sub log_message { }
 
-
 1;
 
 __END__

@@ -8,14 +8,12 @@ use Log::Dispatch::Email::MailSend;
 
 Mail::Mailer->import( sendmail => 't/sendmail' );
 
-
-my $email =
-    Log::Dispatch::Email::MailSend->new
-        ( name      => 'email',
-          min_level => 'emerg',
-          to        => 'foo@example.com',
-          subject   => 'Log this',
-        );
+my $email = Log::Dispatch::Email::MailSend->new(
+    name      => 'email',
+    min_level => 'emerg',
+    to        => 'foo@example.com',
+    subject   => 'Log this',
+);
 
 $email->log( message => 'Something bad is happening', level => 'emerg' );
 

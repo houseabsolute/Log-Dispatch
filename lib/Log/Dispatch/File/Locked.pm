@@ -24,7 +24,6 @@ sub _open_file {
         or die "Cannot seek to end of '$self->{filename}': $!";
 }
 
-
 1;
 
 __END__

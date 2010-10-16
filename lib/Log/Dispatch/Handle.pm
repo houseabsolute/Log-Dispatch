@@ -34,7 +34,6 @@ sub log_message {
         or die "Cannot write to handle: $!";
 }
 
-
 1;
 
 __END__

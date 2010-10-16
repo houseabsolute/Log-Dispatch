@@ -89,7 +89,6 @@ sub DESTROY {
     $self->flush;
 }
 
-
 1;
 
 __END__

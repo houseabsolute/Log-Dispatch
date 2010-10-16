@@ -96,8 +96,10 @@ sub add {
 
     # Once 5.6 is more established start using the warnings module.
     if ( exists $self->{outputs}{ $object->name } && $^W ) {
-        Carp::carp( "Log::Dispatch::* object ", $object->name,
-            " already exists." );
+        Carp::carp(
+            "Log::Dispatch::* object ", $object->name,
+            " already exists."
+        );
     }
 
     $self->{outputs}{ $object->name } = $object;

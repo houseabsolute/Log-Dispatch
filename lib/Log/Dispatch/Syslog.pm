@@ -48,7 +48,7 @@ sub _init {
                 default => 'user'
             },
             socket => {
-                type    => SCALAR|ARRAYREF,
+                type    => SCALAR | ARRAYREF,
                 default => undef
             },
         }
@@ -82,15 +82,16 @@ sub log_message {
     my $pri = $self->_level_as_number( $p{level} );
 
     eval {
-        Sys::Syslog::openlog( $self->{ident}, $self->{logopt},
-            $self->{facility} );
+        Sys::Syslog::openlog(
+            $self->{ident}, $self->{logopt},
+            $self->{facility}
+        );
         Sys::Syslog::syslog( $self->{priorities}[$pri], $p{message} );
         Sys::Syslog::closelog;
     };
 
     warn $@ if $@ and $^W;
 }
-
 
 1;
 

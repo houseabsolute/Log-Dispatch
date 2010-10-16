@@ -13,16 +13,26 @@ my $tempdir = tempdir( CLEANUP => 1 );
 
     # Short syntax
     my $dispatch0 = Log::Dispatch->new(
-        outputs => [[ 'File', name => 'file', min_level => 'emerg', filename => $emerg_log ],
-                    ['+Log::Dispatch::Screen', name => 'screen', min_level => 'debug']]
-        );
+        outputs => [
+            [
+                'File', name => 'file', min_level => 'emerg',
+                filename => $emerg_log
+            ],
+            [
+                '+Log::Dispatch::Screen', name => 'screen',
+                min_level => 'debug'
+            ]
+        ]
+    );
 
     # Short syntax alternate (2.23)
     my $dispatch1 = Log::Dispatch->new(
         outputs => [
-            'File' =>
-              { name => 'file', min_level => 'emerg', filename => $emerg_log },
-            '+Log::Dispatch::Screen' => { name => 'screen', min_level => 'debug' }
+            'File' => {
+                name => 'file', min_level => 'emerg', filename => $emerg_log
+            },
+            '+Log::Dispatch::Screen' =>
+                { name => 'screen', min_level => 'debug' }
         ]
     );
 
@@ -36,17 +46,22 @@ my $tempdir = tempdir( CLEANUP => 1 );
         )
     );
     $dispatch2->add(
-        Log::Dispatch::Screen->new( name => 'screen', min_level => 'debug' ) );
+        Log::Dispatch::Screen->new( name => 'screen', min_level => 'debug' )
+    );
 
-    cmp_deeply( $dispatch0, $dispatch2, "created equivalent dispatchers - 0" );
-    cmp_deeply( $dispatch1, $dispatch2, "created equivalent dispatchers - 1" );
+    cmp_deeply( $dispatch0, $dispatch2,
+        "created equivalent dispatchers - 0" );
+    cmp_deeply( $dispatch1, $dispatch2,
+        "created equivalent dispatchers - 1" );
 }
 
 {
-    eval { Log::Dispatch->new(outputs => ['File']) };
-    like($@, qr/expected arrayref/, "got error for expected inner arrayref");
+    eval { Log::Dispatch->new( outputs => ['File'] ) };
+    like( $@, qr/expected arrayref/,
+        "got error for expected inner arrayref" );
 }
 {
-    eval { Log::Dispatch->new(outputs => 'File') };
-    like($@, qr/not one of the allowed types: arrayref/, "got error for expected outer arrayref");
+    eval { Log::Dispatch->new( outputs => 'File' ) };
+    like( $@, qr/not one of the allowed types: arrayref/,
+        "got error for expected outer arrayref" );
 }

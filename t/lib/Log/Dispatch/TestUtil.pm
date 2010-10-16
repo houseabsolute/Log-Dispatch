@@ -5,8 +5,8 @@ use warnings;
 use base qw(Exporter);
 
 our @EXPORT_OK = qw(
-  cmp_deeply
-  dump_one_line
+    cmp_deeply
+    dump_one_line
 );
 
 sub cmp_deeply {
@@ -20,7 +20,7 @@ sub dump_one_line {
     my ($value) = @_;
 
     return Data::Dumper->new( [$value] )->Indent(0)->Sortkeys(1)->Quotekeys(0)
-      ->Terse(1)->Dump();
+        ->Terse(1)->Dump();
 }
 
 1;
