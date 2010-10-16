@@ -362,14 +362,14 @@ translates to:
 
  $log->log( level => 'alert', message => 'Strange data in incoming request' );
 
-These methods act like Perl's C<print> built-in when given a list of
-arguments.  Thus, the following calls are equivalent:
+If you pass an array to these methods, it will be stringified as is:
 
  my @array = ('Something', 'bad', 'is', here');
  $log->alert(@array);
 
- my $scalar = "@array";
- $log->alert($scalar);
+ # is equivalent to
+
+ $log->alert("@array");
 
 =item * log_and_die( level => $, message => $ or \& )
 
