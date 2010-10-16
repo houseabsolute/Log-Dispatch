@@ -25,11 +25,9 @@ sub dump_one_line {
 
 1;
 
+# ABSTRACT: Utilities used internally by Log::Dispatch for testing
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::TestUtil - Utilities used internally by Log::Dispatch for testing
 
 =head1 METHODS
 

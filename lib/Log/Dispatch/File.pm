@@ -10,8 +10,6 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.26';
-
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;
 
@@ -153,11 +151,9 @@ sub DESTROY {
 
 1;
 
+# ABSTRACT: Object for logging to files
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::File - Object for logging to files
 
 =head1 SYNOPSIS
 
@@ -238,9 +234,5 @@ Then the resulting file will end up with permissions like this:
 which is probably not what you want.
 
 =back
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

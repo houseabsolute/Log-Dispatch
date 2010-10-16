@@ -10,8 +10,6 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.26';
-
 sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
@@ -36,11 +34,9 @@ sub log_message {
 
 1;
 
+# ABSTRACT: Object for logging to IO::Handle classes
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Handle - Object for logging to IO::Handle classes
 
 =head1 SYNOPSIS
 
@@ -76,9 +72,5 @@ parameters documented in L<Log::Dispatch::Output>:
 The handle object.  This object must implement a C<print()> method.
 
 =back
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

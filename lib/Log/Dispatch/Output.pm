@@ -12,8 +12,6 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use Carp ();
 
-our $VERSION = '2.26';
-
 my $level_names
     = [qw( debug info notice warning error critical alert emergency )];
 my $ln            = 0;
@@ -175,11 +173,9 @@ sub _add_newline_callback {
 
 1;
 
+# ABSTRACT: Base class for all Log::Dispatch::* objects
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Output - Base class for all Log::Dispatch::* objects
 
 =head1 SYNOPSIS
 
@@ -290,9 +286,5 @@ set.  Please make sure to use the C<_basic_init> method as directed.
 
 The actual logging implementation should be done in a C<log_message>
 method that you write. B<Do not override C<log>!>.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

@@ -233,11 +233,9 @@ sub _require_dynamic {
 
 1;
 
+# ABSTRACT: Dispatches messages to one or more outputs
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch - Dispatches messages to one or more outputs
 
 =head1 SYNOPSIS
 
@@ -603,19 +601,6 @@ or via email at bug-log-dispatch@rt.cpan.org.
 Support questions can be sent to me at my email address, shown below.
 
 The code repository is at http://hg.urth.org/hg/Log-Dispatch.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
-
-=head1 COPYRIGHT
-
-Copyright (c) 1999-2009 David Rolsky.  All rights reserved.  This program is
-free software; you can redistribute it and/or modify it under the same terms
-as Perl itself.
-
-The full text of the license can be found in the LICENSE file included with
-this module.
 
 =head1 SEE ALSO
 

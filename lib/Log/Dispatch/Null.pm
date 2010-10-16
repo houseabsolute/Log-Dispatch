@@ -7,8 +7,6 @@ use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
 
-our $VERSION = '2.26';
-
 sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
@@ -24,11 +22,9 @@ sub log_message { }
 
 1;
 
+# ABSTRACT: Object that accepts messages and does nothing
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Null - Object that accepts messages and does nothing
 
 =head1 SYNOPSIS
 
@@ -42,10 +38,6 @@ Log::Dispatch::Null - Object that accepts messages and does nothing
 
 This class provides a null logging object. Messages can be sent to the
 object but it does nothing with them.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut
 

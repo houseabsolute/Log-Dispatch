@@ -7,8 +7,6 @@ use base qw( Log::Dispatch::File );
 
 use Fcntl qw(:DEFAULT :flock);
 
-our $VERSION = '2.26';
-
 sub _open_file {
     my $self = shift;
 
@@ -26,11 +24,9 @@ sub _open_file {
 
 1;
 
+# ABSTRACT: Subclass of Log::Dispatch::File to facilitate locking
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::File::Locked - Subclass of Log::Dispatch::File to facilitate locking
 
 =head1 SYNOPSIS
 
@@ -54,10 +50,6 @@ Log::Dispatch::File::Locked - Subclass of Log::Dispatch::File to facilitate lock
 
 This module acts exactly like L<Log::Dispatch::File> except that it
 obtains an exclusive lock on the file before writing to it.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut
 

@@ -10,8 +10,6 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.26';
-
 # need to untaint this value
 my ($program) = $0 =~ /(.+)/;
 
@@ -170,9 +168,5 @@ On destruction, the object will call C<flush()> to send any pending
 email.
 
 =back
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

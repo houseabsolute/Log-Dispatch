@@ -9,8 +9,6 @@ use base qw( Log::Dispatch::Email );
 
 use Mail::Send;
 
-our $VERSION = '2.26';
-
 sub send_email {
     my $self = shift;
     my %p    = @_;
@@ -40,11 +38,9 @@ sub send_email {
 
 1;
 
+# ABSTRACT: Subclass of Log::Dispatch::Email that uses the Mail::Send module
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Email::MailSend - Subclass of Log::Dispatch::Email that uses the Mail::Send module
 
 =head1 SYNOPSIS
 
@@ -78,9 +74,5 @@ you could do:
   use Mail::Mailer 'smtp', Server => 'foo.example.com';
 
 For more details, see the L<Mail::Mailer> docs.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

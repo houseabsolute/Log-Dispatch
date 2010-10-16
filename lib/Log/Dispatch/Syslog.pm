@@ -12,8 +12,6 @@ Params::Validate::validation_options( allow_extra => 1 );
 
 use Sys::Syslog 0.16 ();
 
-our $VERSION = '2.26';
-
 sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
@@ -95,11 +93,9 @@ sub log_message {
 
 1;
 
+# ABSTRACT: Object for logging to system log.
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Syslog - Object for logging to system log.
 
 =head1 SYNOPSIS
 
@@ -164,9 +160,5 @@ If you pass an array reference, it is dereferenced and passed to
 C<Sys::Syslog::setlogsock()>.
 
 =back
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

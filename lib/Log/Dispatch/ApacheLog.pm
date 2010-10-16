@@ -10,8 +10,6 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.26';
-
 BEGIN {
     if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /2\./ ) {
         require Apache2::Log;
@@ -56,11 +54,9 @@ sub new {
 
 1;
 
+# ABSTRACT: Object for logging to Apache::Log objects
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::ApacheLog - Object for logging to Apache::Log objects
 
 =head1 SYNOPSIS
 
@@ -91,9 +87,5 @@ parameters documented in L<Log::Dispatch::Output>:
 An object of either the L<Apache> or L<Apache::Server> classes. Required.
 
 =back
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

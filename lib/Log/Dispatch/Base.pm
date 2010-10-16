@@ -3,8 +3,6 @@ package Log::Dispatch::Base;
 use strict;
 use warnings;
 
-our $VERSION = '2.26';
-
 sub _get_callbacks {
     shift;
     my %p = @_;
@@ -47,11 +45,9 @@ sub add_callback {
 
 1;
 
+# ABSTRACT: Code shared by dispatch and output objects.
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Base - Code shared by dispatch and output objects.
 
 =head1 SYNOPSIS
 
@@ -65,9 +61,5 @@ Log::Dispatch::Base - Code shared by dispatch and output objects.
 
 Unless you are me, you probably don't need to know what this class
 does.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

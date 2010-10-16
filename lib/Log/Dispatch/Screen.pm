@@ -10,8 +10,6 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
-our $VERSION = '2.26';
-
 sub new {
     my $proto = shift;
     my $class = ref $proto || $proto;
@@ -47,11 +45,9 @@ sub log_message {
 
 1;
 
+# ABSTRACT: Object for logging to the screen
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Screen - Object for logging to the screen
 
 =head1 SYNOPSIS
 
@@ -92,9 +88,5 @@ false, logging information is printed to STDOUT instead.  This
 defaults to true.
 
 =back
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut

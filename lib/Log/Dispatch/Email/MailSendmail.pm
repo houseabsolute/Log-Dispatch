@@ -9,8 +9,6 @@ use base qw( Log::Dispatch::Email );
 
 use Mail::Sendmail ();
 
-our $VERSION = '2.26';
-
 sub send_email {
     my $self = shift;
     my %p    = @_;
@@ -32,11 +30,9 @@ sub send_email {
 
 1;
 
+# ABSTRACT: Subclass of Log::Dispatch::Email that uses the Mail::Sendmail module
+
 __END__
-
-=head1 NAME
-
-Log::Dispatch::Email::MailSendmail - Subclass of Log::Dispatch::Email that uses the Mail::Sendmail module
 
 =head1 SYNOPSIS
 
@@ -59,9 +55,5 @@ Log::Dispatch::Email::MailSendmail - Subclass of Log::Dispatch::Email that uses 
 
 This is a subclass of L<Log::Dispatch::Email> that implements the
 send_email method using the L<Mail::Sendmail> module.
-
-=head1 AUTHOR
-
-Dave Rolsky, <autarch@urth.org>
 
 =cut
