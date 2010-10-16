@@ -1,3 +1,14 @@
+2.27
+
+- Fix docs on handling of arrays passed to ->debug, ->error, etc. Requested by
+  Andrew Hanenkamp. RT #61400.
+
+- Allow an arrayref for the Syslog socket option. Requested by Paul
+  Bennett. RT #57631.
+
+- License is now Artistic 2.0.
+
+
 2.26 Sep 22, 2009
 
 - Doc updates. The 2.23 constructor API was still shown in all the output
