@@ -1,3 +1,9 @@
+2.28   2010-12-13
+
+- The Log::Dispatch module still had version 2.26 in the last
+  release. Reported by Øyvind Skaar. RT #63876.
+
+
 2.27   2010-10-16
 
 - Fix docs on handling of arrays passed to ->debug, ->error, etc. Requested by
