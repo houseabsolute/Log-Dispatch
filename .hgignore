@@ -1,6 +1,7 @@
 syntax: glob
 .\#*
 \#*\#
+*~
 blib*
 cover_db*
 Build
@@ -15,3 +16,4 @@ Makefile.PL
 Makefile
 Makefile.old
 pm_to_blib*
+Log-Dispatch-*
