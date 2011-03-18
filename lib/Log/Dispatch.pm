@@ -434,9 +434,9 @@ anything would be logged for that log level.
 
 =item * is_C<$level>
 
-Basically a curried C<would_log>.  To be clear, the following are equivalent:
+There are methods for every log level: C<is_debug()>, C<is_warning()>, etc.
 
- $logger->would_log('debug') == $logger->is_debug
+This returns true if the logger will log a message at the given level.
 
 =back
 
