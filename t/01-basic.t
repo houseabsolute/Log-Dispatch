@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 168;
+use Test::More;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -950,6 +950,8 @@ SKIP:
     like( $dispatch->name, qr/anon/, 'generated anon name' );
     is( $dispatch->max_level, 'emergency', 'max_level is emergency' );
 }
+
+done_testing();
 
 package Log::Dispatch::String;
 

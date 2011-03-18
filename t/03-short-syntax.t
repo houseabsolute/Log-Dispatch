@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use lib qw(t/lib);
-use Test::More tests => 4;
+use Test::More;
 use Log::Dispatch;
 use Log::Dispatch::TestUtil qw(cmp_deeply);
 use File::Temp qw( tempdir );
@@ -65,3 +65,5 @@ my $tempdir = tempdir( CLEANUP => 1 );
     like( $@, qr/not one of the allowed types: arrayref/,
         "got error for expected outer arrayref" );
 }
+
+done_testing();

@@ -8,9 +8,9 @@ unless ( -d '.hg' ) {
     exit;
 }
 
-plan tests => 1;
 
 system( $^X, 't/email-exit-helper.pl' );
 
 is( $? >> 8, 5, 'exit code of helper was 5' );
 
+done_testing();
