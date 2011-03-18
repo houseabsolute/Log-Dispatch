@@ -14,6 +14,7 @@ all_pod_coverage_ok(
             qr/^send_email|log_message|new$/,
             qr/^add_callback$/,
             qr/^(?:O_)?APPEND$/,
+            qr/^is_\w+$/
         ]
     }
 );
