@@ -222,6 +222,19 @@ sub would_log {
     return 0;
 }
 
+sub is_debug     { $_[0]->would_log('debug') }
+sub is_info      { $_[0]->would_log('info') }
+sub is_notice    { $_[0]->would_log('notice') }
+sub is_warning   { $_[0]->would_log('warning') }
+sub is_warn      { $_[0]->would_log('warn') }
+sub is_error     { $_[0]->would_log('error') }
+sub is_err       { $_[0]->would_log('err') }
+sub is_critical  { $_[0]->would_log('critical') }
+sub is_crit      { $_[0]->would_log('crit') }
+sub is_alert     { $_[0]->would_log('alert') }
+sub is_emerg     { $_[0]->would_log('emerg') }
+sub is_emergency { $_[0]->would_log('emergency') }
+
 sub _require_dynamic {
     my ($class) = @_;
 
@@ -418,6 +431,12 @@ valid log level.  Can be called as either a class or object method.
 
 Given a log level, returns true or false to indicate whether or not
 anything would be logged for that log level.
+
+=item * is_C<$level>
+
+Basically a curried C<would_log>.  To be clear, the following are equivalent:
+
+ $logger->would_log('debug') == $logger->is_debug
 
 =back
 

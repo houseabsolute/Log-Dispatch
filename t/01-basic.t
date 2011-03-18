@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 165;
+use Test::More tests => 168;
 
 use File::Spec;
 use File::Temp qw( tempdir );
@@ -691,7 +691,22 @@ SKIP:
     );
 
     ok(
+        !$dispatch->is_debug(),
+        'is_debug returns false'
+    );
+
+    ok(
+        $dispatch->is_warning(),
+        'is_warning returns true'
+    );
+
+    ok(
         $dispatch->would_log('crit'),
+        "will log 'crit'"
+    );
+
+    ok(
+        $dispatch->is_crit,
         "will log 'crit'"
     );
 }

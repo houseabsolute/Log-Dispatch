@@ -1,3 +1,8 @@
+2.29
+
+- Add is_$level methods for compatibility with Log::Contextual. Patch by frew.
+
+
 2.28   2010-12-13
 
 - The Log::Dispatch module still had version 2.26 in the last
