@@ -21,10 +21,12 @@ sub new {
     my %p = @_;
 
     my $smtp = delete $p{smtp} || 'localhost';
+    my $port = delete $p{port} || '25';
 
     my $self = $class->SUPER::new(%p);
 
     $self->{smtp} = $smtp;
+    $self->{port} = $port;
 
     return $self;
 }
@@ -42,6 +44,7 @@ sub send_email {
                 to      => ( join ',', @{ $self->{to} } ),
                 subject => $self->{subject},
                 smtp    => $self->{smtp},
+                port    => $self->{port},
             }
         );
 
