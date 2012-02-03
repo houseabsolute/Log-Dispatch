@@ -619,7 +619,7 @@ SKIP:
 
     my @chmod;
     no warnings 'once';
-    local *CORE::chmod = sub { @chmod = @_; warn @chmod };
+    local *CORE::GLOBAL::chmod = sub { @chmod = @_; warn @chmod };
 
     $dispatch->add(
         Log::Dispatch::File->new(
