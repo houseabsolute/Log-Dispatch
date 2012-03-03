@@ -652,7 +652,7 @@ SKIP:
             name      => 'utf8',
             min_level => 'info',
             filename  => $utf8_log,
-            binmode   => ':utf8',
+            binmode   => ':encoding(UTF-8)',
         )
     );
 

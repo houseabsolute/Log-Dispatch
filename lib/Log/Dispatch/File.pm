@@ -200,7 +200,7 @@ default is 'write'.
 
 =item * binmode ($)
 
-A layer name to be passed to binmode, like ":utf8" or ":raw".
+A layer name to be passed to binmode, like ":encoding(UTF-8)" or ":raw".
 
 =item * close_after_write ($)
 
