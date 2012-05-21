@@ -36,7 +36,10 @@ BEGIN {
     foreach my $l ( keys %level_map ) {
         my $sub = sub {
             my $self = shift;
-            $self->log( level => $level_map{$l}, message => "@_" );
+            $self->log(
+                level   => $level_map{$l},
+                message => @_ > 1 ? "@_" : $_[0],
+            );
         };
 
         $LEVELS{$l} = 1;

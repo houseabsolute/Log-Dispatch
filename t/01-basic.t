@@ -465,6 +465,36 @@ SKIP:
     }
 }
 
+{
+    my $string;
+    my $dispatch = Log::Dispatch->new(
+        outputs => [
+            [
+                'String',
+                name      => 'string',
+                string    => \$string,
+                min_level => 'debug',
+            ],
+        ],
+    );
+
+    $dispatch->debug( 'foo', 'bar' );
+    is(
+        $string,
+        'foo bar',
+        'passing multiple elements to ->debug stringifies them like an array'
+    );
+
+    $string = q{};
+    $dispatch->debug( sub { 'foo'} );
+    is(
+        $string,
+        'foo',
+        'passing single sub ref to ->debug calls the sub ref'
+    );
+
+}
+
 # Log::Dispatch->level_is_valid method
 {
     foreach my $l (
@@ -799,7 +829,7 @@ SKIP:
 
     ok( $e, 'died when calling log_and_die()' );
     like( $e, qr{this is my message},     'error contains expected message' );
-    like( $e, qr{01-basic\.t line 7\d\d}, 'error croaked' );
+    like( $e, qr{01-basic\.t line 8\d\d}, 'error croaked' );
 
     is( $string, 'this is my message', 'message is logged' );
 
