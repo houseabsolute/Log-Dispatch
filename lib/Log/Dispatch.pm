@@ -337,7 +337,7 @@ string following '+' is taken to be a full classname. e.g.
                  [ '+My::Dispatch', min_level => 'info' ] ]
 
 For each inner list, a new output object is created and added to the
-dispatcher (via L</add>).
+dispatcher (via the C<add() method>).
 
 See L<OUTPUT CLASSES> for the parameters that can be used when creating an
 output object.
@@ -504,11 +504,11 @@ form of generated names, as they may change.
 
 =item * min_level ($)
 
-The minimum L<logging level|Log Levels> this object will accept. Required.
+The minimum L<logging level|LOG LEVELS> this object will accept. Required.
 
 =item * max_level ($)
 
-The maximum L<logging level|Log Levels> this object will accept.  By default
+The maximum L<logging level|LOG LEVELS> this object will accept.  By default
 the maximum is the highest possible level (which means functionally that the
 object has no maximum).
 
@@ -531,7 +531,7 @@ message!
 
 If true, a callback will be added to the end of the callbacks list that adds
 a newline to the end of each message. Default is false, but some
-output classes may decide to make the default true. See L</NEWLINES> for more details.
+output classes may decide to make the default true.
 
 =back
 
