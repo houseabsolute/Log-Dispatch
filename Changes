@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Remove Sys::Syslog as a prereq, since you can use this distro perfectly well
+  without it. Fixes RT #52065.
+
 - You can now pass a subroutine reference to the sugar methods like
   $dispatch->debug() and friends. Requested by Jeffrey Thalhammer. RT #77308.
 
