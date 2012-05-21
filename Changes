@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.30     2012-05-20
+
 - Remove Sys::Syslog as a prereq, since you can use this distro perfectly well
   without it. Fixes RT #52065.
 
