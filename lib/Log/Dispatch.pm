@@ -12,12 +12,30 @@ use Carp ();
 our %LEVELS;
 
 BEGIN {
-    foreach my $l (
-        qw( debug info notice warn warning err error crit critical alert emerg emergency )
-        ) {
+    my %level_map = (
+        (
+            map { $_ => $_ }
+                qw(
+                debug
+                info
+                notice
+                warning
+                error
+                critical
+                alert
+                emergency
+                )
+        ),
+        warn  => 'warning',
+        err   => 'error',
+        crit  => 'critical',
+        emerg => 'emergency',
+    );
+
+    foreach my $l ( keys %level_map ) {
         my $sub = sub {
             my $self = shift;
-            $self->log( level => $l, message => "@_" );
+            $self->log( level => $level_map{$l}, message => "@_" );
         };
 
         $LEVELS{$l} = 1;
