@@ -42,7 +42,6 @@ classname
 crit
 emerg
 filename
-filename
 ident
 kern
 logopt
