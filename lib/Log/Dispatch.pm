@@ -6,6 +6,7 @@ use strict;
 use warnings;
 
 use base qw( Log::Dispatch::Base );
+use Class::Load qw( load_class );
 use Params::Validate 0.15 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
@@ -102,7 +103,7 @@ sub _add_output {
         ? substr( $class, 1 )
         : "Log::Dispatch::$class";
 
-    _require_dynamic($full_class);
+    load_class($full_class);
 
     $self->add( $full_class->new(@_) );
 }
@@ -252,14 +253,6 @@ sub is_crit      { $_[0]->would_log('crit') }
 sub is_alert     { $_[0]->would_log('alert') }
 sub is_emerg     { $_[0]->would_log('emerg') }
 sub is_emergency { $_[0]->would_log('emergency') }
-
-sub _require_dynamic {
-    my ($class) = @_;
-
-    local $@;
-    eval "require $class";
-    die $@ if $@;
-}
 
 1;
 
