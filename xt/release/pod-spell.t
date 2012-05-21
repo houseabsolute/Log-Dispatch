@@ -19,11 +19,14 @@ local $ENV{LC_ALL} = 'C';
 all_pod_files_spelling_ok;
 
 __DATA__
+API
+CPAN
 Cholet
 Dumont
 Goess
 Manfredi
 Miyagawa
+PayPal
 Pfeiffer
 Rolsky
 STDERR
