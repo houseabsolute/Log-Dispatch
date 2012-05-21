@@ -951,6 +951,54 @@ SKIP:
     is( $dispatch->max_level, 'emergency', 'max_level is emergency' );
 }
 
+{
+    my $level;
+    my $record_level = sub {
+        my %p = @_;
+        $level = $p{level};
+        return %p;
+    };
+
+    my $dispatch = Log::Dispatch->new(
+        callbacks => $record_level,
+        outputs   => [
+            [
+                'Null',
+                name      => 'null',
+                min_level => 'debug',
+            ],
+        ],
+    );
+
+    $dispatch->warn('foo');
+    is(
+        $level,
+        'warning',
+        'level for call to ->warn is warning'
+    );
+
+    $dispatch->err('foo');
+    is(
+        $level,
+        'error',
+        'level for call to ->err is error'
+    );
+
+    $dispatch->crit('foo');
+    is(
+        $level,
+        'critical',
+        'level for call to ->crit is critical'
+    );
+
+    $dispatch->emerg('foo');
+    is(
+        $level,
+        'emergency',
+        'level for call to ->emerg is emergency'
+    );
+}
+
 done_testing();
 
 package Log::Dispatch::String;
