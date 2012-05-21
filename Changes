@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Calling sugar methods like $dispatch->warn or $dispatch->crit did not
+  normalize the log level, so the level would be passed to the outputs as
+  "warn", not "warning". Reported by Karen Etheridge. RT #77203.
+
+
 2.29   2011-03-18
 
 - Add is_$level methods for compatibility with Log::Contextual. Patch by frew.
