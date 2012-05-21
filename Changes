@@ -392,26 +392,23 @@ NOTE: 1.5 was never released to CPAN.
 - Log/Dispatch.pm: Added convenience methods for log levels like
   $dispatcher->alert($message).  Suggested by Dominique Dumont.
 
+- This version introduces some changes into the interface that will
+  cause incompatibility with any Log::Dispatch::Output interface you may
+  have created.  However, it is fairly simple to fix.  Simply change the
+  method in your subclass named 'log' to be called 'log_message'.  You
+  can also remove the line:
 
-1.5
+    return unless $self->_should_log($params{level});
 
-This version introduces some changes into the interface that will
-cause incompatibility with any Log::Dispatch::Output interface you may
-have created.  However, it is fairly simple to fix.  Simply change the
-method in your subclass named 'log' to be called 'log_message'.  You
-can also remove the line:
+  This is now done before the message ever gets to the Output subclass
+  (which is what it should have done in the first place, really.)
 
-  return unless $self->_should_log($params{level});
+  This was done so that I could allow per-Output object callbacks, a
+  feature which several people have requested and which seems useful
+  enough to warrant the breakage.
 
-This is now done before the message ever gets to the Output subclass
-(which is what it should have done in the first place, really.)
-
-This was done so that I could allow per-Output object callbacks, a
-feature which several people have requested and which seems useful
-enough to warrant the breakage.
-
-NOTE: This change is transparent if you are only using the Output
-objects included with this distribution.
+  NOTE: This change is transparent if you are only using the Output
+  objects included with this distribution.
 
 - Many: Changed the interface to allow per-Output object level
   callbacks and documented this.
