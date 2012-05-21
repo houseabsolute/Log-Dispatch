@@ -397,6 +397,9 @@ If you pass an array to these methods, it will be stringified as is:
 
  $log->alert("@array");
 
+You can also pass a subroutine reference, just like passing one to the
+C<log()> method.
+
 =item * log_and_die( level => $, message => $ or \& )
 
 Has the same behavior as calling C<log()> but calls
