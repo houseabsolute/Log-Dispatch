@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use base qw( Log::Dispatch::Base );
-use Params::Validate qw(validate_with ARRAYREF CODEREF);
+use Params::Validate 0.15 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
 our %LEVELS;

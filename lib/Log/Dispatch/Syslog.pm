@@ -10,7 +10,7 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate ARRAYREF SCALAR);
 Params::Validate::validation_options( allow_extra => 1 );
 
-use Sys::Syslog 0.16 ();
+use Sys::Syslog 0.25 ();
 
 sub new {
     my $proto = shift;
