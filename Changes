@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Added missing prereq - Class::Load.
+
+
 2.30     2012-05-20
 
 - Remove Sys::Syslog as a prereq, since you can use this distro perfectly well
