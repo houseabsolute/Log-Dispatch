@@ -1,3 +1,5 @@
+{{$NEXT}}
+
 2.29   2011-03-18
 
 - Add is_$level methods for compatibility with Log::Contextual. Patch by frew.
