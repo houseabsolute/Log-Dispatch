@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Fix a test failure - test failed if you had 0.16 <= Sys::Syslog < 0.25
+  installed.
+
+
 2.31     2012-05-21
 
 - Added missing prereq - Class::Load.
