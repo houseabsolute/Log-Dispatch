@@ -3,6 +3,8 @@ package Log::Dispatch::File;
 use strict;
 use warnings;
 
+use Scalar::Util qw(openhandle);
+
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
@@ -145,7 +147,7 @@ sub DESTROY {
 
     if ( $self->{fh} ) {
         my $fh = $self->{fh};
-        close $fh;
+        close $fh if openhandle($fh);
     }
 }
 
