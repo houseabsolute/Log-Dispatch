@@ -132,7 +132,7 @@ sub log_message {
     my $fh = $self->{fh};
 
     if ( $self->{syswrite} ) {
-        syswrite($fh, $p{message})
+        defined syswrite($fh, $p{message})
             or die "Cannot write to '$self->{filename}': $!";
     }
     else {

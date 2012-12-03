@@ -5,6 +5,7 @@ use Test::More;
 
 use File::Spec;
 use File::Temp qw( tempdir );
+
 use Log::Dispatch;
 
 my %tests;
@@ -21,6 +22,18 @@ my %TestConfig;
 if ( my $email_address = $ENV{LOG_DISPATCH_TEST_EMAIL} ) {
     %TestConfig = ( email_address => $email_address );
 }
+
+my @syswrite_strs;
+BEGIN {
+    my $syswrite = \&CORE::syswrite;
+    *CORE::GLOBAL::syswrite = sub {
+        my ($fh, $str, @other) = @_;
+        push @syswrite_strs, $_[1];
+        # wth, CORE::syswrite(...) does not work here
+        return $syswrite->($fh, $str, @other);
+    };
+}
+
 
 use Log::Dispatch::File;
 use Log::Dispatch::Handle;
@@ -91,6 +104,15 @@ ok( $dispatch, "created Log::Dispatch object" );
     is(
         $log[1], "emerg level 2\n",
         "Second line in log file set to level 'debug' is 'emerg level 2'"
+    );
+
+    is_deeply(
+        \@syswrite_strs,
+        [
+            "info level 2\n",
+            "emerg level 2\n",
+        ],
+        'second LD object used syswrite',
     );
 }
 
