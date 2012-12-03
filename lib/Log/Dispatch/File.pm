@@ -64,6 +64,7 @@ sub _make_handle {
     $self->{close}       = $p{close_after_write};
     $self->{permissions} = $p{permissions};
     $self->{binmode}     = $p{binmode};
+    $self->{syswrite}    = $p{syswrite};
 
     if ( $self->{close} ) {
         $self->{mode} = '>>';
@@ -129,8 +130,15 @@ sub log_message {
     }
 
     my $fh = $self->{fh};
-    print $fh $p{message}
-        or die "Cannot write to '$self->{filename}': $!";
+
+    if ( $self->{syswrite} ) {
+        syswrite($fh, $p{message})
+            or die "Cannot write to '$self->{filename}': $!";
+    }
+    else {
+        print $fh $p{message}
+            or die "Cannot write to '$self->{filename}': $!";
+    }
 
     if ( $self->{close} ) {
         close $fh
@@ -211,6 +219,12 @@ is not re-written for each new message.
 =item * autoflush ($)
 
 Whether or not the file should be autoflushed.  This defaults to true.
+
+=item * syswrite ($)
+
+Whether or not to perform the write using L<perlfunc/syswrite>(),
+as opposed to L<perlfunc/print>().  This defaults to false.
+The usual caveats and warnings as documented in L<perlfunc/syswrite> apply.
 
 =item * permissions ($)
 

@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- 'syswrite' option added to Log::Dispatch::File. Patched by ether.
+
 2.32     2012-05-24
 
 - Fix a test failure - test failed if you had 0.16 <= Sys::Syslog < 0.25

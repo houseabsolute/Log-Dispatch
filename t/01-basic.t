@@ -55,6 +55,7 @@ ok( $dispatch, "created Log::Dispatch object" );
         Log::Dispatch::File->new(
             name      => 'file2',
             min_level => 'debug',
+            syswrite  => 1,
             filename  => $debug_log
         )
     );
