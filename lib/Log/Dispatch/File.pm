@@ -124,21 +124,17 @@ sub log_message {
     my $self = shift;
     my %p    = @_;
 
-    my $fh;
-
     if ( $self->{close} ) {
         $self->_open_file;
-        $fh = $self->{fh};
-        print $fh $p{message}
-            or die "Cannot write to '$self->{filename}': $!";
+    }
 
+    my $fh = $self->{fh};
+    print $fh $p{message}
+        or die "Cannot write to '$self->{filename}': $!";
+
+    if ( $self->{close} ) {
         close $fh
             or die "Cannot close '$self->{filename}': $!";
-    }
-    else {
-        $fh = $self->{fh};
-        print $fh $p{message}
-            or die "Cannot write to '$self->{filename}': $!";
     }
 }
 
