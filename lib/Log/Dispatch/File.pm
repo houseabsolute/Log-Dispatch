@@ -10,6 +10,8 @@ use base qw( Log::Dispatch::Output );
 use Params::Validate qw(validate SCALAR BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
+use Scalar::Util qw( openhandle );
+
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;
 
@@ -145,7 +147,7 @@ sub DESTROY {
 
     if ( $self->{fh} ) {
         my $fh = $self->{fh};
-        close $fh;
+        close $fh if openhandle($fh);
     }
 }
 
