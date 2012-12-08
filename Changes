@@ -1,6 +1,11 @@
 {{$NEXT}}
 
-- 'syswrite' option added to Log::Dispatch::File. Patched by ether.
+- Added a 'syswrite' option to Log::Dispatch::File which causes all writes to
+  use syswrite (so they're atomic). Patched by ether. RT #81669.
+
+- The File output's DESTROY method now checks to see if it's associated handle
+  is open before trying to close it. Patch by Jeffrey Thalhammer.
+
 
 2.32     2012-05-24
 
