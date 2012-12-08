@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More 0.88;
 
 use File::Spec;
 use File::Temp qw( tempdir );
