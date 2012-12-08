@@ -214,8 +214,8 @@ A layer name to be passed to binmode, like ":encoding(UTF-8)" or ":raw".
 Whether or not the file should be closed after each write.  This
 defaults to false.
 
-If this is true, then the mode will aways be append, so that the file
-is not re-written for each new message.
+If this is true, then the mode will always be append, so that the file is not
+re-written for each new message.
 
 =item * autoflush ($)
 
