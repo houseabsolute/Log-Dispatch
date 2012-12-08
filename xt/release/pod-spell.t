@@ -51,4 +51,6 @@ logopt
 params
 smtp
 stderr
+subclass's
+subclasses
 uucp
