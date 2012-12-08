@@ -24,16 +24,17 @@ if ( my $email_address = $ENV{LOG_DISPATCH_TEST_EMAIL} ) {
 }
 
 my @syswrite_strs;
+
 BEGIN {
     my $syswrite = \&CORE::syswrite;
     *CORE::GLOBAL::syswrite = sub {
-        my ($fh, $str, @other) = @_;
+        my ( $fh, $str, @other ) = @_;
         push @syswrite_strs, $_[1];
+
         # wth, CORE::syswrite(...) does not work here
-        return $syswrite->($fh, $str, @other);
+        return $syswrite->( $fh, $str, @other );
     };
 }
-
 
 use Log::Dispatch::File;
 use Log::Dispatch::Handle;
@@ -197,7 +198,8 @@ SKIP:
         )
     );
 
-    $dispatch->log( level => 'emerg',
+    $dispatch->log(
+        level => 'emerg',
         message =>
             "Mail::Send test - If you can read this then the test succeeded (PID $$)"
     );
@@ -227,7 +229,8 @@ SKIP:
         )
     );
 
-    $dispatch->log( level => 'emerg',
+    $dispatch->log(
+        level => 'emerg',
         message =>
             "Mail::Sendmail test - If you can read this then the test succeeded (PID $$)"
     );
@@ -258,7 +261,8 @@ SKIP:
         )
     );
 
-    $dispatch->log( level => 'emerg',
+    $dispatch->log(
+        level => 'emerg',
         message =>
             "MIME::Lite - If you can read this then the test succeeded (PID $$)"
     );
@@ -307,7 +311,7 @@ SKIP:
     my @levels   = $l->accepted_levels;
 
     my $pass = 1;
-    for ( my $x = 0; $x < scalar @expected; $x++ ) {
+    for ( my $x = 0 ; $x < scalar @expected ; $x++ ) {
         $pass = 0 unless $expected[$x] eq $levels[$x];
     }
 
@@ -509,7 +513,7 @@ SKIP:
     );
 
     $string = q{};
-    $dispatch->debug( sub { 'foo'} );
+    $dispatch->debug( sub { 'foo' } );
     is(
         $string,
         'foo',
@@ -575,7 +579,8 @@ SKIP:
         )
     );
 
-    $dispatch->log( level => 'emerg',
+    $dispatch->log(
+        level => 'emerg',
         message =>
             "Mail::Sender - If you can read this then the test succeeded (PID $$)"
     );
@@ -810,11 +815,13 @@ SKIP:
 
     $dispatch->log(
         level   => 'debug',
-        message => sub {'this is my message'},
+        message => sub { 'this is my message' },
     );
 
-    is( $string, 'this is my message',
-        'message returned by subref is logged' );
+    is(
+        $string, 'this is my message',
+        'message returned by subref is logged'
+    );
 }
 
 {
@@ -870,8 +877,10 @@ SKIP:
 
     ok( $e, 'died when calling log_and_croak()' );
     like( $e, qr{croak}, 'error contains expected message' );
-    like( $e, qr{01-basic\.t line 10005},
-        'error croaked from perspective of caller' );
+    like(
+        $e, qr{01-basic\.t line 10005},
+        'error croaked from perspective of caller'
+    );
 
     is( $string, 'croak', 'message is logged' );
 }

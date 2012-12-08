@@ -15,7 +15,7 @@ use Scalar::Util qw( openhandle );
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;
 
-sub APPEND {0}
+sub APPEND { 0 }
 
 sub new {
     my $proto = shift;
@@ -35,7 +35,8 @@ sub _make_handle {
     my $self = shift;
 
     my %p = validate(
-        @_, {
+        @_,
+        {
             filename => { type => SCALAR },
             mode     => {
                 type    => SCALAR,
@@ -132,7 +133,7 @@ sub log_message {
     my $fh = $self->{fh};
 
     if ( $self->{syswrite} ) {
-        defined syswrite($fh, $p{message})
+        defined syswrite( $fh, $p{message} )
             or die "Cannot write to '$self->{filename}': $!";
     }
     else {
