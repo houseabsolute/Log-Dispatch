@@ -31,7 +31,6 @@ BEGIN {
         my ( $fh, $str, @other ) = @_;
         push @syswrite_strs, $_[1];
 
-        # wth, CORE::syswrite(...) does not work here
         return $syswrite->( $fh, $str, @other );
     };
 }
