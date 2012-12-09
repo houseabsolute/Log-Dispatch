@@ -26,13 +26,15 @@ if ( my $email_address = $ENV{LOG_DISPATCH_TEST_EMAIL} ) {
 my @syswrite_strs;
 
 BEGIN {
-    my $syswrite = \&CORE::syswrite;
-    *CORE::GLOBAL::syswrite = sub {
-        my ( $fh, $str, @other ) = @_;
-        push @syswrite_strs, $_[1];
+    if ( $] >= 5.016 ) {
+        my $syswrite = \&CORE::syswrite;
+        *CORE::GLOBAL::syswrite = sub {
+            my ( $fh, $str, @other ) = @_;
+            push @syswrite_strs, $_[1];
 
-        return $syswrite->( $fh, $str, @other );
-    };
+            return $syswrite->( $fh, $str, @other );
+        };
+    }
 }
 
 use Log::Dispatch::File;
@@ -106,14 +108,19 @@ ok( $dispatch, "created Log::Dispatch object" );
         "Second line in log file set to level 'debug' is 'emerg level 2'"
     );
 
-    is_deeply(
-        \@syswrite_strs,
-        [
-            "info level 2\n",
-            "emerg level 2\n",
-        ],
-        'second LD object used syswrite',
-    );
+SKIP:
+    {
+        skip 'This test requires Perl 5.16+', 1
+            unless $] >= 5.016;
+        is_deeply(
+            \@syswrite_strs,
+            [
+                "info level 2\n",
+                "emerg level 2\n",
+            ],
+            'second LD object used syswrite',
+        );
+    }
 }
 
 # max_level test
