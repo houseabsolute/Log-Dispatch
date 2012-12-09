@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.34     2012-12-08
+
 - Fix a test bug that caused the tests to fail on all Perls before 5.16.0.
 
 
