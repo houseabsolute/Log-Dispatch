@@ -55,9 +55,15 @@ obtains an exclusive lock on the file while opening it.
 
 B<DANGER!> Use very carefully in multi-process environments. Because the lock
 is obtained at file open time, not at write time, you may experience deadlocks
-in your system.  You should also seriously consider using the
-C<close_after_write> option.  The C<syswrite> option might also be a reasonable
-alternative to using this module (see L<Log::Dispatch::File>).
+in your system.
+
+You can partially work around this by using the C<close_after_write> option,
+which causes the file to be re-opened every time a log message is written.
+
+Alternatively, the C<syswrite> option does atomic writes, which may mean that
+you don't need locking at all.
+
+See  L<Log::Dispatch::File>) for details on these options.
 
 =head1 SEE ALSO
 
