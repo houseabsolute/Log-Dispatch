@@ -48,6 +48,7 @@ filename
 ident
 kern
 logopt
+multi
 params
 smtp
 stderr
