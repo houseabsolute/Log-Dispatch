@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.35     2013-01-20
+
 - Added a big warning about the potential for deadlocks in the documentation
   for Log::Dispatch::File::Locked (ether).
 
