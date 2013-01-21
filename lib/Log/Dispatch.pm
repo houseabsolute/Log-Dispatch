@@ -9,46 +9,25 @@ our $VERSION = '2.46';
 
 use base qw( Log::Dispatch::Base );
 
+use Log::Dispatch::Util qw( _level_is_valid );
 use Module::Runtime qw( use_package_optimistically );
 use Params::Validate 1.03 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
-our %LEVELS;
-
 BEGIN {
-    my %level_map = (
-        (
-            map { $_ => $_ }
-                qw(
-                debug
-                info
-                notice
-                warning
-                error
-                critical
-                alert
-                emergency
-                )
-        ),
-        warn  => 'warning',
-        err   => 'error',
-        crit  => 'critical',
-        emerg => 'emergency',
-    );
+    foreach my $level ( keys %Log::Dispatch::Util::LevelNumbers ) {
+        my $num = $Log::Dispatch::Util::LevelNumbers{$level};
 
-    foreach my $l ( keys %level_map ) {
         my $sub = sub {
             my $self = shift;
             $self->log(
-                level   => $level_map{$l},
+                level   => $num,
                 message => @_ > 1 ? "@_" : $_[0],
             );
         };
 
-        $LEVELS{$l} = 1;
-
         no strict 'refs';
-        *{$l} = $sub;
+        *{$level} = $sub;
     }
 }
 
@@ -252,19 +231,11 @@ sub output {
     return $self->{outputs}{$name};
 }
 
-sub level_is_valid {
-    shift;
-    my $level = shift
-        or Carp::croak('Logging level was not provided');
-
-    return $LEVELS{$level};
-}
-
 sub would_log {
     my $self  = shift;
     my $level = shift;
 
-    return 0 unless $self->level_is_valid($level);
+    return 0 unless _level_is_valid($level);
 
     foreach ( values %{ $self->{outputs} } ) {
         return 1 if $_->_should_log($level);
@@ -285,6 +256,11 @@ sub is_crit      { $_[0]->would_log('crit') }
 sub is_alert     { $_[0]->would_log('alert') }
 sub is_emerg     { $_[0]->would_log('emerg') }
 sub is_emergency { $_[0]->would_log('emergency') }
+
+# deprecated - for back compat only
+sub level_is_valid {
+    return _level_is_valid( $_[1] );
+}
 
 1;
 
@@ -466,11 +442,6 @@ output objects.
 =head2 $dispatch->callbacks()
 
 Returns a list of the callbacks in a given output.
-
-=head2 $dispatch->level_is_valid( $string )
-
-Returns true or false to indicate whether or not the given string is a
-valid log level. Can be called as either a class or object method.
 
 =head2 $dispatch->would_log( $string )
 
