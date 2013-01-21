@@ -750,15 +750,12 @@ SKIP:
         )
     );
 
-    ok(
-        !$dispatch->would_log('foo'),
-        "will not log 'foo'"
-    );
-
-    ok(
-        !$dispatch->would_log('debug'),
-        "will not log 'debug'"
-    );
+    for my $no (qw( foo debug 0 )) {
+        ok(
+            !$dispatch->would_log($no),
+            qq{will not log level = $no}
+        );
+    }
 
     ok(
         !$dispatch->is_debug(),
@@ -770,15 +767,12 @@ SKIP:
         'is_warning returns true'
     );
 
-    ok(
-        $dispatch->would_log('crit'),
-        "will log 'crit'"
-    );
-
-    ok(
-        $dispatch->is_crit,
-        "will log 'crit'"
-    );
+    for my $yes (qw( critical crit 5 )) {
+        ok(
+            $dispatch->would_log($yes),
+            qq{will log level = $yes}
+        );
+    }
 }
 
 {
@@ -1029,7 +1023,7 @@ SKIP:
     my $level;
     my $record_level = sub {
         my %p = @_;
-        $level = $p{level};
+        $level = $Log::Dispatch::Util::LevelNames[ $p{level} ];
         return %p;
     };
 

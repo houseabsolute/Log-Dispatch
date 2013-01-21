@@ -3,7 +3,7 @@ package Log::Dispatch::Output;
 use strict;
 use warnings;
 
-use Log::Dispatch;
+use Log::Dispatch::Util qw( _level_is_valid );
 
 use base qw( Log::Dispatch::Base );
 
@@ -11,17 +11,6 @@ use Params::Validate qw(validate SCALAR ARRAYREF CODEREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
 use Carp ();
-
-my $level_names
-    = [qw( debug info notice warning error critical alert emergency )];
-my $ln            = 0;
-my $level_numbers = {
-    ( map { $_ => $ln++ } @{$level_names} ),
-    warn  => 3,
-    err   => 4,
-    crit  => 5,
-    emerg => 7
-};
 
 sub new {
     my $proto = shift;
@@ -67,20 +56,17 @@ sub _basic_init {
         }
     );
 
-    $self->{level_names}   = $level_names;
-    $self->{level_numbers} = $level_numbers;
-
     $self->{name} = $p{name} || $self->_unique_name();
 
     $self->{min_level} = $self->_level_as_number( $p{min_level} );
-    die "Invalid level specified for min_level"
+    die "Invalid level specified for min_level ($p{min_level})"
         unless defined $self->{min_level};
 
     # Either use the parameter supplied or just the highest possible level.
     $self->{max_level} = (
         exists $p{max_level}
         ? $self->_level_as_number( $p{max_level} )
-        : $#{ $self->{level_names} }
+        : $#Log::Dispatch::Util::LevelNames
     );
 
     die "Invalid level specified for max_level"
@@ -103,26 +89,26 @@ sub name {
 sub min_level {
     my $self = shift;
 
-    return $self->{level_names}[ $self->{min_level} ];
+    return $Log::Dispatch::Util::LevelNames[ $self->{min_level} ];
 }
 
 sub max_level {
     my $self = shift;
 
-    return $self->{level_names}[ $self->{max_level} ];
+    return $Log::Dispatch::Util::LevelNames[ $self->{max_level} ];
 }
 
 sub accepted_levels {
     my $self = shift;
 
-    return @{ $self->{level_names} }
-        [ $self->{min_level} .. $self->{max_level} ];
+    return @Log::Dispatch::Util::LevelNames[ $self->{min_level} .. $self->{max_level} ];
 }
 
 sub _should_log {
     my $self = shift;
 
     my $msg_level = $self->_level_as_number(shift);
+
     return (   ( $msg_level >= $self->{min_level} )
             && ( $msg_level <= $self->{max_level} ) );
 }
@@ -135,13 +121,13 @@ sub _level_as_number {
         Carp::croak "undefined value provided for log level";
     }
 
-    return $level if $level =~ /^\d$/;
+    return $level if $level =~ /^[0-7]$/;
 
-    unless ( Log::Dispatch->level_is_valid($level) ) {
+    unless ( _level_is_valid($level) ) {
         Carp::croak "$level is not a valid Log::Dispatch log level";
     }
 
-    return $self->{level_numbers}{$level};
+    return $Log::Dispatch::Util::LevelNumbers{$level};
 }
 
 sub _level_as_name {
@@ -152,9 +138,9 @@ sub _level_as_name {
         Carp::croak "undefined value provided for log level";
     }
 
-    return $level unless $level =~ /^\d$/;
+    return $level unless $level =~ /^[0-7]$/;
 
-    return $self->{level_names}[$level];
+    return $Log::Dispatch::Util::LevelNames[$level];
 }
 
 my $_unique_name_counter = 0;
