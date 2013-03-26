@@ -26,13 +26,15 @@ sub new {
     my $self = bless {}, $class;
 
     $self->_basic_init(%p);
-    $self->_make_handle(%p);
+    $self->_make_handle;
 
     return $self;
 }
 
-sub _make_handle {
+sub _basic_init {
     my $self = shift;
+
+    $self->SUPER::_basic_init(@_);
 
     my %p = validate(
         @_,
@@ -86,9 +88,12 @@ sub _make_handle {
     }
 
     $self->{autoflush} = $p{autoflush};
+}
 
-    $self->_open_file() unless $p{close_after_write};
+sub _make_handle {
+    my $self = shift;
 
+    $self->_open_file() unless $self->{close};
 }
 
 sub _open_file {
