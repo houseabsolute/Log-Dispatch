@@ -10,10 +10,10 @@ sub _get_callbacks {
     return unless exists $p{callbacks};
 
     return @{ $p{callbacks} }
-        if UNIVERSAL::isa( $p{callbacks}, 'ARRAY' );
+        if ref $p{callbacks} eq 'ARRAY';
 
     return $p{callbacks}
-        if UNIVERSAL::isa( $p{callbacks}, 'CODE' );
+        if ref $p{callbacks} eq 'CODE';
 
     return;
 }
