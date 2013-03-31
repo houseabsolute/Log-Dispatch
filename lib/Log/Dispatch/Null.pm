@@ -30,7 +30,8 @@ __END__
 
   use Log::Dispatch;
 
-  my $null = Log::Dispatch->new( outputs => [ ['Null'] ] );
+  my $null
+      = Log::Dispatch->new( outputs => [ [ 'Null', min_level => 'debug' ] ] );
 
   $null->emerg( "I've fallen and I can't get up" );
 
