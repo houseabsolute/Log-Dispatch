@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added a very simple Log::Dispatch::Code output. This lets you log to a
+  subroutine reference.
+
+
 2.35     2013-01-20
 
 - Added a big warning about the potential for deadlocks in the documentation

@@ -1073,6 +1073,38 @@ SKIP:
     );
 }
 
+{
+    my @calls;
+    my $log = Log::Dispatch->new(
+        outputs => [
+            [
+                'Code',
+                min_level => 'error',
+                code      => sub { push @calls, {@_} },
+            ],
+        ]
+    );
+
+    $log->error('foo');
+    $log->info('bar');
+    $log->critical('baz');
+
+    is_deeply(
+        \@calls,
+        [
+            {
+                level   => 4,
+                message => 'foo',
+            },
+            {
+                level   => 5,
+                message => 'baz',
+            },
+        ],
+        'code received the expected messages'
+    );
+}
+
 done_testing();
 
 package Log::Dispatch::String;
