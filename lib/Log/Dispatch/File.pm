@@ -64,9 +64,10 @@ sub _basic_init {
     );
 
     $self->{filename}    = $p{filename};
+    $self->{binmode}     = $p{binmode};
+    $self->{autoflush}   = $p{autoflush};
     $self->{close}       = $p{close_after_write};
     $self->{permissions} = $p{permissions};
-    $self->{binmode}     = $p{binmode};
     $self->{syswrite}    = $p{syswrite};
 
     if ( $self->{close} ) {
@@ -87,7 +88,6 @@ sub _basic_init {
         $self->{mode} = '>';
     }
 
-    $self->{autoflush} = $p{autoflush};
 }
 
 sub _make_handle {
