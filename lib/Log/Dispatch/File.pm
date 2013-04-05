@@ -60,6 +60,10 @@ sub _basic_init {
                 type     => SCALAR,
                 optional => 1
             },
+            syswrite => {
+                type    => BOOLEAN,
+                default => 0
+            },
         }
     );
 
