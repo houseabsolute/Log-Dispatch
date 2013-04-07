@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Some internal cleanups that ensure that log levels are always passed around
+  as numbers, rather than converting to and from strings repeatedly. This
+  means that an output's log_message() method will always receive the level as
+  a number now.
+
+
 2.39     2013-04-21
 
 - You can now pass a port option to the MailSender output. Patch by Whitney
