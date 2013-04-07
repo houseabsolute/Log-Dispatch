@@ -29,6 +29,7 @@ sub log_message {
     my %p    = @_;
 
     delete $p{name};
+    $p{level} = $Log::Dispatch::Util::LevelNames[ $p{level} ];
 
     $self->{code}->(%p);
 }
