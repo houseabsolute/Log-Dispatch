@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Some internal cleanups that ensure that log levels are always passed around
+  as numbers, rather than converting to and from strings repeatedly. This
+  means that an output's log_message() method will always receive the level as
+  a number now. This makes the whole system a little faster.
+
 - Really make the per-thread locking in the Syslog output work. Based on a
   patch by David Schweikert. GitHub #9.
 
