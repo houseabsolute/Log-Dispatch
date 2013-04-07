@@ -1093,11 +1093,11 @@ SKIP:
         \@calls,
         [
             {
-                level   => 4,
+                level   => 'error',
                 message => 'foo',
             },
             {
-                level   => 5,
+                level   => 'critical',
                 message => 'baz',
             },
         ],

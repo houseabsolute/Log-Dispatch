@@ -85,8 +85,7 @@ two arguments are:
 
 =item * level
 
-The log level of the message. This will be a number from 0-7, where 0 is debug
-and 7 is emergency. See L<Log::Dispatch> for more details on log levels.
+The log level of the message. This will be a string like "info" or "error".
 
 =item * message
 
