@@ -5,6 +5,9 @@ use warnings;
 
 our $VERSION = '2.46';
 
+# We load Log::Dispatch for the benefit of various output modules on CPAN
+# which expect loading Output to load LD itself. Without this their tests
+# fail.
 use Log::Dispatch;
 use Log::Dispatch::Util qw( _level_is_valid );
 
