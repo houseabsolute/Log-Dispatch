@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Log::Dispatch::File validation moved to _basic_init(), to facilitate proper
+  subclassing (ether)
+
+
 2.36     2013-04-08
 
 - Added a very simple Log::Dispatch::Code output. This lets you log to a
