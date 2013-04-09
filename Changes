@@ -3,6 +3,12 @@
 - Added a very simple Log::Dispatch::Code output. This lets you log to a
   subroutine reference.
 
+- Added Sys::Syslog 0.25 as a prereq. This is a temporary fix to the problem
+  of Log::Dispatch shipping lots of output modules with undeclared prereqs (so
+  as not to require mod_perl, four email sending modules, etc.). In the future
+  Log::Dispatch will be split into a core distro and a set of distros, one for
+  each output that has prereqs. Reported by Michael Schwern. RT #84481.
+
 
 2.35     2013-01-20
 
