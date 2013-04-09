@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.36     2013-04-08
+
 - Added a very simple Log::Dispatch::Code output. This lets you log to a
   subroutine reference.
 
