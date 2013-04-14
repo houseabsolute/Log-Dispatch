@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.37     2013-04-14
+
 - Moved Log::Dispatch::File constructor parameter validation moved to
   _basic_init() to facilitate proper subclassing. Patch by ether. RT #84545.
 
