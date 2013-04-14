@@ -19,7 +19,7 @@
 2.35     2013-01-20
 
 - Added a big warning about the potential for deadlocks in the documentation
-  for Log::Dispatch::File::Locked (ether).
+  for Log::Dispatch::File::Locked. Patch by ether.
 
 
 2.34     2012-12-08
