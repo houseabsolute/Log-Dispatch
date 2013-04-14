@@ -1,7 +1,7 @@
 {{$NEXT}}
 
-- Log::Dispatch::File validation moved to _basic_init(), to facilitate proper
-  subclassing (ether)
+- Moved Log::Dispatch::File constructor parameter validation moved to
+  _basic_init() to facilitate proper subclassing. Patch by ether. RT #84545.
 
 
 2.36     2013-04-08
