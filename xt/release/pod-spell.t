@@ -33,6 +33,7 @@ STDERR
 STDOUT
 Schilli
 Straup
+Subclasses
 Swartz
 Tatsuhiko
 UTF
