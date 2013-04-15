@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Fix test that used undeclared prereqs so it does not do that.
+
+
 2.37     2013-04-14
 
 - Moved Log::Dispatch::File constructor parameter validation moved to
