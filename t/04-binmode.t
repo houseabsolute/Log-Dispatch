@@ -32,7 +32,7 @@ for my $t (@tests) {
     my $dispatcher = Log::Dispatch->new();
     ok( $dispatcher, 'got a logger object' );
 
-    $t->{params}{filename} =~ s/X/$count++/e;
+    $t->{params}{filename} =~ s/X\.txt$/$count++ . '.txt'/e;
     my $file = $t->{params}{filename};
 
     my $logger = Log::Dispatch::File->new( %{ $t->{params} } );
