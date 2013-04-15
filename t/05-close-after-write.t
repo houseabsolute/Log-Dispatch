@@ -42,14 +42,15 @@ my $dir = tempdir( CLEANUP => 1 );
         'caw output has not created a fh before first write'
     );
 
-    # write the first message...
     $logger->log( level => 'info', message => 'first message' );
     is(
-        path( $logger->output('no_caw')->{filename} )->slurp,
-        "first message\n", 'first line from no_caw output'
+        _slurp( $logger->output('no_caw')->{filename} ),
+        "first message\n",
+        'first line from no_caw output'
     );
     is(
-        path( $logger->output('caw')->{filename} )->slurp, "first message\n",
+        _slurp( $logger->output('caw')->{filename} ),
+        "first message\n",
         'first line from caw output'
     );
 
@@ -58,28 +59,39 @@ my $dir = tempdir( CLEANUP => 1 );
         caw    => $logger->output('caw')->{fh},
     );
 
-    # now write another message...
     $logger->log( level => 'info', message => 'second message' );
 
     is(
-        path( $logger->output('no_caw')->{filename} )->slurp,
+        _slurp( $logger->output('no_caw')->{filename} ),
         "first message\nsecond message\n",
         'full content from no_caw output'
     );
     is(
-        path( $logger->output('caw')->{filename} )->slurp,
-        "first message\nsecond message\n", 'full content from caw output'
+        _slurp( $logger->output('caw')->{filename} ),
+        "first message\nsecond message\n",
+        'full content from caw output'
     );
 
     # check the filehandles again...
     is(
-        $logger->output('no_caw')->{fh}, $handle{no_caw},
+        $logger->output('no_caw')->{fh},
+        $handle{no_caw},
         'handle has not changed when not using CAW'
     );
     isnt(
-        $logger->output('caw')->{fh}, $handle{caw},
+        $logger->output('caw')->{fh},
+        $handle{caw},
         'handle has changed when using CAW'
     );
 }
 
 done_testing();
+
+sub _slurp {
+    open my $fh, '<', $_[0]
+        or die "Cannot read $_[0]: $!";
+    return do {
+        local $/;
+        <$fh>;
+    };
+}
