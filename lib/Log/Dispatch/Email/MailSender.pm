@@ -86,4 +86,21 @@ __END__
 This is a subclass of L<Log::Dispatch::Email> that implements the send_email
 method using the L<Mail::Sender> module.
 
+=head1 CONSTRUCTOR
+
+The constructor takes the following parameters in addition to the parameters
+documented in L<Log::Dispatch::Output> and L<Log::Dispatch::Email>:
+
+=over 4
+
+=item * smtp ($)
+
+The smtp server to connect to. This defaults to "localhost".
+
+=item * port ($)
+
+The port to use when connecting. This defaults to 25.
+
+=back
+
 =cut
