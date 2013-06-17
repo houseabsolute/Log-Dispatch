@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added a conflict entry for older Log::Dispatch::File::Stamped to the
+  metadata. Patch by Karen Etheridge.
+
+
 2.39     2013-04-21
 
 - You can now pass a port option to the MailSender output. Patch by Whitney
