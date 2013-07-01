@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.40     2013-07-01
+
 - Added a conflict entry for older Log::Dispatch::File::Stamped to the
   metadata. Patch by Karen Etheridge.
 
