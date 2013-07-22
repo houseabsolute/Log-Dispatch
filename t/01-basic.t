@@ -540,6 +540,23 @@ SKIP:
     foreach my $l (qw( debu inf foo bar )) {
         ok( !Log::Dispatch->level_is_valid($l), "$l is not valid level" );
     }
+
+    #   Provide calling line if level missing
+    my $string;
+    my $dispatch = Log::Dispatch->new(
+        outputs => [
+            [
+                'String',
+                name      => 'string',
+                string    => \$string,
+                min_level => 'debug',
+            ],
+        ],
+    );
+
+    eval { $dispatch->log(msg => "Message") };
+    like($@, qr/Logging level not provided at .* line \d+./,"Provide calling line if level not provided");
+
 }
 
 # make sure passing mode as write works
