@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- An error is now thrown if you call Log::Dispatch->log without a
+  level. Previously you'd just get a warning and then execution would continue
+  (without logging anything). Patch by Ross Attrill. RT #87133.
+
+
 2.40     2013-07-01
 
 - Added a conflict entry for older Log::Dispatch::File::Stamped to the
