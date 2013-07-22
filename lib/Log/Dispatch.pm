@@ -228,9 +228,10 @@ sub output {
 
 sub level_is_valid {
     shift;
-    my $level = shift;
-    Carp::croak("Logging level not provided") unless $level;
-    return $LEVELS{ $level };
+    my $level = shift
+        or Carp::croak('Logging level was not provided');
+
+    return $LEVELS{$level};
 }
 
 sub would_log {

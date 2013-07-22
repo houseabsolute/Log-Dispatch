@@ -554,9 +554,11 @@ SKIP:
         ],
     );
 
-    eval { $dispatch->log(msg => "Message") };
-    like($@, qr/Logging level not provided at .* line \d+./,"Provide calling line if level not provided");
-
+    eval { $dispatch->log( msg => "Message" ) };
+    like(
+        $@, qr/Logging level was not provided at .* line \d+./,
+        "Provide calling line if level not provided"
+    );
 }
 
 # make sure passing mode as write works
