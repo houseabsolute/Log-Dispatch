@@ -393,7 +393,7 @@ translates to:
 
 If you pass an array to these methods, it will be stringified as is:
 
- my @array = ('Something', 'bad', 'is', here');
+ my @array = ('Something', 'bad', 'is', 'here');
  $log->alert(@array);
 
  # is equivalent to
