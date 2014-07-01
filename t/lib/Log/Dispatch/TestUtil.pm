@@ -2,7 +2,7 @@ package Log::Dispatch::TestUtil;
 use Data::Dumper;
 use strict;
 use warnings;
-use base qw(Exporter);
+use parent qw(Exporter);
 
 our @EXPORT_OK = qw(
     cmp_deeply

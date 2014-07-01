@@ -5,7 +5,7 @@ use warnings;
 
 use Log::Dispatch::Output;
 
-use base qw( Log::Dispatch::Output );
+use parent qw( Log::Dispatch::Output );
 
 use Params::Validate qw(validate);
 Params::Validate::validation_options( allow_extra => 1 );
