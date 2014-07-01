@@ -1143,7 +1143,7 @@ use strict;
 
 use Log::Dispatch::Output;
 
-use base qw( Log::Dispatch::Output );
+use parent qw( Log::Dispatch::Output );
 
 sub new {
     my $proto = shift;

@@ -5,7 +5,7 @@ use warnings;
 
 use Log::Dispatch::Email;
 
-use base qw( Log::Dispatch::Email );
+use parent qw( Log::Dispatch::Email );
 
 use Mail::Send;
 
