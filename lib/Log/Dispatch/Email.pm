@@ -5,7 +5,7 @@ use warnings;
 
 use Log::Dispatch::Output;
 
-use base qw( Log::Dispatch::Output );
+use parent qw( Log::Dispatch::Output );
 
 use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
@@ -98,7 +98,7 @@ __END__
   package Log::Dispatch::Email::MySender;
 
   use Log::Dispatch::Email;
-  use base qw( Log::Dispatch::Email );
+  use parent qw( Log::Dispatch::Email );
 
   sub send_email {
       my $self = shift;

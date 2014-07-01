@@ -5,7 +5,7 @@ use warnings;
 
 use Log::Dispatch;
 
-use base qw( Log::Dispatch::Base );
+use parent qw( Log::Dispatch::Base );
 
 use Params::Validate qw(validate SCALAR ARRAYREF CODEREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
@@ -182,7 +182,7 @@ __END__
   package Log::Dispatch::MySubclass;
 
   use Log::Dispatch::Output;
-  use base qw( Log::Dispatch::Output );
+  use parent qw( Log::Dispatch::Output );
 
   sub new {
       my $proto = shift;

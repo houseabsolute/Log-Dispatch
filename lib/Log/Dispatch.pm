@@ -5,7 +5,7 @@ use 5.006;
 use strict;
 use warnings;
 
-use base qw( Log::Dispatch::Base );
+use parent qw( Log::Dispatch::Base );
 use Class::Load qw( load_class );
 use Params::Validate 0.15 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
