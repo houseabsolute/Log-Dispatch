@@ -139,6 +139,12 @@ sub outputs {
     return values %{ $self->{outputs} };
 }
 
+sub callbacks {
+    my $self = shift;
+
+    return @{ $self->{callbacks} };
+}
+
 sub log {
     my $self = shift;
     my %p    = @_;
@@ -441,6 +447,10 @@ handle a subroutine reference as the message.
 Adds a callback (like those given during construction). It is added to the end
 of the list of callbacks. Note that this can also be called on individual
 output objects.
+
+=item * callbacks()
+
+Returns a list of the callbacks in a given output.
 
 =back
 

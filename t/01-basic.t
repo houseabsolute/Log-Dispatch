@@ -385,6 +385,12 @@ SKIP:
         $string, 'REVERSE',
         "callback to reverse and uppercase text"
     );
+
+    is_deeply(
+        [ $dispatch->callbacks() ],
+        [ $reverse, $uc ],
+        '->callbacks() method returns all of the callback subs'
+    );
 }
 
 # Log::Dispatch::Output single callback
