@@ -49,6 +49,8 @@ sub add_callback {
 
 __END__
 
+=for Pod::Coverage add_callback
+
 =head1 SYNOPSIS
 
   use Log::Dispatch::Base;

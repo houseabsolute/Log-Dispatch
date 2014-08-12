@@ -171,6 +171,8 @@ sub DESTROY {
 
 __END__
 
+=for Pod::Coverage new log_message
+
 =head1 SYNOPSIS
 
   use Log::Dispatch;

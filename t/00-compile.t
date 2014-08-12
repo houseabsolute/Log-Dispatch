@@ -5,18 +5,18 @@ use Test::More;
 
 my %deps = (
     ApacheLog             => 'Apache::Log',
-    File                  => '',
-    'File::Locked'        => '',
-    Handle                => '',
-    Screen                => '',
-    Syslog                => 'Sys::Syslog 0.25',
+    Code                  => q{},
+    File                  => q{},
+    'File::Locked'        => q{},
+    Handle                => q{},
+    Null                  => q{},
+    Screen                => q{},
+    Syslog                => 'Sys::Syslog 0.28',
     'Email::MailSend'     => 'Mail::Send',
     'Email::MIMELite'     => 'MIME::Lite',
     'Email::MailSendmail' => 'Mail::Sendmail',
     'Email::MailSender'   => 'Mail::Sender',
 );
-
-plan tests => 1 + scalar keys %deps;
 
 use_ok('Log::Dispatch');
 
@@ -34,3 +34,5 @@ for my $subclass ( sort keys %deps ) {
         }
     }
 }
+
+done_testing();
