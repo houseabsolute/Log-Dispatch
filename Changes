@@ -4,11 +4,11 @@
   outputs and callbacks are shared, but changes to outputs and callbacks in
   the clone do not affect the original, or vice versa.
 
-- Add Log::Dispatch->outputs() method. This returns all the output objects in
-  a dispatch object.
+- Added Log::Dispatch->outputs() method. This returns all the output objects
+  in a dispatch object.
 
-- Add Log::Dispatch->callbacks() method. This returns all the callback subs in
-  a dispatch object.
+- Added Log::Dispatch->callbacks() method. This returns all the callback subs
+  in a dispatch object.
 
 - Replaced Class::Load with Module::Runtime.
 
