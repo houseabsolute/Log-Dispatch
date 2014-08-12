@@ -1070,7 +1070,7 @@ SKIP:
 
     ok(
         !@sock,
-        'no call to stelogsock unless socket is set explicitly'
+        'no call to setlogsock unless socket is set explicitly'
     );
 
     $dispatch->info('Foo');
