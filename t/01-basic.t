@@ -2,15 +2,18 @@ use strict;
 use warnings;
 
 use Test::More 0.88;
+use Test::Fatal;
 
 use File::Spec;
 use File::Temp qw( tempdir );
+use Module::Runtime qw( use_module );
 
 use Log::Dispatch;
 
 my %tests;
 
 BEGIN {
+    local $@;
     foreach (qw( MailSend MIMELite MailSendmail MailSender )) {
         eval "use Log::Dispatch::Email::$_";
         $tests{$_} = !$@;
@@ -600,9 +603,9 @@ SKIP:
         ],
     );
 
-    eval { $dispatch->log( msg => "Message" ) };
     like(
-        $@, qr/Logging level was not provided at .* line \d+./,
+        exception { $dispatch->log( msg => "Message" ) },
+        qr/Logging level was not provided at .* line \d+./,
         "Provide calling line if level not provided"
     );
 }
@@ -925,14 +928,12 @@ SKIP:
         )
     );
 
-    eval {
+    my $e = exception {
         $dispatch->log_and_die(
             level   => 'error',
             message => 'this is my message',
         );
     };
-
-    my $e = $@;
 
     ok( $e, 'died when calling log_and_die()' );
     like( $e, qr{this is my message},     'error contains expected message' );
@@ -942,9 +943,11 @@ SKIP:
 
     undef $string;
 
-    eval { Croaker::croak($dispatch); };
-
-    $e = $@;
+    $e = do {
+        local $@;
+        eval { Croaker::croak($dispatch) };
+        $@;
+    };
 
     ok( $e, 'died when calling log_and_croak()' );
     like( $e, qr{croak}, 'error contains expected message' );
