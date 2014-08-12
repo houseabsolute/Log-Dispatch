@@ -386,6 +386,8 @@ will only be applied to a given message once. If they do not return
 the message then you will get no output. Make sure to return the
 message!
 
+=back
+
 =head2 $dispatch->clone()
 
 This returns a I<shallow> clone of the original object. The underlying output
