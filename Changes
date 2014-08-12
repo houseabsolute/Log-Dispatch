@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.42     2014-08-12
+
 - Added a Log::Dispatch->clone() method. This returns shallow clone. The
   outputs and callbacks are shared, but changes to outputs and callbacks in
   the clone do not affect the original, or vice versa.
