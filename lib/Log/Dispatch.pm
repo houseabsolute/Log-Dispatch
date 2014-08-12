@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use base qw( Log::Dispatch::Base );
-use Class::Load qw( load_class );
+use Module::Runtime qw( use_package_optimistically );
 use Params::Validate 0.15 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
@@ -106,7 +106,7 @@ sub _add_output {
         ? substr( $class, 1 )
         : "Log::Dispatch::$class";
 
-    load_class($full_class);
+    use_package_optimistically($full_class);
 
     $self->add( $full_class->new(@_) );
 }
@@ -131,6 +131,12 @@ sub remove {
     my $name = shift;
 
     return delete $self->{outputs}{$name};
+}
+
+sub outputs {
+    my $self = shift;
+
+    return values %{ $self->{outputs} };
 }
 
 sub log {
@@ -475,6 +481,10 @@ a warning if C<$^W> is true.
 Removes the object that matches the name given to the remove method.
 The return value is the object being removed or undef if no object
 matched this.
+
+=item * outputs()
+
+Returns a list of output objects.
 
 =item * output( $name )
 

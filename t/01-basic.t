@@ -75,6 +75,16 @@ ok( $dispatch, "created Log::Dispatch object" );
         )
     );
 
+    my %outputs = map { $_->name() => ref $_ } $dispatch->outputs();
+    is_deeply(
+        \%outputs,
+        {
+            file1 => 'Log::Dispatch::File',
+            file2 => 'Log::Dispatch::File',
+        },
+        '->outputs() method returns all output objects'
+    );
+
     $dispatch->log( level => 'info',  message => "info level 2\n" );
     $dispatch->log( level => 'emerg', message => "emerg level 2\n" );
 

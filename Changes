@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Add Log::Dispatch->outputs() method. This returns all the output objects in
+  a log object.
+
+- Replaced Class::Load with Module::Runtime.
+
+
 2.41     2013-07-22
 
 - An error is now thrown if you call Log::Dispatch->log without a
