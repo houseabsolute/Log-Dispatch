@@ -72,7 +72,7 @@ This module provides an object for logging to the screen (really
 STDOUT or STDERR).
 
 Note that a newline will I<not> be added automatically at the end of a
-message by default.  To do that, pass C<newline =E<gt> 1>.
+message by default. To do that, pass C<< newline => 1 >>.
 
 =head1 CONSTRUCTOR
 
@@ -83,8 +83,8 @@ parameters documented in L<Log::Dispatch::Output>:
 
 =item * stderr (0 or 1)
 
-Indicates whether or not logging information should go to STDERR.  If
-false, logging information is printed to STDOUT instead.  This
+Indicates whether or not logging information should go to STDERR. If
+false, logging information is printed to STDOUT instead. This
 defaults to true.
 
 =back

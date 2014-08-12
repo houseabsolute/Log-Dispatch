@@ -221,70 +221,68 @@ parameters accepted by this constructor.
 
 =head1 METHODS
 
-=over 4
+This class provides the following methods:
 
-=item * _basic_init(%p)
+=head2 $output->_basic_init(%p)
 
-This should be called from a subclass's constructor.  Make sure to
-pass the arguments in @_ to it.  It sets the object's name and minimum
+This should be called from a subclass's constructor. Make sure to
+pass the arguments in @_ to it. It sets the object's name and minimum
 level from the passed parameters  It also sets up two other attributes which
 are used by other Log::Dispatch::Output methods, level_names and level_numbers.
 Subclasses will perform parameter validation in this method, and must also call
 the superclass's method.
 
-=item * name
+=head2 $output->name
 
 Returns the object's name.
 
-=item * min_level
+=head2 $output->min_level
 
 Returns the object's minimum log level.
 
-=item * max_level
+=head2 $output->max_level
 
 Returns the object's maximum log level.
 
-=item * accepted_levels
+=head2 $output->accepted_levels
 
 Returns a list of the object's accepted levels (by name) from minimum
 to maximum.
 
-=item * log( level => $, message => $ )
+=head2 $output->log( level => $, message => $ )
 
 Sends a message if the level is greater than or equal to the object's
-minimum level.  This method applies any message formatting callbacks
+minimum level. This method applies any message formatting callbacks
 that the object may have.
 
-=item * _should_log ($)
+=head2 $output->_should_log ($)
 
 This method is called from the C<log()> method with the log level of
-the message to be logged as an argument.  It returns a boolean value
+the message to be logged as an argument. It returns a boolean value
 indicating whether or not the message should be logged by this
-particular object.  The C<log()> method will not process the message
+particular object. The C<log()> method will not process the message
 if the return value is false.
 
-=item * _level_as_number ($)
+=head2 $output->_level_as_number ($)
 
 This method will take a log level as a string (or a number) and return
-the number of that log level.  If not given an argument, it returns
-the calling object's log level instead.  If it cannot determine the
+the number of that log level. If not given an argument, it returns
+the calling object's log level instead. If it cannot determine the
 level then it will croak.
 
-=item * add_callback( $code )
+=head2 $output->add_callback( $code )
 
 Adds a callback (like those given during construction). It is added to the end
 of the list of callbacks.
 
-=back
-
-=head2 Subclassing
+=head1 SUBCLASSING
 
 This class should be used as the base class for all logging objects
 you create that you would like to work under the Log::Dispatch
-architecture.  Subclassing is fairly trivial.  For most subclasses, if
+architecture. Subclassing is fairly trivial. For most subclasses, if
 you simply copy the code in the SYNOPSIS and then put some
 functionality into the C<log_message> method then you should be all
-set.  Please make sure to use the C<_basic_init> method as described above.
+set. Please make sure to use the C<_basic_init> method as described above.
 
 The actual logging implementation should be done in a C<log_message>
 method that you write. B<Do not override C<log>!>.

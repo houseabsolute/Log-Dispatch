@@ -195,7 +195,7 @@ This module provides a simple object for logging to files under the
 Log::Dispatch::* system.
 
 Note that a newline will I<not> be added automatically at the end of a message
-by default.  To do that, pass C<< newline => 1 >>.
+by default. To do that, pass C<< newline => 1 >>.
 
 =head1 CONSTRUCTOR
 
@@ -210,8 +210,8 @@ The filename to be opened for writing.
 
 =item * mode ($)
 
-The mode the file should be opened with.  Valid options are 'write',
-'>', 'append', '>>', or the relevant constants from Fcntl.  The
+The mode the file should be opened with. Valid options are 'write',
+'>', 'append', '>>', or the relevant constants from Fcntl. The
 default is 'write'.
 
 =item * binmode ($)
@@ -220,7 +220,7 @@ A layer name to be passed to binmode, like ":encoding(UTF-8)" or ":raw".
 
 =item * close_after_write ($)
 
-Whether or not the file should be closed after each write.  This
+Whether or not the file should be closed after each write. This
 defaults to false.
 
 If this is true, then the mode will always be append, so that the file is not
@@ -228,23 +228,23 @@ re-written for each new message.
 
 =item * autoflush ($)
 
-Whether or not the file should be autoflushed.  This defaults to true.
+Whether or not the file should be autoflushed. This defaults to true.
 
 =item * syswrite ($)
 
 Whether or not to perform the write using L<perlfunc/syswrite>(),
-as opposed to L<perlfunc/print>().  This defaults to false.
+as opposed to L<perlfunc/print>(). This defaults to false.
 The usual caveats and warnings as documented in L<perlfunc/syswrite> apply.
 
 =item * permissions ($)
 
 If the file does not already exist, the permissions that it should
-be created with.  Optional.  The argument passed must be a valid
+be created with. Optional. The argument passed must be a valid
 octal value, such as 0600 or the constants available from Fcntl, like
 S_IRUSR|S_IWUSR.
 
 See L<perlfunc/chmod> for more on potential traps when passing octal
-values around.  Most importantly, remember that if you pass a string
+values around. Most importantly, remember that if you pass a string
 that looks like an octal value, like this:
 
  my $mode = '0644';

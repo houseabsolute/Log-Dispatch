@@ -57,7 +57,7 @@ __END__
 =head1 DESCRIPTION
 
 This module supplies a very simple object for logging to some sort of
-handle object.  Basically, anything that implements a C<print()>
+handle object. Basically, anything that implements a C<print()>
 method can be passed the object constructor and it should work.
 
 =head1 CONSTRUCTOR
@@ -69,7 +69,7 @@ parameters documented in L<Log::Dispatch::Output>:
 
 =item * handle ($)
 
-The handle object.  This object must implement a C<print()> method.
+The handle object. This object must implement a C<print()> method.
 
 =back
 

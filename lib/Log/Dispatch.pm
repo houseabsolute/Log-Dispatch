@@ -321,7 +321,7 @@ This module manages a set of Log::Dispatch::* output objects that can be
 logged to via a unified interface.
 
 The idea is that you create a Log::Dispatch object and then add various
-logging objects to it (such as a file logger or screen logger).  Then you
+logging objects to it (such as a file logger or screen logger). Then you
 call the C<log> method of the dispatch object, which passes the message to
 each of the objects, which in turn decide whether or not to accept the
 message and what to do with it.
@@ -331,9 +331,13 @@ log file, via email, to the screen, and anywhere else, all with very
 little code needed on your part, once the dispatching object has been
 created.
 
-=head1 CONSTRUCTOR
+=head1 METHODS
 
-The constructor (C<new>) takes the following parameters:
+This class provides the following methods:
+
+=head2 Log::Dispatch->new(...)
+
+This method takes the following parameters:
 
 =over 4
 
@@ -348,7 +352,7 @@ string following '+' is taken to be a full classname. e.g.
                  [ '+My::Dispatch', min_level => 'info' ] ]
 
 For each inner list, a new output object is created and added to the
-dispatcher (via the C<add() method>).
+dispatcher (via the C<add()> method).
 
 See L<OUTPUT CLASSES> for the parameters that can be used when creating an
 output object.
@@ -356,7 +360,7 @@ output object.
 =item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
-reference of subroutine references.  These callbacks will be called in
+reference of subroutine references. These callbacks will be called in
 the order they are given and passed a hash containing the following keys:
 
  ( message => $log_message, level => $log_level )
@@ -365,21 +369,13 @@ In addition, any key/value pairs passed to a logging method will be
 passed onto your callback.
 
 The callbacks are expected to modify the message and then return a
-single scalar containing that modified message.  These callbacks will
+single scalar containing that modified message. These callbacks will
 be called when either the C<log> or C<log_to> methods are called and
-will only be applied to a given message once.  If they do not return
-the message then you will get no output.  Make sure to return the
+will only be applied to a given message once. If they do not return
+the message then you will get no output. Make sure to return the
 message!
 
-=back
-
-=head1 METHODS
-
-=head2 Logging
-
-=over 4
-
-=item * log( level => $, message => $ or \& )
+=head2 $dispatch->log( level => $, message => $ or \& )
 
 Sends the message (at the appropriate level) to all the
 output objects that the dispatcher contains (by calling the
@@ -389,10 +385,10 @@ This method also accepts a subroutine reference as the message
 argument. This reference will be called only if there is an output
 that will accept a message of the specified level.
 
-=item * debug (message), info (message), ...
+=head2 $dispatch->debug (message), info (message), ...
 
 You may call any valid log level (including valid abbreviations) as a method
-with a single argument that is the message to be logged.  This is converted
+with a single argument that is the message to be logged. This is converted
 into a call to the C<log> method with the appropriate level.
 
 For example:
@@ -415,93 +411,79 @@ If you pass an array to these methods, it will be stringified as is:
 You can also pass a subroutine reference, just like passing one to the
 C<log()> method.
 
-=item * log_and_die( level => $, message => $ or \& )
+=head2 $dispatch->log_and_die( level => $, message => $ or \& )
 
 Has the same behavior as calling C<log()> but calls
 C<_die_with_message()> at the end.
 
-=item * log_and_croak( level => $, message => $ or \& )
+=head2 $dispatch->log_and_croak( level => $, message => $ or \& )
 
 This method adjusts the C<$Carp::CarpLevel> scalar so that the croak
 comes from the context in which it is called.
-
-=item * _die_with_message( message => $, carp_level => $ )
-
-This method is used by C<log_and_die> and will either die() or croak()
-depending on the value of C<message>: if it's a reference or it ends
-with a new line then a plain die will be used, otherwise it will
-croak.
 
 You can throw exception objects by subclassing this method.
 
 If the C<carp_level> parameter is present its value will be added to
 the current value of C<$Carp::CarpLevel>.
 
-=item * log_to( name => $, level => $, message => $ )
+=head2 $dispatch->log_to( name => $, level => $, message => $ )
 
 Sends the message only to the named object. Note: this will not properly
 handle a subroutine reference as the message.
 
-=item * add_callback( $code )
+=head2 $dispatch->add_callback( $code )
 
 Adds a callback (like those given during construction). It is added to the end
 of the list of callbacks. Note that this can also be called on individual
 output objects.
 
-=item * callbacks()
+=head2 $dispatch->callbacks()
 
 Returns a list of the callbacks in a given output.
 
-=back
-
-=head2 Log levels
-
-=over 4
-
-=item * level_is_valid( $string )
+=head2 $dispatch->level_is_valid( $string )
 
 Returns true or false to indicate whether or not the given string is a
-valid log level.  Can be called as either a class or object method.
+valid log level. Can be called as either a class or object method.
 
-=item * would_log( $string )
+=head2 $dispatch->would_log( $string )
 
 Given a log level, returns true or false to indicate whether or not
 anything would be logged for that log level.
 
-=item * is_C<$level>
+=head2 $dispatch->is_C<$level>
 
 There are methods for every log level: C<is_debug()>, C<is_warning()>, etc.
 
 This returns true if the logger will log a message at the given level.
 
-=back
+=head2 $dispatch->add( Log::Dispatch::* OBJECT )
 
-=head2 Output objects
-
-=over
-
-=item * add( Log::Dispatch::* OBJECT )
-
-Adds a new L<output object|OUTPUT CLASSES> to the dispatcher.  If an object
+Adds a new L<output object|OUTPUT CLASSES> to the dispatcher. If an object
 of the same name already exists, then that object is replaced, with
 a warning if C<$^W> is true.
 
-=item * remove($)
+=head2 $dispatch->remove($)
 
 Removes the object that matches the name given to the remove method.
 The return value is the object being removed or undef if no object
 matched this.
 
-=item * outputs()
+=head2 $dispatch->outputs()
 
 Returns a list of output objects.
 
-=item * output( $name )
+=head2 $dispatch->output( $name )
 
-Returns the output object of the given name.  Returns undef or an empty
+Returns the output object of the given name. Returns undef or an empty
 list, depending on context, if the given output does not exist.
 
-=back
+=head2 $dispatch->_die_with_message( message => $, carp_level => $ )
+
+This method is used by C<log_and_die> and will either die() or croak()
+depending on the value of C<message>: if it's a reference or it ends
+with a new line then a plain die will be used, otherwise it will
+croak.
 
 =head1 OUTPUT CLASSES
 
@@ -521,7 +503,7 @@ these, see their documentation for details.
 A name for the object (not the filename!). This is useful if you want to
 refer to the object later, e.g. to log specifically to it or remove it.
 
-By default a unique name will be generated.  You should not depend on the
+By default a unique name will be generated. You should not depend on the
 form of generated names, as they may change.
 
 =item * min_level ($)
@@ -530,23 +512,23 @@ The minimum L<logging level|LOG LEVELS> this object will accept. Required.
 
 =item * max_level ($)
 
-The maximum L<logging level|LOG LEVELS> this object will accept.  By default
+The maximum L<logging level|LOG LEVELS> this object will accept. By default
 the maximum is the highest possible level (which means functionally that the
 object has no maximum).
 
 =item * callbacks( \& or [ \&, \&, ... ] )
 
 This parameter may be a single subroutine reference or an array
-reference of subroutine references.  These callbacks will be called in
+reference of subroutine references. These callbacks will be called in
 the order they are given and passed a hash containing the following keys:
 
  ( message => $log_message, level => $log_level )
 
 The callbacks are expected to modify the message and then return a
-single scalar containing that modified message.  These callbacks will
+single scalar containing that modified message. These callbacks will
 be called when either the C<log> or C<log_to> methods are called and
-will only be applied to a given message once.  If they do not return
-the message then you will get no output.  Make sure to return the
+will only be applied to a given message once. If they do not return
+the message then you will get no output. Make sure to return the
 message!
 
 =item * newline (0|1)
@@ -560,7 +542,7 @@ output classes may decide to make the default true.
 =head1 LOG LEVELS
 
 The log levels that Log::Dispatch uses are taken directly from the
-syslog man pages (except that I expanded them to full words).  Valid
+syslog man pages (except that I expanded them to full words). Valid
 levels are:
 
 =over 4
@@ -596,8 +578,8 @@ Log::Dispatch::Output and overriding the C<new> and C<log_message>
 methods. See the L<Log::Dispatch::Output> docs for more details.
 
 If you would like to create your own subclass for sending email then
-it is even simpler.  Simply subclass L<Log::Dispatch::Email> and
-override the C<send_email> method.  See the L<Log::Dispatch::Email>
+it is even simpler. Simply subclass L<Log::Dispatch::Email> and
+override the C<send_email> method. See the L<Log::Dispatch::Email>
 docs for more details.
 
 The logging levels that Log::Dispatch uses are borrowed from the standard
@@ -608,29 +590,29 @@ Log::Dispatch also allows the use of the full word as well ("error").
 
 =head2 Log::Dispatch::DBI
 
-Written by Tatsuhiko Miyagawa.  Log output to a database table.
+Written by Tatsuhiko Miyagawa. Log output to a database table.
 
 =head2 Log::Dispatch::FileRotate
 
-Written by Mark Pfeiffer.  Rotates log files periodically as part of
+Written by Mark Pfeiffer. Rotates log files periodically as part of
 its usage.
 
 =head2 Log::Dispatch::File::Stamped
 
-Written by Eric Cholet.  Stamps log files with date and time
+Written by Eric Cholet. Stamps log files with date and time
 information.
 
 =head2 Log::Dispatch::Jabber
 
-Written by Aaron Straup Cope.  Logs messages via Jabber.
+Written by Aaron Straup Cope. Logs messages via Jabber.
 
 =head2 Log::Dispatch::Tk
 
-Written by Dominique Dumont.  Logs messages to a Tk window.
+Written by Dominique Dumont. Logs messages to a Tk window.
 
 =head2 Log::Dispatch::Win32EventLog
 
-Written by Arthur Bergman.  Logs messages to the Windows event log.
+Written by Arthur Bergman. Logs messages to the Windows event log.
 
 =head2 Log::Log4perl
 
@@ -641,14 +623,14 @@ job. Created by Mike Schilli and Kevin Goess.
 
 =head2 Log::Dispatch::Config
 
-Written by Tatsuhiko Miyagawa.  Allows configuration of logging via a
+Written by Tatsuhiko Miyagawa. Allows configuration of logging via a
 text file similar (or so I'm told) to how it is done with log4j.
 Simpler than Log::Log4perl.
 
 =head2 Log::Agent
 
 A very different API for doing many of the same things that
-Log::Dispatch does.  Originally written by Raphael Manfredi.
+Log::Dispatch does. Originally written by Raphael Manfredi.
 
 =head1 SUPPORT
 

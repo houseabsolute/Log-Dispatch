@@ -137,7 +137,7 @@ Defaults to $0.
 =item * logopt ($)
 
 A string containing the log options (separated by any separator you
-like).  See the openlog(3) and Sys::Syslog docs for more details.
+like). See the openlog(3) and Sys::Syslog docs for more details.
 Defaults to ''.
 
 =item * facility ($)
@@ -145,11 +145,11 @@ Defaults to ''.
 Specifies what type of program is doing the logging to the system log.
 Valid options are 'auth', 'authpriv', 'cron', 'daemon', 'kern',
 'local0' through 'local7', 'mail, 'news', 'syslog', 'user',
-'uucp'.  Defaults to 'user'
+'uucp'. Defaults to 'user'
 
 =item * socket ($ or \@)
 
-Tells what type of socket to use for sending syslog messages.  Valid
+Tells what type of socket to use for sending syslog messages. Valid
 options are listed in C<Sys::Syslog>.
 
 If you don't provide this, then we let C<Sys::Syslog> simply pick one
