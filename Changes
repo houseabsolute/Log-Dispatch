@@ -10,6 +10,14 @@
 - Added Log::Dispatch->callbacks() method. This returns all the callback subs
   in a dispatch object.
 
+- The Syslog output now calls Sys::Syslog::setlogsock() every time a message
+  is logged, since something else could have called it in between logging two
+  messages.
+
+- Added a lock parameter to the Syslog output. If this is true, then logging
+  is done in the scope of a per-thread lock. Reported by Cedric Carree and
+  Franck Youssef. RT #67988 and #85013.
+
 - Replaced Class::Load with Module::Runtime.
 
 

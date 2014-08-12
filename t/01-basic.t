@@ -1047,44 +1047,6 @@ SKIP:
     is( $string, 'bar', 'second call, callback overrides message' );
 }
 
-SKIP:
-{
-    skip 'Cannot do syslog tests without Sys::Syslog 0.16+', 2
-        unless eval "use Log::Dispatch::Syslog; 1;";
-
-    no warnings 'redefine', 'once';
-
-    my @sock;
-    local *Sys::Syslog::setlogsock = sub { @sock = @_ };
-
-    local *Sys::Syslog::openlog  = sub { return 1 };
-    local *Sys::Syslog::closelog = sub { return 1 };
-
-    my @log;
-    local *Sys::Syslog::syslog = sub { push @log, [@_] };
-
-    my $dispatch = Log::Dispatch->new;
-    $dispatch->add(
-        Log::Dispatch::Syslog->new(
-            name      => 'syslog',
-            min_level => 'debug',
-        )
-    );
-
-    ok(
-        !@sock,
-        'no call to setlogsock unless socket is set explicitly'
-    );
-
-    $dispatch->info('Foo');
-
-    is_deeply(
-        \@log,
-        [ [ 'INFO', 'Foo' ] ],
-        'passed message to syslog'
-    );
-}
-
 {
 
     # Test defaults
