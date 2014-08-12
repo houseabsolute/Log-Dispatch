@@ -97,6 +97,17 @@ sub new {
     return $self;
 }
 
+sub clone {
+    my $self = shift;
+
+    my %clone = (
+        callbacks => [ @{ $self->{callbacks} } ],
+        outputs   => { %{ $self->{outputs} } },
+    );
+
+    return bless \%clone, ref $self;
+}
+
 sub _add_output {
     my $self  = shift;
     my $class = shift;
@@ -374,6 +385,12 @@ be called when either the C<log> or C<log_to> methods are called and
 will only be applied to a given message once. If they do not return
 the message then you will get no output. Make sure to return the
 message!
+
+=head2 $dispatch->clone()
+
+This returns a I<shallow> clone of the original object. The underlying output
+objects and callbacks are shared between the two objects. However any changes
+made to the outputs or callbacks that the object contains are not shared.
 
 =head2 $dispatch->log( level => $, message => $ or \& )
 

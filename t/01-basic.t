@@ -391,6 +391,36 @@ SKIP:
         [ $reverse, $uc ],
         '->callbacks() method returns all of the callback subs'
     );
+
+    my $clone = $dispatch->clone();
+    is_deeply(
+        $clone,
+        $dispatch,
+        'clone is a shallow clone of the original object'
+    );
+
+    $clone->add(
+        Log::Dispatch::Screen->new(
+            name      => 'screen',
+            min_level => 'debug',
+        )
+    );
+    my @orig_outputs  = map { $_->name() } $dispatch->outputs();
+    my @clone_outputs = map { $_->name() } $clone->outputs();
+    isnt(
+        scalar(@orig_outputs),
+        scalar(@clone_outputs),
+        'clone is not the same as original after adding an output'
+    );
+
+    $clone->add_callback( sub { return 'foo' } );
+    my @orig_cb  = $dispatch->callbacks();
+    my @clone_cb = $clone->callbacks();
+    isnt(
+        scalar(@orig_cb),
+        scalar(@clone_cb),
+        'clone is not the same as original after adding a callback'
+    );
 }
 
 # Log::Dispatch::Output single callback
@@ -906,7 +936,7 @@ SKIP:
 
     ok( $e, 'died when calling log_and_die()' );
     like( $e, qr{this is my message},     'error contains expected message' );
-    like( $e, qr{01-basic\.t line 8\d\d}, 'error croaked' );
+    like( $e, qr{01-basic\.t line 9\d\d}, 'error croaked' );
 
     is( $string, 'this is my message', 'message is logged' );
 
