@@ -1,7 +1,7 @@
 {{$NEXT}}
 
 - Add Log::Dispatch->outputs() method. This returns all the output objects in
-  a log object.
+  a dispatch object.
 
 - Add Log::Dispatch->callbacks() method. This returns all the callback subs in
   a dispatch object.
