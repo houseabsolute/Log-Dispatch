@@ -101,8 +101,8 @@ sub clone {
     my $self = shift;
 
     my %clone = (
-        callbacks => [ @{ $self->{callbacks} } ],
-        outputs   => { %{ $self->{outputs} } },
+        callbacks => [ @{ $self->{callbacks} || [] } ],
+        outputs   => { %{ $self->{outputs}   || {} } },
     );
 
     return bless \%clone, ref $self;
