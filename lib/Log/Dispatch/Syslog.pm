@@ -75,16 +75,17 @@ sub _init {
     ];
 }
 
-my $thread_lock;
+my $thread_lock : shared = 0;
+
 sub log_message {
     my $self = shift;
     my %p    = @_;
 
     my $pri = $self->_level_as_number( $p{level} );
 
-    eval {
-        threads::shared::lock($thread_lock) if $self->{lock};
+    lock($thread_lock) if $self->{lock};
 
+    eval {
         if ( defined $self->{socket} ) {
             Sys::Syslog::setlogsock(
                 ref $self->{socket} && reftype( $self->{socket} ) eq 'ARRAY'
