@@ -11,6 +11,9 @@
   already be destroyed, leading to weird errors when we try to use
   it. Reported by Mark Overmeer. RT #97733.
 
+- In 2.42 I added the ability to pass a hashref for the socket parameter given
+  to Log::Dispatch::Syslog, but I forgot to mention this here. This is
+  necessary to support remote logging. Patch by David Coppit. RT #93045.
 
 2.42     2014-08-12
 
