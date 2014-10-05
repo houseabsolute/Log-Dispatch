@@ -5,6 +5,12 @@
   I don't use threads so I haven't tested this. Patch by Sergio Fernández
   Muñoz. RT # 99208.
 
+- If a buffered email output is being destroyed during global destruction and
+  still has messages in the buffer, we warn and do not attempt to send the
+  messages. During global destruction, the package we use to send email may
+  already be destroyed, leading to weird errors when we try to use
+  it. Reported by Mark Overmeer. RT #97733.
+
 
 2.42     2014-08-12
 
