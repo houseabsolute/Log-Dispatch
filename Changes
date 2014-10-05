@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.43     2014-10-05
+
 - Fixed the thread locking in Log::Dispatch::Syslog (I hope). The previous
   version caused Perl to crash when per-thread locking was enabled. Note that
   I don't use threads so I haven't tested this. Patch by Sergio Fernández
