@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- The fix for a buffered email output in the last release introduced a bug
+  with _non-buffered_ email outputs. This would cause a fatal error during
+  global destruction when the DESTROY method was called. Reported by Christ
+  Hutchinson. RT #99474.
+
+
 2.43     2014-10-05
 
 - Fixed the thread locking in Log::Dispatch::Syslog (I hope). The previous

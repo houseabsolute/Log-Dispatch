@@ -85,7 +85,10 @@ sub flush {
 sub DESTROY {
     my $self = shift;
 
-    if ( in_global_destruction() && @{ $self->{buffer} } ) {
+    if (   in_global_destruction()
+        && $self->{buffered}
+        && @{ $self->{buffer} } ) {
+
         my $name  = $self->name();
         my $class = ref $self;
         my $message
