@@ -166,9 +166,7 @@ sub _unique_name {
 }
 
 sub _add_newline_callback {
-    my %p = @_;
-
-    return $p{message} . "\n";
+    +{@_}->{message} . "\n"
 }
 
 1;
