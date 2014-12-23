@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use utf8;
 
 use Test::More 0.88;
 use Test::Fatal;
@@ -313,6 +314,30 @@ SKIP:
 
     is(
         $text, 'testing screen',
+        "Log::Dispatch::Screen outputs to STDOUT"
+    );
+}
+
+# Log::Dispatch::Screen utf8 output
+{
+    my $dispatch = Log::Dispatch->new;
+
+    $dispatch->add(
+        Log::Dispatch::Screen->new(
+            name      => 'screen',
+            min_level => 'debug',
+            stderr    => 0,
+            utf8      => 1,
+        )
+    );
+
+    my $text;
+    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
+    $dispatch->log( level => 'crit', message => 'I ♥ Log::Dispatch' );
+    untie *STDOUT;
+
+    is(
+        $text, 'I ♥ Log::Dispatch',
         "Log::Dispatch::Screen outputs to STDOUT"
     );
 }

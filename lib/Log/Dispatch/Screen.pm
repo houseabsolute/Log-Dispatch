@@ -28,6 +28,14 @@ sub new {
     $self->_basic_init(%p);
     $self->{stderr} = exists $p{stderr} ? $p{stderr} : 1;
 
+    if( $self->{utf8} ) {
+        if( $self->{stderr} ) {
+            binmode STDERR, ":utf8";
+        } else {
+            binmode STDOUT, ":utf8";
+        }
+    }
+
     return $self;
 }
 
@@ -61,7 +69,8 @@ __END__
               'Screen',
               min_level => 'debug',
               stderr    => 1,
-              newline   => 1
+              newline   => 1,
+              utf8      => 1,
           ]
       ],
   );
@@ -88,6 +97,10 @@ parameters documented in L<Log::Dispatch::Output>:
 Indicates whether or not logging information should go to STDERR. If
 false, logging information is printed to STDOUT instead. This
 defaults to true.
+
+=item * utf8 (0 or 1)
+
+Set the utf8 option to a true value to enable printing wide utf8 characters.
 
 =back
 
