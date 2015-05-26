@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Fixed again thread locking in Log::Dispatch::Syslog (didn't work at least
+  with Perl 5.20). Patch by David Schweikert.
+
 2.44     2014-10-18
 
 - The fix for a buffered email output in the last release introduced a bug
