@@ -62,7 +62,7 @@ sub _init {
     if ( $self->{lock} ) {
         require threads;
         require threads::shared;
-        threads::shared::share(\$thread_lock);
+        &threads::shared::share(\$thread_lock);
     }
 
     $self->{priorities} = [
