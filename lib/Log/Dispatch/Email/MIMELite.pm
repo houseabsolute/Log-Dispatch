@@ -3,6 +3,8 @@ package Log::Dispatch::Email::MIMELite;
 use strict;
 use warnings;
 
+our $VERSION = '2.45';
+
 use Log::Dispatch::Email;
 
 use base qw( Log::Dispatch::Email );

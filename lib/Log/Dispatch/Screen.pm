@@ -3,6 +3,8 @@ package Log::Dispatch::Screen;
 use strict;
 use warnings;
 
+our $VERSION = '2.45';
+
 use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );

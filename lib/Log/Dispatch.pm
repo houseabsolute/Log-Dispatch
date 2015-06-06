@@ -5,7 +5,10 @@ use 5.006;
 use strict;
 use warnings;
 
+our $VERSION = '2.45';
+
 use base qw( Log::Dispatch::Base );
+
 use Module::Runtime qw( use_package_optimistically );
 use Params::Validate 0.15 qw(validate_with ARRAYREF CODEREF);
 use Carp ();

@@ -5,6 +5,8 @@ use warnings;
 
 use base qw( Log::Dispatch::File );
 
+our $VERSION = '2.45';
+
 use Fcntl qw(:DEFAULT :flock);
 
 sub _open_file {
