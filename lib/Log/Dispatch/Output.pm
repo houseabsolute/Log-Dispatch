@@ -168,9 +168,10 @@ sub _unique_name {
 }
 
 sub _add_newline_callback {
+
     # This weird construct is an optimization since this might be called a lot
     # - see https://github.com/autarch/Log-Dispatch/pull/7
-    +{@_}->{message} . "\n"
+    +{@_}->{message} . "\n";
 }
 
 1;

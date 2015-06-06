@@ -8,7 +8,6 @@ unless ( -d '.git' ) {
     exit;
 }
 
-
 system( $^X, 't/email-exit-helper.pl' );
 
 is( $? >> 8, 5, 'exit code of helper was 5' );

@@ -80,8 +80,7 @@ ok( $dispatch, "created Log::Dispatch object" );
 
     my %outputs = map { $_->name() => ref $_ } $dispatch->outputs();
     is_deeply(
-        \%outputs,
-        {
+        \%outputs, {
             file1 => 'Log::Dispatch::File',
             file2 => 'Log::Dispatch::File',
         },
@@ -330,7 +329,7 @@ SKIP:
     my @levels   = $l->accepted_levels;
 
     my $pass = 1;
-    for ( my $x = 0 ; $x < scalar @expected ; $x++ ) {
+    for ( my $x = 0; $x < scalar @expected; $x++ ) {
         $pass = 0 unless $expected[$x] eq $levels[$x];
     }
 
@@ -568,7 +567,7 @@ SKIP:
     );
 
     $string = q{};
-    $dispatch->debug( sub { 'foo' } );
+    $dispatch->debug( sub {'foo'} );
     is(
         $string,
         'foo',
@@ -889,7 +888,7 @@ SKIP:
 
     $dispatch->log(
         level   => 'debug',
-        message => sub { 'this is my message' },
+        message => sub {'this is my message'},
     );
 
     is(
@@ -1125,8 +1124,7 @@ SKIP:
             {
                 level   => 'error',
                 message => 'foo',
-            },
-            {
+            }, {
                 level   => 'critical',
                 message => 'baz',
             },

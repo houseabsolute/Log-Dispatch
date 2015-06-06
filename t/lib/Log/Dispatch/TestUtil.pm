@@ -19,8 +19,8 @@ sub cmp_deeply {
 sub dump_one_line {
     my ($value) = @_;
 
-    return Data::Dumper->new( [$value] )->Indent(0)->Sortkeys(1)->Quotekeys(0)
-        ->Terse(1)->Dump();
+    return Data::Dumper->new( [$value] )->Indent(0)->Sortkeys(1)
+        ->Quotekeys(0)->Terse(1)->Dump();
 }
 
 1;

@@ -17,7 +17,7 @@ use Scalar::Util qw( openhandle );
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;
 
-sub APPEND { 0 }
+sub APPEND {0}
 
 sub new {
     my $proto = shift;
@@ -39,8 +39,7 @@ sub _basic_init {
     $self->SUPER::_basic_init(@_);
 
     my %p = validate(
-        @_,
-        {
+        @_, {
             filename => { type => SCALAR },
             mode     => {
                 type    => SCALAR,
