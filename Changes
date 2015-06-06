@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Don't include threads and threads::shared in list of dependencies. This is
+  only needed for Log::Dispatch::Syslog and is loaded at runtime as needed
+  (which has its own issues but ...). Reported by Kent Fredric. RT #103392.
+
+
 2.44     2014-10-18
 
 - The fix for a buffered email output in the last release introduced a bug
