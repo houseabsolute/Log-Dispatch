@@ -292,6 +292,10 @@ sub is_emergency { $_[0]->would_log('emergency') }
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
 =head1 SYNOPSIS
 
   use Log::Dispatch;
