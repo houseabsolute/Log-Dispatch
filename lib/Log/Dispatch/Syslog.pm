@@ -3,7 +3,7 @@ package Log::Dispatch::Syslog;
 use strict;
 use warnings;
 
-our $VERSION = '2.45';
+our $VERSION = '2.46';
 
 use Log::Dispatch::Output;
 

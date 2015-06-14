@@ -8,7 +8,7 @@ package Log::Dispatch::Email::MailSender;
 use strict;
 use warnings;
 
-our $VERSION = '2.45';
+our $VERSION = '2.46';
 
 use Log::Dispatch::Email;
 
