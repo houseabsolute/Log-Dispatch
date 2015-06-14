@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.45     2015-06-14
+
 - Don't include threads and threads::shared in list of dependencies. This is
   only needed for Log::Dispatch::Syslog and is loaded at runtime as needed
   (which has its own issues but ...). Reported by Kent Fredric. RT #103392.
