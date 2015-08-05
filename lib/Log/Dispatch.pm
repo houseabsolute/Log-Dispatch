@@ -257,7 +257,6 @@ sub is_alert     { $_[0]->would_log('alert') }
 sub is_emerg     { $_[0]->would_log('emerg') }
 sub is_emergency { $_[0]->would_log('emergency') }
 
-# deprecated - for back compat only
 sub level_is_valid {
     return _level_is_valid( $_[1] );
 }
@@ -442,6 +441,11 @@ output objects.
 =head2 $dispatch->callbacks()
 
 Returns a list of the callbacks in a given output.
+
+=head2 $dispatch->level_is_valid( $string )
+
+Returns true or false to indicate whether or not the given string is a
+valid log level. Can be called as either a class or object method.
 
 =head2 $dispatch->would_log( $string )
 
