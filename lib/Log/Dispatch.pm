@@ -10,7 +10,7 @@ our $VERSION = '2.46';
 use base qw( Log::Dispatch::Base );
 
 use Module::Runtime qw( use_package_optimistically );
-use Params::Validate 0.15 qw(validate_with ARRAYREF CODEREF);
+use Params::Validate 1.03 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
 our %LEVELS;
