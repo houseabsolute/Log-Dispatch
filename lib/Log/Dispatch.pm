@@ -142,6 +142,9 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
+    Carp::croak('Logging level was not provided')
+        unless defined $p{level};
+
     return unless $self->would_log( $p{level} );
 
     $self->_log_to_outputs( $self->_prepare_message(%p) );
