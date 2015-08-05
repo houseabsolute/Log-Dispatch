@@ -39,4 +39,19 @@ env:
     - RELEASE_TESTING=1
     - AUTHOR_TESTING=1
 before_install:
-  - eval $(curl https://travis-perl.github.io/init) --auto
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - source ~/travis-perl-helpers/init
+  - build-perl
+  - perl -V
+  - build-dist
+  - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
+install:
+  - cpan-install --deps       # installs prereqs, including recommends
+  - cpan-install --coverage   # installs converage prereqs, if enabled
+  - cpan-install Module::Implementation # Work around some weirdness where this doesn't get installed for 5.10
+before_script:
+  - coverage-setup
+script:
+  - prove -l -j$(test-jobs) $(test-files)   # parallel testing
+after_success:
+  - coverage-report
