@@ -3,6 +3,8 @@ package Log::Dispatch::Util;
 use strict;
 use warnings;
 
+our $VERSION = '2.46';
+
 use Exporter qw( import );
 
 our @EXPORT_OK = qw( _level_is_valid );
