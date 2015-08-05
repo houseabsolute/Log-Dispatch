@@ -10,16 +10,19 @@ $ENV{PERL_TEST_DM_PROCESSES} = 4;
 $ENV{PERL_TEST_DM_LOG_DIR}   = abs_path('.');
 
 my @exclude = (
+    'Email::Sendmail',    # broken dist
     'Growl',
     'Gtk2-Notify',
-    'Kafka',    # has no tests
+    'Kafka',              # has no tests
     'MacGrowl',
+    'Scribe',
     'Tk',
     'ToTk',
     'Twilio',
     'Win32EventLog',
     'Wx',
-    'XML',      # depends on nonexistent Log::Dispatch::Buffer
+    'XML',                # depends on nonexistent Log::Dispatch::Buffer
+    'ZMQ',
 );
 
 my $ld_only = qr/(?!Log-Dispatch)/;
