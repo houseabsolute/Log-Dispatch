@@ -31,6 +31,8 @@ sub new {
 
 my ($Ident) = $0 =~ /(.+)/;
 
+my $thread_lock;
+
 sub _init {
     my $self = shift;
 
@@ -63,6 +65,7 @@ sub _init {
     if ( $self->{lock} ) {
         require threads;
         require threads::shared;
+        threads::shared::share( \$thread_lock );
     }
 
     $self->{priorities} = [
@@ -76,8 +79,6 @@ sub _init {
         'EMERG'
     ];
 }
-
-my $thread_lock : shared = 0;
 
 sub log_message {
     my $self = shift;

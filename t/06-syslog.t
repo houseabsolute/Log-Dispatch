@@ -22,6 +22,8 @@ my @log;
 local *Sys::Syslog::syslog = sub { push @log, [@_] };
 
 {
+    @log = ();
+
     my $dispatch = Log::Dispatch->new;
     $dispatch->add(
         Log::Dispatch::Syslog->new(
@@ -45,6 +47,8 @@ local *Sys::Syslog::syslog = sub { push @log, [@_] };
 }
 
 {
+    @log = ();
+
     my $dispatch = Log::Dispatch->new;
     $dispatch->add(
         Log::Dispatch::Syslog->new(
@@ -60,6 +64,31 @@ local *Sys::Syslog::syslog = sub { push @log, [@_] };
         \@sock,
         [ { type => 'foo' } ],
         'call to setlogsock is made when logging a message if socket was passed to LD::Syslog constructor'
+    );
+}
+
+SKIP:
+{
+    skip 'These tests only run on a threaded perl', 1
+        unless eval { require threads; 1 };
+
+    @log = ();
+
+    my $dispatch = Log::Dispatch->new;
+    $dispatch->add(
+        Log::Dispatch::Syslog->new(
+            name      => 'syslog',
+            min_level => 'debug',
+            lock      => 1,
+        )
+    );
+
+    $dispatch->info('Foo thread');
+
+    is_deeply(
+        \@log,
+        [ [ 'INFO', 'Foo thread' ] ],
+        'passed message to syslog (with thread lock)'
     );
 }
 

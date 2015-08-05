@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Really make the per-thread locking in the Syslog output work. Based on a
+  patch by David Schweikert. GitHub #9.
+
+
 2.45     2015-06-14
 
 - Don't include threads and threads::shared in list of dependencies. This is
