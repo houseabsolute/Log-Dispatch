@@ -4,7 +4,7 @@ use warnings;
 use Cwd qw( abs_path );
 use Test::More;
 
-use Test::DependentModules qw( test_all_dependents );
+use Test::DependentModules 0.21 qw( test_all_dependents );
 
 $ENV{PERL_TEST_DM_PROCESSES} = 4;
 $ENV{PERL_TEST_DM_LOG_DIR}   = abs_path('.');
