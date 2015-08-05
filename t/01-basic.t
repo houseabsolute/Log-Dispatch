@@ -50,7 +50,7 @@ use IO::File;
 my $tempdir = tempdir( CLEANUP => 1 );
 
 my $dispatch = Log::Dispatch->new;
-ok( $dispatch, "created Log::Dispatch object" );
+ok( $dispatch, 'created Log::Dispatch object' );
 
 # Test Log::Dispatch::File
 {
@@ -101,23 +101,23 @@ ok( $dispatch, "created Log::Dispatch object" );
     my @log = <$emerg_fh>;
     is(
         $log[0], "emerg level 1\n",
-        "First line in log file set to level 'emerg' is 'emerg level 1'"
+        q{First line in log file set to level 'emerg' is 'emerg level 1'}
     );
 
     is(
         $log[1], "emerg level 2\n",
-        "Second line in log file set to level 'emerg' is 'emerg level 2'"
+        q{Second line in log file set to level 'emerg' is 'emerg level 2'}
     );
 
     @log = <$debug_fh>;
     is(
         $log[0], "info level 2\n",
-        "First line in log file set to level 'debug' is 'info level 2'"
+        q{First line in log file set to level 'debug' is 'info level 2'}
     );
 
     is(
         $log[1], "emerg level 2\n",
-        "Second line in log file set to level 'debug' is 'emerg level 2'"
+        q{Second line in log file set to level 'debug' is 'emerg level 2'}
     );
 
 SKIP:
@@ -160,7 +160,7 @@ SKIP:
 
     is(
         $log[0], "critical\n",
-        "First line in log file with a max level of 'crit' is 'critical'"
+        q{First line in log file with a max level of 'crit' is 'critical'}
     );
 }
 
@@ -195,14 +195,14 @@ SKIP:
 
     is(
         $log[0], "handle test\n",
-        "Log::Dispatch::Handle created log file should contain 'handle test\\n'"
+        q{Log::Dispatch::Handle created log file should contain 'handle test\\n'}
     );
 }
 
 # Log::Dispatch::Email::MailSend
 SKIP:
 {
-    skip "Cannot do MailSend tests", 1
+    skip 'Cannot do MailSend tests', 1
         unless $tests{MailSend} && $TestConfig{email_address};
 
     my $dispatch = Log::Dispatch->new;
@@ -233,7 +233,7 @@ SKIP:
 # Log::Dispatch::Email::MailSendmail
 SKIP:
 {
-    skip "Cannot do MailSendmail tests", 1
+    skip 'Cannot do MailSendmail tests', 1
         unless $tests{MailSendmail} && $TestConfig{email_address};
 
     my $dispatch = Log::Dispatch->new;
@@ -265,7 +265,7 @@ SKIP:
 SKIP:
 {
 
-    skip "Cannot do MIMELite tests", 1
+    skip 'Cannot do MIMELite tests', 1
         unless $tests{MIMELite} && $TestConfig{email_address};
 
     my $dispatch = Log::Dispatch->new;
@@ -312,7 +312,7 @@ SKIP:
 
     is(
         $text, 'testing screen',
-        "Log::Dispatch::Screen outputs to STDOUT"
+        'Log::Dispatch::Screen outputs to STDOUT'
     );
 }
 
@@ -335,10 +335,10 @@ SKIP:
 
     is(
         scalar @expected, scalar @levels,
-        "number of levels matched"
+        'number of levels matched'
     );
 
-    ok( $pass, "levels matched" );
+    ok( $pass, 'levels matched' );
 }
 
 # Log::Dispatch single callback
@@ -360,7 +360,7 @@ SKIP:
 
     is(
         $string, 'reverse',
-        "callback to reverse text"
+        'callback to reverse text'
     );
 }
 
@@ -385,7 +385,7 @@ SKIP:
 
     is(
         $string, 'REVERSE',
-        "callback to reverse and uppercase text"
+        'callback to reverse and uppercase text'
     );
 
     is_deeply(
@@ -446,7 +446,7 @@ SKIP:
 
     is(
         $string, 'reverse',
-        "Log::Dispatch::Output callback to reverse text"
+        'Log::Dispatch::Output callback to reverse text'
     );
 }
 
@@ -472,7 +472,7 @@ SKIP:
 
     is(
         $string, 'REVERSE',
-        "Log::Dispatch::Output callbacks to reverse and uppercase text"
+        'Log::Dispatch::Output callbacks to reverse and uppercase text'
     );
 }
 
@@ -497,7 +497,7 @@ SKIP:
 
     is(
         $string, 'WARNING',
-        "Log::Dispatch callback to uppercase the level parameter"
+        'Log::Dispatch callback to uppercase the level parameter'
     );
 }
 
@@ -603,9 +603,9 @@ SKIP:
     );
 
     like(
-        exception { $dispatch->log( msg => "Message" ) },
+        exception { $dispatch->log( msg => 'Message' ) },
         qr/Logging level was not provided at .* line \d+./,
-        "Provide calling line if level not provided"
+        'Provide calling line if level not provided'
     );
 }
 
@@ -631,7 +631,7 @@ SKIP:
     my $data = join '', <$fh>;
     close $fh;
 
-    like( $data, qr/^test2/, "test write mode" );
+    like( $data, qr/^test2/, 'test write mode' );
 }
 
 # Log::Dispatch::Email::MailSender
@@ -679,12 +679,12 @@ SKIP:
 
     ok(
         $dispatch->output('yomama'),
-        "yomama output should exist"
+        'yomama output should exist'
     );
 
     ok(
         !$dispatch->output('nomama'),
-        "nomama output should not exist"
+        'nomama output should not exist'
     );
 }
 
@@ -714,7 +714,7 @@ SKIP:
 
     is(
         $log[0], "info\n",
-        "First line in log file should be 'info\\n'"
+        q{First line in log file should be 'info\\n'}
     );
 
     my $mode = ( stat $close_log )[2]
@@ -725,19 +725,19 @@ SKIP:
     if ( $^O =~ /win32/i ) {
         ok(
             $mode_string == '0777' || $mode_string == '0666',
-            "Mode should be 0777 or 0666"
+            'Mode should be 0777 or 0666'
         );
     }
     elsif ( $^O =~ /cygwin/i ) {
         ok(
             $mode_string == '0777' || $mode_string == '0644',
-            "Mode should be 0777 or 0644"
+            'Mode should be 0777 or 0644'
         );
     }
     else {
         is(
             $mode_string, '0777',
-            "Mode should be 0777"
+            'Mode should be 0777'
         );
     }
 }
