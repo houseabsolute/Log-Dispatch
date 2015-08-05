@@ -3,7 +3,7 @@ requires "Devel::GlobalDestruction" => "0";
 requires "Dist::CheckConflicts" => "0.02";
 requires "Fcntl" => "0";
 requires "Module::Runtime" => "0";
-requires "Params::Validate" => "0.15";
+requires "Params::Validate" => "1.03";
 requires "Scalar::Util" => "0";
 requires "Sys::Syslog" => "0.28";
 requires "base" => "0";
@@ -35,6 +35,10 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Code::TidyAll" => "0.24";
+  requires "MIME::Lite" => "0";
+  requires "Mail::Send" => "0";
+  requires "Mail::Sender" => "0";
+  requires "Mail::Sendmail" => "0";
   requires "Perl::Critic" => "1.123";
   requires "Perl::Tidy" => "20140711";
   requires "Pod::Coverage::TrustPod" => "0";
@@ -45,6 +49,7 @@ on 'develop' => sub {
   requires "Test::NoTabs" => "0";
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
+  requires "Test::Pod::No404s" => "0";
   requires "Test::Spelling" => "0.12";
   requires "Test::Version" => "1";
 };

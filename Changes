@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.46     2015-08-05
+
 - Really make the per-thread locking in the Syslog output work. Based on a
   patch by David Schweikert. GitHub #9.
 
