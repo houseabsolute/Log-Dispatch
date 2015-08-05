@@ -23,7 +23,7 @@ my @exclude = (
 );
 
 my $ld_only = qr/(?!Log-Dispatch)/;
-my $cannot_run = join '|', map { "Log-Dispatch-$_" } @exclude;
+my $cannot_run = join '|', map {"Log-Dispatch-$_"} @exclude;
 
 my $exclude = qr/^(?:$ld_only|$cannot_run)/;
 

@@ -107,7 +107,8 @@ sub max_level {
 sub accepted_levels {
     my $self = shift;
 
-    return @Log::Dispatch::Util::LevelNames[ $self->{min_level} .. $self->{max_level} ];
+    return @Log::Dispatch::Util::LevelNames[ $self->{min_level}
+        .. $self->{max_level} ];
 }
 
 sub _should_log {
