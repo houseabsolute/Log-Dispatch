@@ -1,9 +1,9 @@
 {{$NEXT}}
 
 - Really, really make per-thread locking work. Depending on when threads and
-  threads::shared were loaded, you might get an error of the form 'Type of arg
-  1 to threads::shared::share must be one of $@% at .../Log/Dispatch/Syslog.pm
-  line 67, near "$thread_lock)"'. Reported by David Schweikert.
+  threads::shared were loaded, you might get an error like 'Type of arg 1 to
+  threads::shared::share must be one of $@% at .../Log/Dispatch/Syslog.pm line
+  67, near "$thread_lock)"'. Reported by David Schweikert.
 
 - Added support for auth-related parameters and replyto to
   Log::Dispatch::Email::MailSender. Patch by Rohan Carly. Based on GitHub #10.
