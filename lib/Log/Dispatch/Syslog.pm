@@ -32,6 +32,7 @@ sub new {
 my ($Ident) = $0 =~ /(.+)/;
 
 my $thread_lock;
+my $threads_loaded;
 
 sub _init {
     my $self = shift;
@@ -63,8 +64,11 @@ sub _init {
 
     $self->{$_} = $p{$_} for qw( ident logopt facility socket lock );
     if ( $self->{lock} ) {
-        require threads;
-        require threads::shared;
+
+        # These need to be loaded with use, not require.
+        eval 'use threads; use threads::shared'
+            unless $threads_loaded;
+        $threads_loaded = 1;
         threads::shared::share( \$thread_lock );
     }
 
