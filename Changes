@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.47     2015-08-06
+
 - Really, really make per-thread locking work. Depending on when threads and
   threads::shared were loaded, you might get an error like 'Type of arg 1 to
   threads::shared::share must be one of $@% at .../Log/Dispatch/Syslog.pm line
