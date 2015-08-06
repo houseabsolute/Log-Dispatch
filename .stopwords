@@ -5,6 +5,7 @@ Dumont
 Goess
 Manfredi
 Miyagawa
+NTLM
 PayPal
 Pfeiffer
 STDERR
@@ -13,12 +14,15 @@ Schilli
 Straup
 Subclasses
 Swartz
+TLS
 Tatsuhiko
 UTF
 apache
 appenders
 auth
+authid
 authpriv
+authpwd
 autoflushed
 classname
 crit
@@ -29,6 +33,7 @@ kern
 logopt
 multi
 params
+replyto
 smtp
 stderr
 subclass's
