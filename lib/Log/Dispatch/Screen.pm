@@ -9,6 +9,7 @@ use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
 
+use IO::Handle;
 use Params::Validate qw(validate BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
@@ -20,15 +21,21 @@ sub new {
         @_, {
             stderr => {
                 type    => BOOLEAN,
-                default => 1
+                default => 1,
+            },
+            utf8 => {
+                type    => BOOLEAN,
+                default => 0,
             },
         }
     );
 
-    my $self = bless {}, $class;
+    my $fh = IO::Handle->new;
+    $fh->fdopen( $p{stderr} ? fileno(*STDERR) : fileno(*STDOUT), 'w' );
+    binmode $fh, ':encoding(UTF-8)' if $p{utf8};
 
+    my $self = bless { fh => $fh }, $class;
     $self->_basic_init(%p);
-    $self->{stderr} = exists $p{stderr} ? $p{stderr} : 1;
 
     return $self;
 }
@@ -37,12 +44,7 @@ sub log_message {
     my $self = shift;
     my %p    = @_;
 
-    if ( $self->{stderr} ) {
-        print STDERR $p{message};
-    }
-    else {
-        print STDOUT $p{message};
-    }
+    $self->{fh}->print( $p{message} );
 }
 
 1;
@@ -87,9 +89,18 @@ parameters documented in L<Log::Dispatch::Output>:
 
 =item * stderr (0 or 1)
 
-Indicates whether or not logging information should go to STDERR. If
-false, logging information is printed to STDOUT instead. This
-defaults to true.
+Indicates whether or not logging information should go to C<STDERR>. If
+false, logging information is printed to C<STDOUT> instead.
+
+This defaults to true.
+
+=item * utf8 (0 or 1)
+
+If this is true, then the output uses C<binmode> to apply the
+C<:encoding(UTF-8)> layer to the relevant handle for output. This will not
+affect C<STDOUT> or C<STDERR> in other parts of your code.
+
+This defaults to false.
 
 =back
 

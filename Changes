@@ -8,6 +8,10 @@
 - Added support for auth-related parameters and replyto to
   Log::Dispatch::Email::MailSender. Patch by Rohan Carly. Based on GitHub #10.
 
+- Add a utf8 flag for Log::Dispatch::Screen. If this is true, then it sets the
+  ":encoding(UTF-8)" flag on the handle it uses for output (without affecting
+  STDOUT or STDERR elsewhere). Suggested by Ivan Baidakou.
+
 
 2.46     2015-08-05
 

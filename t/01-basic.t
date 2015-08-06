@@ -293,29 +293,6 @@ SKIP:
     ok( 1, 'sent mail via MIMELite' );
 }
 
-# Log::Dispatch::Screen
-{
-    my $dispatch = Log::Dispatch->new;
-
-    $dispatch->add(
-        Log::Dispatch::Screen->new(
-            name      => 'screen',
-            min_level => 'debug',
-            stderr    => 0
-        )
-    );
-
-    my $text;
-    tie *STDOUT, 'Test::Tie::STDOUT', \$text;
-    $dispatch->log( level => 'crit', message => 'testing screen' );
-    untie *STDOUT;
-
-    is(
-        $text, 'testing screen',
-        'Log::Dispatch::Screen outputs to STDOUT'
-    );
-}
-
 # Log::Dispatch::Output->accepted_levels
 {
     my $l = Log::Dispatch::Screen->new(
@@ -1160,29 +1137,6 @@ sub log_message {
     my %p    = @_;
 
     ${ $self->{string} } .= $p{message};
-}
-
-# Used for testing Log::Dispatch::Screen
-package Test::Tie::STDOUT;
-
-sub TIEHANDLE {
-    my $class = shift;
-    my $self  = {};
-    $self->{string} = shift;
-    ${ $self->{string} } ||= '';
-
-    return bless $self, $class;
-}
-
-sub PRINT {
-    my $self = shift;
-    ${ $self->{string} } .= join '', @_;
-}
-
-sub PRINTF {
-    my $self   = shift;
-    my $format = shift;
-    ${ $self->{string} } .= sprintf( $format, @_ );
 }
 
 #line 10000

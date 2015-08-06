@@ -15,12 +15,14 @@ my $tempdir = tempdir( CLEANUP => 1 );
     my $dispatch0 = Log::Dispatch->new(
         outputs => [
             [
-                'File', name => 'file', min_level => 'emerg',
-                filename => $emerg_log
+                'File', name => 'file',
+                min_level => 'emerg',
+                filename  => $emerg_log,
             ],
             [
-                '+Log::Dispatch::Screen', name => 'screen',
-                min_level => 'debug'
+                '+Log::Dispatch::Null',
+                name      => 'null',
+                min_level => 'debug',
             ]
         ]
     );
@@ -31,8 +33,7 @@ my $tempdir = tempdir( CLEANUP => 1 );
             'File' => {
                 name => 'file', min_level => 'emerg', filename => $emerg_log
             },
-            '+Log::Dispatch::Screen' =>
-                { name => 'screen', min_level => 'debug' }
+            '+Log::Dispatch::Null' => { name => 'null', min_level => 'debug' }
         ]
     );
 
@@ -46,8 +47,7 @@ my $tempdir = tempdir( CLEANUP => 1 );
         )
     );
     $dispatch2->add(
-        Log::Dispatch::Screen->new( name => 'screen', min_level => 'debug' )
-    );
+        Log::Dispatch::Null->new( name => 'null', min_level => 'debug' ) );
 
     cmp_deeply(
         $dispatch0, $dispatch2,
