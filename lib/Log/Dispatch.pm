@@ -5,7 +5,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '2.47';
+our $VERSION = '2.48';
 
 use base qw( Log::Dispatch::Base );
 
