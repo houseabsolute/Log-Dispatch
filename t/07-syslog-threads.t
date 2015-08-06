@@ -5,10 +5,13 @@ use Test::More 0.88;
 
 use Test::Requires {
     'Sys::Syslog' => '0.28',
+    'threads'     => '0',
 };
 
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
+use threads;
+use threads::shared;
 
 no warnings 'redefine', 'once';
 
@@ -21,6 +24,7 @@ local *Sys::Syslog::closelog = sub { return 1 };
 my @log;
 local *Sys::Syslog::syslog = sub { push @log, [@_] };
 
+SKIP:
 {
     @log = ();
 
@@ -29,41 +33,16 @@ local *Sys::Syslog::syslog = sub { push @log, [@_] };
         Log::Dispatch::Syslog->new(
             name      => 'syslog',
             min_level => 'debug',
+            lock      => 1,
         )
     );
 
-    $dispatch->info('Foo');
-
-    ok(
-        !@sock,
-        'no call to setlogsock unless socket is set explicitly'
-    );
+    $dispatch->info('Foo thread');
 
     is_deeply(
         \@log,
-        [ [ 'INFO', 'Foo' ] ],
-        'passed message to syslog'
-    );
-}
-
-{
-    @log = ();
-
-    my $dispatch = Log::Dispatch->new;
-    $dispatch->add(
-        Log::Dispatch::Syslog->new(
-            name      => 'syslog',
-            min_level => 'debug',
-            socket    => { type => 'foo' },
-        )
-    );
-
-    $dispatch->info('Foo');
-
-    is_deeply(
-        \@sock,
-        [ { type => 'foo' } ],
-        'call to setlogsock is made when logging a message if socket was passed to LD::Syslog constructor'
+        [ [ 'INFO', 'Foo thread' ] ],
+        'passed message to syslog (with thread lock)'
     );
 }
 
