@@ -5,7 +5,7 @@ use warnings;
 
 use base qw( Log::Dispatch::File );
 
-our $VERSION = '2.48';
+our $VERSION = '2.49';
 
 use Fcntl qw(:DEFAULT :flock);
 
