@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Fixed (I hope) tests that were added in the last release that fail on
+  Windows.
+
+
 2.47     2015-08-06
 
 - Really, really make per-thread locking work. Depending on when threads and

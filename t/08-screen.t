@@ -50,7 +50,7 @@ use PerlIO;
                 stderr => 0,
                 utf8   => 0,
             }, {
-                stdout => "test message\n",
+                stdout => "test message",
                 stderr => q{},
             },
         ],
@@ -60,7 +60,7 @@ use PerlIO;
                 utf8   => 0,
             }, {
                 stdout => q{},
-                stderr => "test message\n",
+                stderr => "test message",
             },
         ],
         [
@@ -68,7 +68,7 @@ use PerlIO;
                 stderr => 0,
                 utf8   => 1,
             }, {
-                stdout => "test message - \x{1f60}\n",
+                stdout => "test message - \x{1f60}",
                 stderr => q{},
             },
         ],
@@ -78,7 +78,7 @@ use PerlIO;
                 utf8   => 1,
             }, {
                 stdout => q{},
-                stderr => "test message - \x{1f60}\n",
+                stderr => "test message - \x{1f60}",
             },
         ],
     );
@@ -123,6 +123,8 @@ sub _run_helper {
             binmode_stderr => ':encoding(UTF-8)',
         },
     );
+
+    chomp $_ for grep {defined} $stdout, $stderr;
 
     return ( $stdout, $stderr );
 }
