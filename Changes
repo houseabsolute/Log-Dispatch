@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.48     2015-08-07
+
 - Fixed (I hope) tests that were added in the last release that fail on
   Windows.
 
