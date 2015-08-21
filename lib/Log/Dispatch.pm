@@ -40,7 +40,7 @@ BEGIN {
         my $sub = sub {
             my $self = shift;
             $self->log(
-                level   => $level_map{$l},
+                level => $level_map{$l},
                 message => @_ > 1 ? "@_" : $_[0],
             );
         };
@@ -59,7 +59,7 @@ sub new {
     my %p = validate_with(
         params => \@_,
         spec   => {
-            outputs   => { type => ARRAYREF,           optional => 1 },
+            outputs => { type => ARRAYREF, optional => 1 },
             callbacks => { type => ARRAYREF | CODEREF, optional => 1 }
         },
         allow_extra => 1,    # for backward compatibility

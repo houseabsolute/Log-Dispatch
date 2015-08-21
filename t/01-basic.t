@@ -864,7 +864,7 @@ SKIP:
     );
 
     $dispatch->log(
-        level   => 'debug',
+        level => 'debug',
         message => sub {'this is my message'},
     );
 
@@ -1086,7 +1086,7 @@ SKIP:
             [
                 'Code',
                 min_level => 'error',
-                code      => sub { push @calls, {@_} },
+                code => sub { push @calls, {@_} },
             ],
         ]
     );

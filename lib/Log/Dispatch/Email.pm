@@ -26,7 +26,7 @@ sub new {
                 type    => SCALAR,
                 default => "$program: log email"
             },
-            to   => { type => SCALAR | ARRAYREF },
+            to => { type => SCALAR | ARRAYREF },
             from => {
                 type     => SCALAR,
                 optional => 1

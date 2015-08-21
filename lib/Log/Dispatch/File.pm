@@ -41,7 +41,7 @@ sub _basic_init {
     my %p = validate(
         @_, {
             filename => { type => SCALAR },
-            mode     => {
+            mode => {
                 type    => SCALAR,
                 default => '>'
             },
