@@ -32,6 +32,7 @@ sub new {
 
     my $fh = IO::Handle->new;
     $fh->fdopen( $p{stderr} ? fileno(*STDERR) : fileno(*STDOUT), 'w' );
+    $fh->autoflush(1);
     binmode $fh, ':encoding(UTF-8)' if $p{utf8};
 
     my $self = bless { fh => $fh }, $class;
@@ -75,10 +76,13 @@ __END__
 =head1 DESCRIPTION
 
 This module provides an object for logging to the screen (really
-STDOUT or STDERR).
+C<STDOUT> or C<STDERR>).
 
 Note that a newline will I<not> be added automatically at the end of a
 message by default. To do that, pass C<< newline => 1 >>.
+
+The handle will be autoflushed, but this module opens it's own handle to fd 1
+or 2 instead of using the global C<STDOUT> or C<STDERR>.
 
 =head1 CONSTRUCTOR
 
