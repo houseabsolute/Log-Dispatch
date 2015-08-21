@@ -10,7 +10,7 @@ BEGIN {
         unless $ENV{LOG_DISPATCH_TEST_DEPS};
 }
 
-use Test::DependentModules qw( test_all_dependents );
+use Test::DependentModules 0.22 qw( test_all_dependents );
 
 $ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
 
