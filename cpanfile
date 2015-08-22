@@ -41,7 +41,6 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Code::TidyAll" => "0.24";
-  requires "IPC::Run3" => "0";
   requires "MIME::Lite" => "0";
   requires "Mail::Send" => "0";
   requires "Mail::Sender" => "0";
@@ -52,6 +51,7 @@ on 'develop' => sub {
   requires "Test::CPAN::Changes" => "0.19";
   requires "Test::Code::TidyAll" => "0.24";
   requires "Test::EOL" => "0";
+  requires "Test::Mojibake" => "0";
   requires "Test::More" => "0.88";
   requires "Test::NoTabs" => "0";
   requires "Test::Pod" => "1.41";

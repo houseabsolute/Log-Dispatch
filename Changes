@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.49     2015-08-21
+
 - The Screen output now enables autoflush on the handle it uses to send output
   to STDOUT or STDERR every time it sends a message. This does not affect the
   global STDOUT or STDERR, as the Screen module makes its own handle for
