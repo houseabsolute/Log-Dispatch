@@ -3,7 +3,7 @@ package Log::Dispatch::ApacheLog;
 use strict;
 use warnings;
 
-our $VERSION = '2.49';
+our $VERSION = '2.50';
 
 use Log::Dispatch::Output;
 
