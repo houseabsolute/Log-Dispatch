@@ -41,6 +41,10 @@ sub log_message {
     my $self = shift;
     my %p    = @_;
 
+    # This is a bit gross but it's important that we print directly to the
+    # STDOUT or STDERR handle for backwards compatibility. Various modules
+    # have tests which rely on this, so we can't open a new filehandle to fd 1
+    # or 2 and use that.
     my $message
         = $self->{utf8} ? encode( 'UTF-8', $p{message} ) : $p{message};
     if ( $self->{stderr} ) {
