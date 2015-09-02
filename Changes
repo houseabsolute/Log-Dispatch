@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Changed how the Screen output handles UTF-8 data once more. The Screen
+  module has gone back to printing output directly to the global STDOUT and
+  STDERR handles. The previous changes broke the tests for several modules,
+  including Log::Dispatch::Config. This change should fix them.
+
+
 2.49     2015-08-21
 
 - The Screen output now enables autoflush on the handle it uses to send output

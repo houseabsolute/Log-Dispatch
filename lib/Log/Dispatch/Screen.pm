@@ -9,6 +9,7 @@ use Log::Dispatch::Output;
 
 use base qw( Log::Dispatch::Output );
 
+use Encode qw( encode );
 use IO::Handle;
 use Params::Validate qw(validate BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
@@ -30,12 +31,7 @@ sub new {
         }
     );
 
-    my $fh = IO::Handle->new;
-    $fh->fdopen( $p{stderr} ? fileno(*STDERR) : fileno(*STDOUT), 'w' );
-    $fh->autoflush(1);
-    binmode $fh, ':encoding(UTF-8)' if $p{utf8};
-
-    my $self = bless { fh => $fh }, $class;
+    my $self = bless \%p, $class;
     $self->_basic_init(%p);
 
     return $self;
@@ -45,7 +41,14 @@ sub log_message {
     my $self = shift;
     my %p    = @_;
 
-    $self->{fh}->print( $p{message} );
+    my $message
+        = $self->{utf8} ? encode( 'UTF-8', $p{message} ) : $p{message};
+    if ( $self->{stderr} ) {
+        print STDERR $message;
+    }
+    else {
+        print STDOUT $message;
+    }
 }
 
 1;
