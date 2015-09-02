@@ -3,7 +3,7 @@ package Log::Dispatch::Email::MIMELite;
 use strict;
 use warnings;
 
-our $VERSION = '2.50';
+our $VERSION = '2.51';
 
 use Log::Dispatch::Email;
 

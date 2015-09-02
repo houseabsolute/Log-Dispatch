@@ -3,7 +3,7 @@ package Log::Dispatch::Base;
 use strict;
 use warnings;
 
-our $VERSION = '2.50';
+our $VERSION = '2.51';
 
 sub _get_callbacks {
     shift;
