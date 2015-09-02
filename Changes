@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.50     2015-09-02
+
 - Changed how the Screen output handles UTF-8 data once more. The Screen
   module has gone back to printing output directly to the global STDOUT and
   STDERR handles. The previous changes broke the tests for several modules,

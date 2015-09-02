@@ -1,6 +1,7 @@
 requires "Carp" => "0";
 requires "Devel::GlobalDestruction" => "0";
 requires "Dist::CheckConflicts" => "0.02";
+requires "Encode" => "0";
 requires "Fcntl" => "0";
 requires "IO::Handle" => "0";
 requires "Module::Runtime" => "0";
