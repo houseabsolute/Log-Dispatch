@@ -10,7 +10,6 @@ MANIFEST
 META.yml
 MYMETA.yml
 Makefile
-Makefile.PL
 Makefile.old
 README
 \#*\#
