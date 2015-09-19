@@ -124,7 +124,8 @@ sub _run_helper {
         },
     );
 
-    chomp $_ for grep {defined} $stdout, $stderr;
+    # We want to remove all line endings on any platform.
+    s/[\r\n]+$// for grep {defined} $stdout, $stderr;
 
     return ( $stdout, $stderr );
 }

@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Fixed t/08-screen.t on Windows platforms.
+
+
 2.50     2015-09-02
 
 - Changed how the Screen output handles UTF-8 data once more. The Screen
