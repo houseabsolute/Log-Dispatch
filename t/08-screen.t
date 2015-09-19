@@ -119,8 +119,8 @@ sub _run_helper {
         \undef,
         \$stdout,
         \$stderr, {
-            binmode_stdout => ':encoding(UTF-8)',
-            binmode_stderr => ':encoding(UTF-8)',
+            binmode_stdout => ':encoding(UTF-8):crlf',
+            binmode_stderr => ':encoding(UTF-8):crlf',
         },
     );
 
