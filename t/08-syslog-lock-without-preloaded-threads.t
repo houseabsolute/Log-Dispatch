@@ -14,10 +14,9 @@ use Test::Requires {
     'Sys::Syslog' => '0.28',
 };
 
-use threads;
-use threads::shared;
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
+
 
 no warnings 'redefine', 'once';
 
@@ -48,7 +47,7 @@ SKIP:
     is_deeply(
         \@log,
         [ [ 'INFO', 'Foo thread' ] ],
-        'passed message to syslog (with thread lock)'
+        'passed message to syslog (with thread lock, but no preloaded threads module)'
     );
 }
 
