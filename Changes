@@ -5,6 +5,9 @@
   process and then recreated in the children. If the close_after_write
   parameter was false, then there would be a deadlock.
 
+- Made Syslog work on a threaded Perl when the threads module was not
+  explicitly loaded. Fixed by Konrad Bucheli. GitHub #13.
+
 
 2.53     2016-01-14
 
