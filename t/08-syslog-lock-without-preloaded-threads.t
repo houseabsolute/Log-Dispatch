@@ -17,7 +17,6 @@ use Test::Requires {
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
 
-
 no warnings 'redefine', 'once';
 
 my @sock;
