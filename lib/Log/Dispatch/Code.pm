@@ -3,7 +3,7 @@ package Log::Dispatch::Code;
 use strict;
 use warnings;
 
-our $VERSION = '2.52';
+our $VERSION = '2.53';
 
 use Log::Dispatch::Output;
 
