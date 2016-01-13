@@ -15,6 +15,7 @@ use Test::DependentModules 0.22 qw( test_all_dependents );
 $ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
 
 my %known_failures = map { $_ => 1 } (
+    'Log-Dispatch-FileRotate',       # Prints out broken TAP
     'Log-Dispatch-Gtk2-Notify',      # requires Gtk2
     'Log-Dispatch-MacGrowl',         # Mac only
     'Log-Dispatch-Scribe',           # fails its pod coverage test
