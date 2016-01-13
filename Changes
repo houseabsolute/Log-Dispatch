@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.52     2016-01-13
+
 - Make File::Locked output do an explicit unlock if the close_after_write
   option is not set. Without this it would open the file once in each process,
   attempting to get a lock at open time, pretty much guaranteeing a deadlock
