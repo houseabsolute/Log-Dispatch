@@ -1,5 +1,12 @@
 {{$NEXT}}
 
+- Make File::Locked output do an explicit unlock if the close_after_write
+  option is not set. Without this it would open the file once in each process,
+  attempting to get a lock at open time, pretty much guaranteeing a deadlock
+  in a multiprocess environment. Now it should work sanely whether
+  close_after_write is true or not.
+
+
 2.51     2015-09-19
 
 - Fixed t/08-screen.t on Windows platforms.

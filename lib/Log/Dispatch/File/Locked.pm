@@ -24,6 +24,15 @@ sub _open_file {
         or die "Cannot seek to end of '$self->{filename}': $!";
 }
 
+sub log_message {
+    my $self = shift;
+
+    $self->SUPER::log_message(@_);
+    return unless $self->{close};
+
+    flock( $self->{fh}, LOCK_UN );
+}
+
 1;
 
 # ABSTRACT: Subclass of Log::Dispatch::File to facilitate locking
@@ -52,20 +61,6 @@ __END__
 
 This module acts exactly like L<Log::Dispatch::File> except that it
 obtains an exclusive lock on the file while opening it.
-
-=head1 CAVEATS
-
-B<DANGER!> Use very carefully in multi-process environments. Because the lock
-is obtained at file open time, not at write time, you may experience deadlocks
-in your system.
-
-You can partially work around this by using the C<close_after_write> option,
-which causes the file to be re-opened every time a log message is written.
-
-Alternatively, the C<syswrite> option does atomic writes, which may mean that
-you don't need locking at all.
-
-See  L<Log::Dispatch::File>) for details on these options.
 
 =head1 SEE ALSO
 
