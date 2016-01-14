@@ -24,6 +24,7 @@ on 'test' => sub {
   requires "Getopt::Long" => "0";
   requires "IO::File" => "0";
   requires "IPC::Run3" => "0";
+  requires "POSIX" => "0";
   requires "PerlIO" => "0";
   requires "Test::Fatal" => "0";
   requires "Test::More" => "0.96";

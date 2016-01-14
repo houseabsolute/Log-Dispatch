@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.53     2016-01-14
+
 - Actually fix File::Locked, this time with some actual tests.
 
 
