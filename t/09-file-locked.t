@@ -28,6 +28,8 @@ sub _run_children {
     my $dir = tempdir( CLEANUP => 1 );
     my $file = File::Spec->catfile( $dir, 'lock-test.log' );
 
+    my $logger = _dispatch_for_file( $close_after_write, $file );
+
     my %pids;
     for ( 1 .. $ChildCount ) {
         if ( my $pid = fork ) {
@@ -62,7 +64,24 @@ sub _write_to_file {
     my $close_after_write = shift;
     my $file              = shift;
 
-    my $dispatch = Log::Dispatch->new(
+    my $dispatch = _dispatch_for_file( $close_after_write, $file );
+
+    # The sleep makes a deadlock much more likely if the locking logic is not
+    # working correctly. Without it each child process runs so quickly that
+    # they are unlikely to step on each other.
+    $dispatch->info(1);
+    sleep 1;
+    $dispatch->info(2);
+    $dispatch->info(3);
+
+    return;
+}
+
+sub _dispatch_for_file {
+    my $close_after_write = shift;
+    my $file              = shift;
+
+    return Log::Dispatch->new(
         outputs => [
             [
                 'File::Locked',
@@ -74,16 +93,6 @@ sub _write_to_file {
             ]
         ],
     );
-
-    # The sleep make a deadlock much more likely if the locking logic is not
-    # working correctly. Without it each child process runs so quickly that
-    # they are unlikely to step on each other.
-    $dispatch->info(1);
-    sleep 1;
-    $dispatch->info(2);
-    $dispatch->info(3);
-
-    return;
 }
 
 sub _test_file_locked {

@@ -1,5 +1,11 @@
 {{$NEXT}}
 
+- Fixed File::Locked even more. While some deadlocks were eliminated, there
+  was still an issue when a Log::Dispatch object was created in a parent
+  process and then recreated in the children. If the close_after_write
+  parameter was false, then there would be a deadlock.
+
+
 2.53     2016-01-14
 
 - Actually fix File::Locked, this time with some actual tests.

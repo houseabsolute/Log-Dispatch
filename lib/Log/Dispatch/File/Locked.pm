@@ -9,10 +9,13 @@ our $VERSION = '2.54';
 
 use Fcntl qw(:DEFAULT :flock);
 
-sub _open_file {
+sub log_message {
     my $self = shift;
+    my %p    = @_;
 
-    $self->SUPER::_open_file();
+    if ( $self->{close} ) {
+        $self->_open_file;
+    }
 
     my $fh = $self->{fh};
 
@@ -22,15 +25,22 @@ sub _open_file {
     # just in case there was an append while we waited for the lock
     seek( $fh, 0, 2 )
         or die "Cannot seek to end of '$self->{filename}': $!";
-}
 
-sub log_message {
-    my $self = shift;
+    if ( $self->{syswrite} ) {
+        defined syswrite( $fh, $p{message} )
+            or die "Cannot write to '$self->{filename}': $!";
+    }
+    else {
+        print $fh $p{message}
+            or die "Cannot write to '$self->{filename}': $!";
+    }
 
-    $self->SUPER::log_message(@_);
-    return if $self->{close};
-
-    flock( $self->{fh}, LOCK_UN );
+    flock( $fh, LOCK_UN ) or die "Cannot unlock '$self->{filename}'";
+    if ( $self->{close} ) {
+        close $fh
+            or die "Cannot close '$self->{filename}': $!";
+        delete $self->{fh};
+    }
 }
 
 1;
