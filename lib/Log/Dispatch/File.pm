@@ -92,7 +92,6 @@ sub _basic_init {
     else {
         $self->{mode} = '>';
     }
-
 }
 
 sub _make_handle {
@@ -154,6 +153,7 @@ sub log_message {
     if ( $self->{close} ) {
         close $fh
             or die "Cannot close '$self->{filename}': $!";
+        delete $self->{fh};
     }
 }
 

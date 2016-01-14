@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Actually fix File::Locked, this time with some actual tests.
+
+
 2.52     2016-01-13
 
 - Make File::Locked output do an explicit unlock if the close_after_write

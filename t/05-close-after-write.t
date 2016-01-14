@@ -78,10 +78,10 @@ my $dir = tempdir( CLEANUP => 1 );
         $handle{no_caw},
         'handle has not changed when not using CAW'
     );
-    isnt(
+    is(
         $logger->output('caw')->{fh},
-        $handle{caw},
-        'handle has changed when using CAW'
+        undef,
+        'handle is deleted when using CAW'
     );
 }
 

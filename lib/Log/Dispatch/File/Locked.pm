@@ -28,7 +28,7 @@ sub log_message {
     my $self = shift;
 
     $self->SUPER::log_message(@_);
-    return unless $self->{close};
+    return if $self->{close};
 
     flock( $self->{fh}, LOCK_UN );
 }
