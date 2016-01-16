@@ -8,6 +8,9 @@
 - Made Syslog work on a threaded Perl when the threads module was not
   explicitly loaded. Fixed by Konrad Bucheli. GitHub #13.
 
+- The log() method now accepts a level parameter as an integer. Fixed by Steve
+  Bertrand. GitHub #15.
+
 
 2.53     2016-01-14
 

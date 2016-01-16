@@ -163,6 +163,16 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
+    if ($p{level} =~ /[0-7]/){
+
+        my @levels = qw(
+            debug info notice warning error
+            critical alert emergency
+        );
+
+        $p{level} = $levels[$p{level}];
+    }
+
     return unless $self->would_log( $p{level} );
 
     $self->_log_to_outputs( $self->_prepare_message(%p) );
@@ -254,8 +264,11 @@ sub output {
 
 sub level_is_valid {
     shift;
-    my $level = shift
-        or Carp::croak('Logging level was not provided');
+    my $level = shift;
+
+    if (! defined $level) {
+        Carp::croak('Logging level was not provided');
+    }
 
     return $LEVELS{$level};
 }
@@ -403,9 +416,11 @@ made to the outputs or callbacks that the object contains are not shared.
 
 =head2 $dispatch->log( level => $, message => $ or \& )
 
-Sends the message (at the appropriate level) to all the
-output objects that the dispatcher contains (by calling the
-C<log_to> method repeatedly).
+Sends the message (at the appropriate level) to all the output objects that
+the dispatcher contains (by calling the C<log_to> method repeatedly).
+
+The level can be specified by name or by an integer from 0 (debug) to 7
+(critical).
 
 This method also accepts a subroutine reference as the message
 argument. This reference will be called only if there is an output

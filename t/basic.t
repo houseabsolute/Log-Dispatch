@@ -1110,6 +1110,80 @@ SKIP:
     );
 }
 
+{
+    my $dispatch = Log::Dispatch->new;
+    my $log = File::Spec->catdir( $tempdir, 'emerg.log' );
+
+    $dispatch->add(
+        Log::Dispatch::File->new(
+            name      => 'file1',
+            min_level => 3,
+            filename  => $log,
+        )
+    );
+
+    $dispatch->log( level => 'info',  message => "info level 1\n" );
+    $dispatch->log( level => 'emerg', message => "emerg level 1\n" );
+    $dispatch->log( level => 'warn',  message => "warn level 1\n" );
+    $dispatch->log( level => 3,       message => "bug 106495 1\n" );
+    $dispatch->log( level => 4,       message => "bug 106495 2\n" );
+    $dispatch->log( level => 1,       message => "bug 106495 3\n" );
+
+    open my $fh, '<', $log or die $!;
+    my @log = <$fh>;
+    close $fh;
+
+    is( $log[0], "emerg level 1\n", 'at level 3, emerg works' );
+    is( $log[1], "warn level 1\n",  'at level 3, warn works' );
+    is(
+        $log[2], "bug 106495 1\n",
+        'level as integer works with min_level 3 and level 3'
+    );
+    is(
+        $log[3], "bug 106495 2\n",
+        'level as integer works with min_level 3 and level 4'
+    );
+    is(
+        $log[4], undef,
+        'using integer level works with min_level 3 and level 1'
+    );
+}
+
+{
+    my $dispatch = Log::Dispatch->new;
+    my $log = File::Spec->catdir( $tempdir, 'emerg.log' );
+
+    $dispatch->add(
+        Log::Dispatch::File->new(
+            name      => 'file1',
+            min_level => 0,
+            filename  => $log,
+        )
+    );
+
+    $dispatch->log( level => 0, message => "bug 106495 0\n" );
+    $dispatch->log( level => 1, message => "bug 106495 1\n" );
+    $dispatch->log( level => 2, message => "bug 106495 2\n" );
+    $dispatch->log( level => 3, message => "bug 106495 3\n" );
+    $dispatch->log( level => 4, message => "bug 106495 4\n" );
+    $dispatch->log( level => 5, message => "bug 106495 5\n" );
+    $dispatch->log( level => 6, message => "bug 106495 6\n" );
+    $dispatch->log( level => 7, message => "bug 106495 7\n" );
+
+    open my $fh, '<', $log or die $!;
+    my @log = <$fh>;
+    close $fh;
+
+    is( $log[0], "bug 106495 0\n", 'at level 0, int works' );
+    is( $log[1], "bug 106495 1\n", 'at level 1, int works' );
+    is( $log[2], "bug 106495 2\n", 'at level 2, int works' );
+    is( $log[3], "bug 106495 3\n", 'at level 3, int works' );
+    is( $log[4], "bug 106495 4\n", 'at level 4, int works' );
+    is( $log[5], "bug 106495 5\n", 'at level 5, int works' );
+    is( $log[6], "bug 106495 6\n", 'at level 6, int works' );
+    is( $log[7], "bug 106495 7\n", 'at level 7, int works' );
+}
+
 done_testing();
 
 package Log::Dispatch::String;
