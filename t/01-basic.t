@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 
+use Data::Dumper;
 use Test::More 0.88;
 use Test::Fatal;
 
@@ -1108,6 +1109,40 @@ SKIP:
         ],
         'code received the expected messages'
     );
+}
+{# bug 106495
+
+    my $dispatch = Log::Dispatch->new;
+    my $log = File::Spec->catdir( $tempdir, 'emerg.log' );
+
+    $dispatch->add(
+        Log::Dispatch::File->new(
+            name      => 'file1',
+            min_level => 3,
+            filename  => $log,
+        )
+    );
+
+    $dispatch->log( level => 'info',  message => "info level 1\n" );
+    $dispatch->log( level => 'emerg', message => "emerg level 1\n" );
+    $dispatch->log( level => 'warn',  message => "warn level 1\n" );
+    $dispatch->log( level => 3,  message => "bug 106495 1\n" );
+    $dispatch->log( level => 4,  message => "bug 106495 2\n" );
+    $dispatch->log( level => 1,  message => "bug 106495 3\n" );
+
+    $dispatch->log( level => 0,  message => "bug 106495 3\n" );
+
+
+    open my $fh, '<', $log or die $!;
+    my @log = <$fh>;
+    close $fh;
+
+
+    is ($log[0], "emerg level 1\n", 'at level 3, emerg works');
+    is ($log[1], "warn level 1\n", 'at level 3, warn works');
+    is ($log[2], "bug 106495 1\n", 'nummerical level works with min_level 3 and level 3');
+    is ($log[3], "bug 106495 2\n", 'nummerical level works with min_level 3 and level 4');
+    is ($log[4], undef, 'using numerical level works with min_level 3 and level 1');
 }
 
 done_testing();
