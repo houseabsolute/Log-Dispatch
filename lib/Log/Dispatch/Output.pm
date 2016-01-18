@@ -9,21 +9,11 @@ use Log::Dispatch;
 
 use base qw( Log::Dispatch::Base );
 
+use Log::Dispatch::Vars qw( %LevelNamesToNumbers @OrderedLevels );
 use Params::Validate qw(validate SCALAR ARRAYREF CODEREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
 use Carp ();
-
-my $level_names
-    = [qw( debug info notice warning error critical alert emergency )];
-my $ln            = 0;
-my $level_numbers = {
-    ( map { $_ => $ln++ } @{$level_names} ),
-    warn  => 3,
-    err   => 4,
-    crit  => 5,
-    emerg => 7
-};
 
 sub new {
     my $proto = shift;
@@ -69,8 +59,8 @@ sub _basic_init {
         }
     );
 
-    $self->{level_names}   = $level_names;
-    $self->{level_numbers} = $level_numbers;
+    $self->{level_names}   = \@OrderedLevels;
+    $self->{level_numbers} = \%LevelNamesToNumbers;
 
     $self->{name} = $p{name} || $self->_unique_name();
 

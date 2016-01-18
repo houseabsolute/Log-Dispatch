@@ -9,43 +9,20 @@ our $VERSION = '2.54';
 
 use base qw( Log::Dispatch::Base );
 
+use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels );
 use Module::Runtime qw( use_package_optimistically );
 use Params::Validate 1.03 qw(validate_with ARRAYREF CODEREF);
 use Carp ();
 
-our %LEVELS;
-
 BEGIN {
-    my %level_map = (
-        (
-            map { $_ => $_ }
-                qw(
-                debug
-                info
-                notice
-                warning
-                error
-                critical
-                alert
-                emergency
-                )
-        ),
-        warn  => 'warning',
-        err   => 'error',
-        crit  => 'critical',
-        emerg => 'emergency',
-    );
-
-    foreach my $l ( keys %level_map ) {
+    foreach my $l ( keys %CanonicalLevelNames ) {
         my $sub = sub {
             my $self = shift;
             $self->log(
-                level => $level_map{$l},
+                level => $CanonicalLevelNames{$l},
                 message => @_ > 1 ? "@_" : $_[0],
             );
         };
-
-        $LEVELS{$l} = 1;
 
         no strict 'refs';
         *{$l} = $sub;
@@ -163,14 +140,8 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
-    if ($p{level} =~ /[0-7]/){
-
-        my @levels = qw(
-            debug info notice warning error
-            critical alert emergency
-        );
-
-        $p{level} = $levels[$p{level}];
+    if ( exists $p{level} && $p{level} =~ /\A[0-7]\z/ ) {
+        $p{level} = $OrderedLevels[ $p{level} ];
     }
 
     return unless $self->would_log( $p{level} );
@@ -270,7 +241,7 @@ sub level_is_valid {
         Carp::croak('Logging level was not provided');
     }
 
-    return $LEVELS{$level};
+    return $CanonicalLevelNames{$level};
 }
 
 sub would_log {
