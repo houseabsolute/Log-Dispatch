@@ -237,7 +237,7 @@ sub level_is_valid {
     shift;
     my $level = shift;
 
-    if (! defined $level) {
+    if ( !defined $level ) {
         Carp::croak('Logging level was not provided');
     }
 
