@@ -2,6 +2,7 @@ requires "Carp" => "0";
 requires "Devel::GlobalDestruction" => "0";
 requires "Dist::CheckConflicts" => "0.02";
 requires "Encode" => "0";
+requires "Exporter" => "0";
 requires "Fcntl" => "0";
 requires "IO::Handle" => "0";
 requires "JSON::PP" => "2.27300";
@@ -16,7 +17,6 @@ requires "warnings" => "0";
 
 on 'test' => sub {
   requires "Data::Dumper" => "0";
-  requires "Exporter" => "0";
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
   requires "File::Temp" => "0";

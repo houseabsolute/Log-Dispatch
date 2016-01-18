@@ -23,6 +23,7 @@ my %WriteMakefileArgs = (
     "Devel::GlobalDestruction" => 0,
     "Dist::CheckConflicts" => "0.02",
     "Encode" => 0,
+    "Exporter" => 0,
     "Fcntl" => 0,
     "IO::Handle" => 0,
     "JSON::PP" => "2.27300",
@@ -36,7 +37,6 @@ my %WriteMakefileArgs = (
   },
   "TEST_REQUIRES" => {
     "Data::Dumper" => 0,
-    "Exporter" => 0,
     "ExtUtils::MakeMaker" => 0,
     "File::Spec" => 0,
     "File::Temp" => 0,
