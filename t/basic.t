@@ -912,8 +912,8 @@ SKIP:
     };
 
     ok( $e, 'died when calling log_and_die()' );
-    like( $e, qr{this is my message},     'error contains expected message' );
-    like( $e, qr{01-basic\.t line 9\d\d}, 'error croaked' );
+    like( $e, qr{this is my message},  'error contains expected message' );
+    like( $e, qr{basic\.t line 9\d\d}, 'error croaked' );
 
     is( $string, 'this is my message', 'message is logged' );
 
@@ -928,7 +928,7 @@ SKIP:
     ok( $e, 'died when calling log_and_croak()' );
     like( $e, qr{croak}, 'error contains expected message' );
     like(
-        $e, qr{01-basic\.t line 10005},
+        $e, qr{basic\.t line 10005},
         'error croaked from perspective of caller'
     );
 
