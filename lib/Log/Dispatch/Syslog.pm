@@ -69,7 +69,7 @@ sub _init {
         eval 'use threads; use threads::shared'
             unless $threads_loaded;
         $threads_loaded = 1;
-        threads::shared::share( \$thread_lock );
+        &threads::shared::share( \$thread_lock );
     }
 
     $self->{priorities} = [
