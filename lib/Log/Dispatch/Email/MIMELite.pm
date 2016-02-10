@@ -25,7 +25,7 @@ sub send_email {
     $mail{From} = $self->{from} if defined $self->{from};
 
     local $?;
-    unless ( MIME::Lite->new(%mail)->send ) {
+    unless ( MIME::Lite->new(%mail)->send( $self->{send_args} ) ) {
         warn "Error sending mail with MIME::Lite";
     }
 }
@@ -46,7 +46,8 @@ __END__
               'Email::MIMELite',
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
-              subject   => 'Big error!'
+              subject   => 'Big error!',
+              send_args => [ 'smtp', 'smtp.example.org', AuthUser => 'john', AuthPass => 'secret' ]
           ]
       ],
   );
@@ -57,5 +58,10 @@ __END__
 
 This is a subclass of L<Log::Dispatch::Email> that implements the
 send_email method using the L<MIME::Lite> module.
+
+=head1 CHANGING HOW MAIL IS SENT
+
+To change how mail is sent, set send_args to according to what
+L<< MIME::Lite->send >> expects.
 
 =cut

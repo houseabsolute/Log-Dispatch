@@ -25,7 +25,7 @@ sub send_email {
 
     local $?;
     eval {
-        my $fh = $msg->open
+        my $fh = $msg->open( @{$self->{send_args}} )
             or die "Cannot open handle to mail program";
 
         $fh->print( $p{message} )
@@ -54,7 +54,8 @@ __END__
               'Email::MailSend',
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
-              subject   => 'Big error!'
+              subject   => 'Big error!',
+              send_args => [ 'smtp', Server => 'mail.example.org' ],
           ]
       ],
   );
@@ -68,12 +69,25 @@ method using the L<Mail::Send> module.
 
 =head1 CHANGING HOW MAIL IS SENT
 
+There are two ways to change how mail is sent:
+
+=over 4
+
+=item 1
+
 Since L<Mail::Send> is a subclass of L<Mail::Mailer>, you can change
 how mail is sent from this module by simply C<use>ing L<Mail::Mailer>
 in your code before mail is sent. For example, to send mail via smtp,
 you could do:
 
   use Mail::Mailer 'smtp', Server => 'foo.example.com';
+
+=item 2
+
+Set send_args to the same arguments as
+the constructor of L<Mail::Mailer> expects.
+
+=back
 
 For more details, see the L<Mail::Mailer> docs.
 
