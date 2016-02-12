@@ -60,7 +60,7 @@ __END__
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
               subject   => 'Big error!',
-              send_args => [ 'smtp', 'smtp.example.org', AuthUser => 'john', AuthPass => 'secret' ]
+              send_args => [ 'smtp', 'smtp.example.org', { AuthUser => 'john', AuthPass => 'secret' } ]
           ]
       ],
   );
