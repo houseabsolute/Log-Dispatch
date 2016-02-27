@@ -21,7 +21,7 @@ my %params = (
 
 my @tests = (
     {
-        params => { %params, 'binmode' => ':utf8' },
+        params           => { %params, 'binmode' => ':utf8' },
         message          => "foo bar\x{20AC}",
         expected_message => "foo bar\xe2\x82\xac",
     },

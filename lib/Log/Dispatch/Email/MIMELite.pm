@@ -16,7 +16,7 @@ sub send_email {
     my %p    = @_;
 
     my %mail = (
-        To => ( join ',', @{ $self->{to} } ),
+        To      => ( join ',', @{ $self->{to} } ),
         Subject => $self->{subject},
         Type    => 'TEXT',
         Data    => $p{message},
