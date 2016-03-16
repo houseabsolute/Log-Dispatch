@@ -50,7 +50,7 @@ __END__
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
               subject   => 'Big error!',
-              send_args => { smtp => '127.0.0.1', retries => 10, delay => 5, debug => 0 }
+              send_args => { smtp => '127.0.0.1', retries => 10, delay => 5, debug => 0, X-Custom-Header => 'epale' }
           ]
       ],
   );

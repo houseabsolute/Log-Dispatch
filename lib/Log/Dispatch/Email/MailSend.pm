@@ -55,7 +55,7 @@ __END__
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
               subject   => 'Big error!',
-              send_args => [ 'smtp', Server => 'mail.example.org' ],
+              send_args => [ 'smtp', Server => 'mail.example.org', Hello => 'foobar.com' ],
           ]
       ],
   );
