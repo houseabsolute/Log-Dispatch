@@ -16,7 +16,7 @@ sub send_email {
     my %p    = @_;
 
     my %mail = (
-        To => ( join ',', @{ $self->{to} } ),
+        To      => ( join ',', @{ $self->{to} } ),
         Subject => $self->{subject},
         Type    => 'TEXT',
         Data    => $p{message},
@@ -24,26 +24,11 @@ sub send_email {
 
     $mail{From} = $self->{from} if defined $self->{from};
 
+    local $?;
     warn "Error sending mail with MIME::Lite"
-        unless do {
-        local $?;
-        if ( defined $self->{send_args} && @{ $self->{send_args} } > 0 ) {
-            my @args = @{ $self->{send_args} };
-            if ( @args >= 3 ) {
-                MIME::Lite->new(%mail)
-                    ->send( $args[0], $args[1], @args[ 2 .. $#args ] );
-            }
-            elsif ( @args == 2 ) {
-                MIME::Lite->new(%mail)->send( $args[0], $args[1] );
-            }
-            else {
-                MIME::Lite->new(%mail)->send( $args[0] );
-            }
-        }
-        else {
-            MIME::Lite->new(%mail)->send;
-        }
-        };
+      unless do {
+        MIME::Lite->new(%mail)->send( @{ $self->{send_args} || [] } );
+      };
 
 }
 
@@ -64,7 +49,7 @@ __END__
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
               subject   => 'Big error!',
-              send_args => [ 'smtp', 'smtp.example.org', { AuthUser => 'john', AuthPass => 'secret' } ]
+              send_args => [ 'smtp', 'smtp.example.org', Port => 465, AuthUser => 'john', AuthPass => 'secret' ]
           ]
       ],
   );
