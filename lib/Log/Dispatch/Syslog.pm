@@ -65,10 +65,12 @@ sub _init {
     $self->{$_} = $p{$_} for qw( ident logopt facility socket lock );
     if ( $self->{lock} ) {
 
-        # These need to be loaded with use, not require.
-        eval 'use threads; use threads::shared'
-            unless $threads_loaded;
-        $threads_loaded = 1;
+        unless ($threads_loaded) {
+            local ($@, $SIG{__DIE__});
+            # These need to be loaded with use, not require.
+            eval 'use threads; use threads::shared';
+            $threads_loaded = 1;
+        }
         &threads::shared::share( \$thread_lock );
     }
 
@@ -92,6 +94,7 @@ sub log_message {
 
     lock($thread_lock) if $self->{lock};
 
+    local ($@, $SIG{__DIE__});
     eval {
         if ( defined $self->{socket} ) {
             Sys::Syslog::setlogsock(

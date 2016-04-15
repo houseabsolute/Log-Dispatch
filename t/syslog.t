@@ -67,4 +67,23 @@ local *Sys::Syslog::syslog = sub { push @log, [@_] };
     );
 }
 
+{
+    @log = ();
+   my $dispatch = Log::Dispatch->new;
+    $dispatch->add(
+        Log::Dispatch::Syslog->new(
+            name      => 'syslog',
+            min_level => 'debug',
+            socket    => { type => 'foo' },
+        )
+    );
+
+    eval { die "foo!" };
+
+    $dispatch->debug('Foo');
+
+    like($@, qr/^foo!/, '$@ is not changed');
+}
+
+
 done_testing();
