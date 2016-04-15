@@ -52,7 +52,7 @@ sub send_email {
     my $self = shift;
     my %p    = @_;
 
-    local $?;
+    local ($?, $@, $SIG{__DIE__});
     eval {
         my $sender = Mail::Sender->new(
             {
