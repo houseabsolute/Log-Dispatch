@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- The values of $@, $!, and $? are protected in various cases where they could
+  end up being changed by logging code. Patch by Salvador Fandiño. GitHub #18.
+
+
 2.54     2016-01-18
 
 - Fixed File::Locked even more. While some deadlocks were eliminated, there

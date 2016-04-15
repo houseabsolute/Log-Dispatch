@@ -34,6 +34,7 @@ sub log {
 
     return unless $self->_should_log( $p{level} );
 
+    local $!;
     $p{message} = $self->_apply_callbacks(%p)
         if $self->{callbacks};
 
