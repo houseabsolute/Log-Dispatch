@@ -4,7 +4,7 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
 # VERSION
 
-version 2.44
+version 2.55
 
 # SYNOPSIS
 
@@ -109,9 +109,11 @@ made to the outputs or callbacks that the object contains are not shared.
 
 ## $dispatch->log( level => $, message => $ or \\& )
 
-Sends the message (at the appropriate level) to all the
-output objects that the dispatcher contains (by calling the
-`log_to` method repeatedly).
+Sends the message (at the appropriate level) to all the output objects that
+the dispatcher contains (by calling the `log_to` method repeatedly).
+
+The level can be specified by name or by an integer from 0 (debug) to 7
+(critical).
 
 This method also accepts a subroutine reference as the message
 argument. This reference will be called only if there is an output
@@ -349,14 +351,6 @@ Simpler than Log::Log4perl.
 A very different API for doing many of the same things that
 Log::Dispatch does. Originally written by Raphael Manfredi.
 
-# SUPPORT
-
-Please submit bugs and patches to the CPAN RT system at
-http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log%3A%3ADispatch
-or via email at bug-log-dispatch@rt.cpan.org.
-
-Support questions can be sent to me at my email address, shown below.
-
 # DONATIONS
 
 If you'd like to thank me for the work I've done on this module,
@@ -387,13 +381,57 @@ the button on this page:
 [Log::Dispatch::Handle](https://metacpan.org/pod/Log::Dispatch::Handle), [Log::Dispatch::Output](https://metacpan.org/pod/Log::Dispatch::Output), [Log::Dispatch::Screen](https://metacpan.org/pod/Log::Dispatch::Screen),
 [Log::Dispatch::Syslog](https://metacpan.org/pod/Log::Dispatch::Syslog)
 
+# SUPPORT
+
+Please submit bugs and patches to the CPAN RT system at
+http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log%3A%3ADispatch
+or via email at bug-log-dispatch@rt.cpan.org.
+
+Support questions can be sent to me at my email address, shown below.
+
+Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=Log-Dispatch)
+(or [bug-log-dispatch@rt.cpan.org](mailto:bug-log-dispatch@rt.cpan.org)).
+
+I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+
+# DONATIONS
+
+If you'd like to thank me for the work I've done on this module, please
+consider making a "donation" to me via PayPal. I spend a lot of free time
+creating free software, and would appreciate any support you'd care to offer.
+
+Please note that **I am not suggesting that you must do this** in order for me
+to continue working on this particular software. I will continue to do so,
+inasmuch as I have in the past, for as long as it interests me.
+
+Similarly, a donation made in this way will probably not make me work on this
+software much more, unless I get so many donations that I can consider working
+on free software full time (let's all have a chuckle at that together).
+
+To donate, log into PayPal and send money to autarch@urth.org, or use the
+button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html).
+
 # AUTHOR
 
-Dave Rolsky <autarch@urth.org>
+Dave Rolsky &lt;autarch@urth.org>
 
-# COPYRIGHT AND LICENSE
+# CONTRIBUTORS
 
-This software is Copyright (c) 2014 by Dave Rolsky.
+- Gregory Oschwald &lt;goschwald@maxmind.com>
+- Karen Etheridge &lt;ether@cpan.org>
+- Konrad Bucheli &lt;kb@open.ch>
+- Olaf Alders &lt;olaf@wundersolutions.com>
+- Olivier Mengué &lt;dolmen@cpan.org>
+- Rohan Carly &lt;se456@rohan.id.au>
+- Ross Attrill &lt;ross.attrill@gmail.com>
+- Steve Bertrand &lt;steveb@cpan.org>
+- swartz@jonathan-swartzs-macbook-4.local &lt;swartz@jonathan-swartzs-macbook-4.local>
+- swartz@pobox.com &lt;swartz@pobox.com>
+- Whitney Jackson &lt;whitney.jackson@baml.com>
+
+# COPYRIGHT AND LICENCE
+
+This software is Copyright (c) 2016 by Dave Rolsky.
 
 This is free software, licensed under:
 

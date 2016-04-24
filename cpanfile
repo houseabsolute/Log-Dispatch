@@ -5,7 +5,6 @@ requires "Encode" => "0";
 requires "Exporter" => "0";
 requires "Fcntl" => "0";
 requires "IO::Handle" => "0";
-requires "JSON::PP" => "2.27300";
 requires "Module::Runtime" => "0";
 requires "Params::Validate" => "1.03";
 requires "Scalar::Util" => "0";
@@ -42,8 +41,13 @@ on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
 };
 
+on 'configure' => sub {
+  suggests "JSON::PP" => "2.27300";
+};
+
 on 'develop' => sub {
   requires "Code::TidyAll" => "0.24";
+  requires "Cwd" => "0";
   requires "MIME::Lite" => "0";
   requires "Mail::Send" => "0";
   requires "Mail::Sender" => "0";
@@ -51,11 +55,14 @@ on 'develop' => sub {
   requires "Perl::Critic" => "1.123";
   requires "Perl::Tidy" => "20140711";
   requires "Pod::Coverage::TrustPod" => "0";
+  requires "Pod::Wordlist" => "0";
   requires "Test::CPAN::Changes" => "0.19";
+  requires "Test::CPAN::Meta::JSON" => "0.16";
   requires "Test::Code::TidyAll" => "0.24";
+  requires "Test::DependentModules" => "0.22";
   requires "Test::EOL" => "0";
   requires "Test::Mojibake" => "0";
-  requires "Test::More" => "0.88";
+  requires "Test::More" => "0.96";
   requires "Test::NoTabs" => "0";
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
