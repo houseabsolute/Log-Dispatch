@@ -418,6 +418,7 @@ Dave Rolsky &lt;autarch@urth.org>
 # CONTRIBUTORS
 
 - Gregory Oschwald &lt;goschwald@maxmind.com>
+- Jonathan Swartz &lt;swartz@pobox.com>
 - Karen Etheridge &lt;ether@cpan.org>
 - Konrad Bucheli &lt;kb@open.ch>
 - Olaf Alders &lt;olaf@wundersolutions.com>
@@ -425,8 +426,6 @@ Dave Rolsky &lt;autarch@urth.org>
 - Rohan Carly &lt;se456@rohan.id.au>
 - Ross Attrill &lt;ross.attrill@gmail.com>
 - Steve Bertrand &lt;steveb@cpan.org>
-- swartz@jonathan-swartzs-macbook-4.local &lt;swartz@jonathan-swartzs-macbook-4.local>
-- swartz@pobox.com &lt;swartz@pobox.com>
 - Whitney Jackson &lt;whitney.jackson@baml.com>
 
 # COPYRIGHT AND LICENCE
