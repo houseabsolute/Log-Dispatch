@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.55     2016-05-06
+
 - The values of $@, $!, and $? are protected in various cases where they could
   end up being changed by logging code. Patch by Salvador Fandiño. GitHub #18.
 
