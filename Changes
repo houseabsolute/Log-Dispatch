@@ -3,6 +3,8 @@
 - The values of $@, $!, and $? are protected in various cases where they could
   end up being changed by logging code. Patch by Salvador Fandiño. GitHub #18.
 
+- Treat MSYS2 like Cygwin in tests. Fix by Graham Ollis. GitHub #19.
+
 
 2.54     2016-01-18
 
