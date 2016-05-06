@@ -10,7 +10,7 @@ plan skip_all =>
     'Must set LOG_DISPATCH_TEST_DEPS to true in order to run these tests'
     unless $ENV{LOG_DISPATCH_TEST_DEPS};
 
-$ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
+local $ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
 
 my %known_failures = map { $_ => 1 } (
     'Log-Dispatch-FileRotate',       # Prints out broken TAP
