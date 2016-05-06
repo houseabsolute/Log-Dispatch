@@ -4,13 +4,11 @@ use warnings;
 use Cwd qw( abs_path );
 use Test::More;
 
-BEGIN {
-    plan skip_all =>
-        'Must set LOG_DISPATCH_TEST_DEPS to true in order to run these tests'
-        unless $ENV{LOG_DISPATCH_TEST_DEPS};
-}
-
 use Test::DependentModules 0.22 qw( test_all_dependents );
+
+plan skip_all =>
+    'Must set LOG_DISPATCH_TEST_DEPS to true in order to run these tests'
+    unless $ENV{LOG_DISPATCH_TEST_DEPS};
 
 $ENV{PERL_TEST_DM_LOG_DIR} = abs_path('.');
 
