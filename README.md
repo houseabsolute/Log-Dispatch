@@ -4,7 +4,7 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
 # VERSION
 
-version 2.55
+version 2.56
 
 # SYNOPSIS
 
@@ -351,27 +351,6 @@ Simpler than Log::Log4perl.
 A very different API for doing many of the same things that
 Log::Dispatch does. Originally written by Raphael Manfredi.
 
-# DONATIONS
-
-If you'd like to thank me for the work I've done on this module,
-please consider making a "donation" to me via PayPal. I spend a lot of
-free time creating free software, and would appreciate any support
-you'd care to offer.
-
-Please note that **I am not suggesting that you must do this** in order
-for me to continue working on this particular software. I will
-continue to do so, inasmuch as I have in the past, for as long as it
-interests me.
-
-Similarly, a donation made in this way will probably not make me work
-on this software much more, unless I get so many donations that I can
-consider working on free software full time, which seems unlikely at
-best.
-
-To donate, log into PayPal and send money to autarch@urth.org or use
-the button on this page:
-[http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~autarch/fs-donation.html)
-
 # SEE ALSO
 
 [Log::Dispatch::ApacheLog](https://metacpan.org/pod/Log::Dispatch::ApacheLog), [Log::Dispatch::Email](https://metacpan.org/pod/Log::Dispatch::Email),
@@ -382,12 +361,6 @@ the button on this page:
 [Log::Dispatch::Syslog](https://metacpan.org/pod/Log::Dispatch::Syslog)
 
 # SUPPORT
-
-Please submit bugs and patches to the CPAN RT system at
-http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log%3A%3ADispatch
-or via email at bug-log-dispatch@rt.cpan.org.
-
-Support questions can be sent to me at my email address, shown below.
 
 Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=Log-Dispatch)
 (or [bug-log-dispatch@rt.cpan.org](mailto:bug-log-dispatch@rt.cpan.org)).
@@ -417,6 +390,7 @@ Dave Rolsky &lt;autarch@urth.org>
 
 # CONTRIBUTORS
 
+- Graham Ollis &lt;plicease@cpan.org>
 - Gregory Oschwald &lt;goschwald@maxmind.com>
 - Jonathan Swartz &lt;swartz@pobox.com>
 - Karen Etheridge &lt;ether@cpan.org>
@@ -425,6 +399,7 @@ Dave Rolsky &lt;autarch@urth.org>
 - Olivier Mengué &lt;dolmen@cpan.org>
 - Rohan Carly &lt;se456@rohan.id.au>
 - Ross Attrill &lt;ross.attrill@gmail.com>
+- Salvador Fandiño &lt;sfandino@yahoo.com>
 - Steve Bertrand &lt;steveb@cpan.org>
 - Whitney Jackson &lt;whitney.jackson@baml.com>
 

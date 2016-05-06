@@ -46,14 +46,13 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
-  requires "Code::TidyAll" => "0.24";
   requires "Cwd" => "0";
   requires "MIME::Lite" => "0";
   requires "Mail::Send" => "0";
   requires "Mail::Sender" => "0";
   requires "Mail::Sendmail" => "0";
-  requires "Perl::Critic" => "1.123";
-  requires "Perl::Tidy" => "20140711";
+  requires "Perl::Critic" => "1.126";
+  requires "Perl::Tidy" => "20160302";
   requires "Pod::Coverage::TrustPod" => "0";
   requires "Pod::Wordlist" => "0";
   requires "Test::CPAN::Changes" => "0.19";
@@ -66,6 +65,8 @@ on 'develop' => sub {
   requires "Test::NoTabs" => "0";
   requires "Test::Pod" => "1.41";
   requires "Test::Pod::Coverage" => "1.08";
+  requires "Test::Pod::LinkCheck" => "0";
+  requires "Test::Pod::No404s" => "0";
   requires "Test::Spelling" => "0.12";
   requires "Test::Version" => "1";
 };
