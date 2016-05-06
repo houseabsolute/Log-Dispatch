@@ -705,7 +705,7 @@ SKIP:
             'Mode should be 0777 or 0666'
         );
     }
-    elsif ( $^O =~ /cygwin/i ) {
+    elsif ( $^O =~ /cygwin|msys/i ) {
         ok(
             $mode_string == '0777' || $mode_string == '0644',
             'Mode should be 0777 or 0644'
