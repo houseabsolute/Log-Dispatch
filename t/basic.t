@@ -950,10 +950,16 @@ SKIP:
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'foo', 'first test w/o callback' );
 
+    my $cb = sub { return 'bar' };
     $string = '';
-    $dispatch->add_callback( sub { return 'bar' } );
+    $dispatch->add_callback($cb);
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'bar', 'second call, callback overrides message' );
+
+    $string = '';
+    $dispatch->remove_callback($cb);
+    $dispatch->log( level => 'debug', message => 'foo' );
+    is( $string, 'foo', 'third call, callback is removed' );
 }
 
 {
@@ -973,10 +979,16 @@ SKIP:
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'baz', 'first test gets orig callback result' );
 
+    my $cb = sub { return 'bar' };
     $string = '';
-    $dispatch->add_callback( sub { return 'bar' } );
+    $dispatch->add_callback($cb);
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'bar', 'second call, callback overrides message' );
+
+    $string = '';
+    $dispatch->remove_callback($cb);
+    $dispatch->log( level => 'debug', message => 'foo' );
+    is( $string, 'baz', 'third call, output callback is removed' );
 }
 
 {

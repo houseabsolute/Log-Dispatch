@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Added a remove_callback method to the main Log::Dispatch object as well as
+  all outputs.
+
+
 2.56     2016-05-06
 
 - Cleaned up some cruft in Pod. Some sections ended up in there twice.

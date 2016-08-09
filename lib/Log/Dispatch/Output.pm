@@ -269,6 +269,10 @@ level then it will croak.
 Adds a callback (like those given during construction). It is added to the end
 of the list of callbacks.
 
+=head2 $dispatch->remove_callback( $code )
+
+Remove the given callback from the list of callbacks.
+
 =head1 SUBCLASSING
 
 This class should be used as the base class for all logging objects

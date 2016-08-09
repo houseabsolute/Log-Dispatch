@@ -2,6 +2,7 @@ package Log::Dispatch::Base;
 
 use strict;
 use warnings;
+use Scalar::Util qw( refaddr );
 
 our $VERSION = '2.57';
 
@@ -45,6 +46,20 @@ sub add_callback {
     return;
 }
 
+sub remove_callback {
+    my $self = shift;
+    my $cb   = shift;
+
+    Carp::carp("given value $cb is not a valid callback")
+        unless ref $cb eq 'CODE';
+
+    my $cb_id = refaddr $cb;
+    $self->{callbacks}
+        = [ grep { refaddr $_ ne $cb_id } @{ $self->{callbacks} } ];
+
+    return;
+}
+
 1;
 
 # ABSTRACT: Code shared by dispatch and output objects.
@@ -52,6 +67,8 @@ sub add_callback {
 __END__
 
 =for Pod::Coverage add_callback
+
+=for Pod::Coverage remove_callback
 
 =head1 SYNOPSIS
 
