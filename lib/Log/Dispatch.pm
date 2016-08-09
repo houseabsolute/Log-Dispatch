@@ -449,6 +449,11 @@ Adds a callback (like those given during construction). It is added to the end
 of the list of callbacks. Note that this can also be called on individual
 output objects.
 
+=head2 $dispatch->remove_callback( $code )
+
+Remove the given callback from the list of callbacks. Note that this can also
+be called on individual output objects.
+
 =head2 $dispatch->callbacks()
 
 Returns a list of the callbacks in a given output.
