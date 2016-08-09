@@ -477,7 +477,7 @@ a warning if C<$^W> is true.
 
 =head2 $dispatch->remove($)
 
-Removes the object that matches the name given to the remove method.
+Removes the output object that matches the name given to the remove method.
 The return value is the object being removed or undef if no object
 matched this.
 
