@@ -4,6 +4,17 @@ use warnings;
 use Cwd qw( abs_path );
 use Test::More;
 
+# You'd think Test::Needs would be good enough here but it'll bail out under
+# RELEASE_TESTING if the needed module can't be loaded.
+BEGIN {
+    if ( $] < 5.010 ) {
+        plan skip_all =>
+            'Test::DependentModules cannot be loaded on Perl 5.8.x';
+    }
+}
+
+use Test::Requires { 'Test::DependentModules' => '0.22' };
+
 use Test::DependentModules 0.22 qw( test_all_dependents );
 
 plan skip_all =>
