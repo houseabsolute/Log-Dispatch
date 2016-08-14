@@ -4,7 +4,7 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
 # VERSION
 
-version 2.56
+version 2.57
 
 # SYNOPSIS
 
@@ -171,6 +171,11 @@ Adds a callback (like those given during construction). It is added to the end
 of the list of callbacks. Note that this can also be called on individual
 output objects.
 
+## $dispatch->remove\_callback( $code )
+
+Remove the given callback from the list of callbacks. Note that this can also
+be called on individual output objects.
+
 ## $dispatch->callbacks()
 
 Returns a list of the callbacks in a given output.
@@ -199,7 +204,7 @@ a warning if `$^W` is true.
 
 ## $dispatch->remove($)
 
-Removes the object that matches the name given to the remove method.
+Removes the output object that matches the name given to the remove method.
 The return value is the object being removed or undef if no object
 matched this.
 
@@ -386,24 +391,25 @@ button at [http://www.urth.org/~autarch/fs-donation.html](http://www.urth.org/~a
 
 # AUTHOR
 
-Dave Rolsky &lt;autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
 # CONTRIBUTORS
 
-- Graham Ollis &lt;plicease@cpan.org>
-- Gregory Oschwald &lt;goschwald@maxmind.com>
-- Jonathan Swartz &lt;swartz@pobox.com>
-- Karen Etheridge &lt;ether@cpan.org>
-- Konrad Bucheli &lt;kb@open.ch>
-- Olaf Alders &lt;olaf@wundersolutions.com>
-- Olivier Mengué &lt;dolmen@cpan.org>
-- Rohan Carly &lt;se456@rohan.id.au>
-- Ross Attrill &lt;ross.attrill@gmail.com>
-- Salvador Fandiño &lt;sfandino@yahoo.com>
-- Steve Bertrand &lt;steveb@cpan.org>
-- Whitney Jackson &lt;whitney.jackson@baml.com>
+- Doug Bell <madcityzen@gmail.com>
+- Graham Ollis <plicease@cpan.org>
+- Gregory Oschwald <goschwald@maxmind.com>
+- Jonathan Swartz <swartz@pobox.com>
+- Karen Etheridge <ether@cpan.org>
+- Konrad Bucheli <kb@open.ch>
+- Olaf Alders <olaf@wundersolutions.com>
+- Olivier Mengué <dolmen@cpan.org>
+- Rohan Carly <se456@rohan.id.au>
+- Ross Attrill <ross.attrill@gmail.com>
+- Salvador Fandiño <sfandino@yahoo.com>
+- Steve Bertrand <steveb@cpan.org>
+- Whitney Jackson <whitney.jackson@baml.com>
 
-# COPYRIGHT AND LICENCE
+# COPYRIGHT AND LICENSE
 
 This software is Copyright (c) 2016 by Dave Rolsky.
 
