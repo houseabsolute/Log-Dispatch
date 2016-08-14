@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More 0.88;
 
-use Test::Requires {
+use Test::Needs {
     'Sys::Syslog' => '0.28',
 };
 

@@ -10,7 +10,7 @@ BEGIN {
         unless $Config{usethreads};
 }
 
-use Test::Requires {
+use Test::Needs {
     'Sys::Syslog' => '0.28',
 };
 

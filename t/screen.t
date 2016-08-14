@@ -6,7 +6,7 @@ use lib 't/lib';
 
 use Test::More 0.88;
 
-use Test::Requires {
+use Test::Needs {
     'IPC::Run3' => 0,
 };
 

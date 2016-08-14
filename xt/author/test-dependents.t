@@ -13,7 +13,7 @@ BEGIN {
     }
 }
 
-use Test::Requires { 'Test::DependentModules' => '0.22' };
+use Test::Needs { 'Test::DependentModules' => '0.22' };
 
 use Test::DependentModules 0.22 qw( test_all_dependents );
 
