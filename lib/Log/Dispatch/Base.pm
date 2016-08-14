@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Scalar::Util qw( refaddr );
 
-our $VERSION = '2.57';
+our $VERSION = '2.58';
 
 sub _get_callbacks {
     shift;
