@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Switched from RT to the GitHub issue tracker.
+
+
 2.57     2016-08-13
 
 - Added a remove_callback method to the main Log::Dispatch object as well as
