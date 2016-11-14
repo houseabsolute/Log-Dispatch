@@ -4,7 +4,7 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
 # VERSION
 
-version 2.57
+version 2.58
 
 # SYNOPSIS
 
@@ -367,10 +367,9 @@ Log::Dispatch does. Originally written by Raphael Manfredi.
 
 # SUPPORT
 
-Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=Log-Dispatch)
-(or [bug-log-dispatch@rt.cpan.org](mailto:bug-log-dispatch@rt.cpan.org)).
+Bugs may be submitted through [https://github.com/houseabsolute/Log-Dispatch/issues](https://github.com/houseabsolute/Log-Dispatch/issues).
 
-I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
 
 # DONATIONS
 
