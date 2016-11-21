@@ -391,7 +391,7 @@ Sends the message (at the appropriate level) to all the output objects that
 the dispatcher contains (by calling the C<log_to> method repeatedly).
 
 The level can be specified by name or by an integer from 0 (debug) to 7
-(critical).
+(emergency).
 
 This method also accepts a subroutine reference as the message
 argument. This reference will be called only if there is an output
