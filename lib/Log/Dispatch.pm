@@ -140,10 +140,6 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
-    if ( exists $p{level} && $p{level} =~ /\A[0-7]\z/ ) {
-        $p{level} = $OrderedLevels[ $p{level} ];
-    }
-
     return unless $self->would_log( $p{level} );
 
     $self->_log_to_outputs( $self->_prepare_message(%p) );
@@ -239,6 +235,10 @@ sub level_is_valid {
 
     if ( !defined $level ) {
         Carp::croak('Logging level was not provided');
+    }
+
+    if ( $level =~ /\A[0-9]+\z/ && $level <= $#OrderedLevels ) {
+        return $OrderedLevels[$level];
     }
 
     return $CanonicalLevelNames{$level};
