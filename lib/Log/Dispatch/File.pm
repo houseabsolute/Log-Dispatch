@@ -200,6 +200,11 @@ Log::Dispatch::* system.
 Note that a newline will I<not> be added automatically at the end of a message
 by default. To do that, pass C<< newline => 1 >>.
 
+B<NOTE:> If you are writing to a single log file from multiple processes, the
+log output may become interleaved and garbled. Use the
+L<Log::Dispatch::File::Locked> output instead, which allows multiple processes
+to safely share a single file.
+
 =head1 CONSTRUCTOR
 
 The constructor takes the following parameters in addition to the standard
