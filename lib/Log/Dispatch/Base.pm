@@ -6,21 +6,6 @@ use Scalar::Util qw( refaddr );
 
 our $VERSION = '2.59';
 
-sub _get_callbacks {
-    shift;
-    my %p = @_;
-
-    return unless exists $p{callbacks};
-
-    return @{ $p{callbacks} }
-        if ref $p{callbacks} eq 'ARRAY';
-
-    return $p{callbacks}
-        if ref $p{callbacks} eq 'CODE';
-
-    return;
-}
-
 sub _apply_callbacks {
     my $self = shift;
     my %p    = @_;

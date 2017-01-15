@@ -5,99 +5,84 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
+use Scalar::Util qw( openhandle );
 
 use base qw( Log::Dispatch::Output );
-
-use Params::Validate qw(validate SCALAR BOOLEAN);
-Params::Validate::validation_options( allow_extra => 1 );
-
-use Scalar::Util qw( openhandle );
 
 # Prevents death later on if IO::File can't export this constant.
 *O_APPEND = \&APPEND unless defined &O_APPEND;
 
 sub APPEND {0}
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-
-    my %p = @_;
-
-    my $self = bless {}, $class;
-
-    $self->_basic_init(%p);
-    $self->_make_handle;
-
-    return $self;
-}
-
-sub _basic_init {
-    my $self = shift;
-
-    $self->SUPER::_basic_init(@_);
-
-    my %p = validate(
-        @_, {
-            filename => { type => SCALAR },
+{
+    my $validator = validation_for(
+        params => {
+            filename => { type => t('NonEmptyStr') },
             mode     => {
-                type    => SCALAR,
-                default => '>'
+                type    => t('Value'),
+                default => '>',
             },
             binmode => {
-                type    => SCALAR,
-                default => undef
+                type     => t('Str'),
+                optional => 1,
             },
             autoflush => {
-                type    => BOOLEAN,
-                default => 1
+                type    => t('Bool'),
+                default => 1,
             },
             close_after_write => {
-                type    => BOOLEAN,
-                default => 0
+                type    => t('Bool'),
+                default => 0,
             },
             permissions => {
-                type     => SCALAR,
-                optional => 1
+                type     => t('PositiveOrZeroInt'),
+                optional => 1,
             },
             syswrite => {
-                type    => BOOLEAN,
-                default => 0
+                type    => t('Bool'),
+                default => 0,
             },
-        }
+        },
+        slurpy => 1,
     );
 
-    $self->{filename}    = $p{filename};
-    $self->{binmode}     = $p{binmode};
-    $self->{autoflush}   = $p{autoflush};
-    $self->{close}       = $p{close_after_write};
-    $self->{permissions} = $p{permissions};
-    $self->{syswrite}    = $p{syswrite};
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
 
-    if ( $self->{close} ) {
-        $self->{mode} = '>>';
-    }
-    elsif (
-           exists $p{mode}
-        && defined $p{mode}
-        && (
+        my $self
+            = bless { map { $_ => delete $p{$_} }
+                qw( filename binmode autoflush close_after_write permissions syswrite )
+            }, $class;
+
+        if ( $self->{close_after_write} ) {
+            $self->{mode} = '>>';
+        }
+        elsif (
             $p{mode} =~ /^(?:>>|append)$/
             || (   $p{mode} =~ /^\d+$/
                 && $p{mode} == O_APPEND() )
-        )
-        ) {
-        $self->{mode} = '>>';
-    }
-    else {
-        $self->{mode} = '>';
+            ) {
+            $self->{mode} = '>>';
+        }
+        else {
+            $self->{mode} = '>';
+        }
+        delete $p{mode};
+
+        $self->_basic_init(%p);
+        $self->_make_handle;
+
+        return $self;
     }
 }
 
 sub _make_handle {
     my $self = shift;
 
-    $self->_open_file() unless $self->{close};
+    $self->_open_file() unless $self->{close_after_write};
 }
 
 sub _open_file {
@@ -135,7 +120,7 @@ sub log_message {
     my $self = shift;
     my %p    = @_;
 
-    if ( $self->{close} ) {
+    if ( $self->{close_after_write} ) {
         $self->_open_file;
     }
 
@@ -150,7 +135,7 @@ sub log_message {
             or die "Cannot write to '$self->{filename}': $!";
     }
 
-    if ( $self->{close} ) {
+    if ( $self->{close_after_write} ) {
         close $fh
             or die "Cannot close '$self->{filename}': $!";
         delete $self->{fh};

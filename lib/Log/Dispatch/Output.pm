@@ -5,15 +5,13 @@ use warnings;
 
 our $VERSION = '2.59';
 
+use Carp ();
 use Log::Dispatch;
+use Log::Dispatch::Types;
+use Log::Dispatch::Vars qw( %LevelNamesToNumbers @OrderedLevels );
+use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Base );
-
-use Log::Dispatch::Vars qw( %LevelNamesToNumbers @OrderedLevels );
-use Params::Validate qw(validate SCALAR ARRAYREF CODEREF BOOLEAN);
-Params::Validate::validation_options( allow_extra => 1 );
-
-use Carp ();
 
 sub new {
     my $proto = shift;
@@ -22,68 +20,84 @@ sub new {
     die "The new method must be overridden in the $class subclass";
 }
 
-sub log {
-    my $self = shift;
-
-    my %p = validate(
-        @_, {
-            level   => { type => SCALAR },
-            message => { type => SCALAR },
-        }
+{
+    my $validator = validation_for(
+        params => {
+            level   => { type => t('LogLevel') },
+            message => { type => t('NonEmptyStr') },
+        },
+        slurpy => 1,
     );
 
-    return unless $self->_should_log( $p{level} );
+    sub log {
+        my $self = shift;
+        my %p    = $validator->(@_);
 
-    local $!;
-    $p{message} = $self->_apply_callbacks(%p)
-        if $self->{callbacks};
+        return unless $self->_should_log( $p{level} );
 
-    $self->log_message(%p);
+        local $!;
+        $p{message} = $self->_apply_callbacks(%p)
+            if $self->{callbacks};
+
+        $self->log_message(%p);
+    }
 }
 
-sub _basic_init {
-    my $self = shift;
-
-    my %p = validate(
-        @_, {
-            name      => { type => SCALAR, optional => 1 },
-            min_level => { type => SCALAR, required => 1 },
+{
+    my $validator = validation_for(
+        params => {
+            name => {
+                type     => t('NonEmptyStr'),
+                optional => 1,
+            },
+            min_level => { type => t('LogLevel') },
             max_level => {
-                type     => SCALAR,
-                optional => 1
+                type     => t('LogLevel'),
+                optional => 1,
             },
             callbacks => {
-                type     => ARRAYREF | CODEREF,
-                optional => 1
+                type     => t('Callbacks'),
+                optional => 1,
             },
-            newline => { type => BOOLEAN, optional => 1 },
+            newline => {
+                type    => t('Bool'),
+                default => 0,
+            },
+        },
+
+        # This is primarily here for the benefit of outputs outside of this
+        # distro which may be passing who-knows-what to this method.
+        slurpy => 1,
+    );
+
+    sub _basic_init {
+        my $self = shift;
+        my %p    = $validator->(@_);
+
+        $self->{level_names}   = \@OrderedLevels;
+        $self->{level_numbers} = \%LevelNamesToNumbers;
+
+        $self->{name} = $p{name} || $self->_unique_name();
+
+        $self->{min_level} = $self->_level_as_number( $p{min_level} );
+        die "Invalid level specified for min_level"
+            unless defined $self->{min_level};
+
+        # Either use the parameter supplied or just the highest possible level.
+        $self->{max_level} = (
+            exists $p{max_level}
+            ? $self->_level_as_number( $p{max_level} )
+            : $#{ $self->{level_names} }
+        );
+
+        die "Invalid level specified for max_level"
+            unless defined $self->{max_level};
+
+        $self->{callbacks} = $p{callbacks} if $p{callbacks};
+
+        if ( $p{newline} ) {
+            push @{ $self->{callbacks} }, \&_add_newline_callback;
         }
-    );
-
-    $self->{level_names}   = \@OrderedLevels;
-    $self->{level_numbers} = \%LevelNamesToNumbers;
-
-    $self->{name} = $p{name} || $self->_unique_name();
-
-    $self->{min_level} = $self->_level_as_number( $p{min_level} );
-    die "Invalid level specified for min_level"
-        unless defined $self->{min_level};
-
-    # Either use the parameter supplied or just the highest possible level.
-    $self->{max_level} = (
-        exists $p{max_level}
-        ? $self->_level_as_number( $p{max_level} )
-        : $#{ $self->{level_names} }
-    );
-
-    die "Invalid level specified for max_level"
-        unless defined $self->{max_level};
-
-    my @cb = $self->_get_callbacks(%p);
-    $self->{callbacks} = \@cb if @cb;
-
-    if ( $p{newline} ) {
-        push @{ $self->{callbacks} }, \&_add_newline_callback;
     }
 }
 

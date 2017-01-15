@@ -5,25 +5,27 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Output );
 
-use Params::Validate qw(validate CODEREF);
-Params::Validate::validation_options( allow_extra => 1 );
+{
+    my $validator = validation_for(
+        params => { code => { type => t('CodeRef') } },
+        slurpy => 1,
+    );
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
+    sub new {
+        my $class = shift;
 
-    my %p = validate( @_, { code => CODEREF } );
+        my %p = $validator->(@_);
 
-    my $self = bless {}, $class;
+        my $self = bless { code => delete $p{code} }, $class;
+        $self->_basic_init(%p);
 
-    $self->_basic_init(%p);
-    $self->{code} = $p{code};
-
-    return $self;
+        return $self;
+    }
 }
 
 sub log_message {

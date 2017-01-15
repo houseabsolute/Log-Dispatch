@@ -5,53 +5,51 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
+use Devel::GlobalDestruction qw( in_global_destruction );
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Output );
 
-use Devel::GlobalDestruction qw( in_global_destruction );
-use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
-Params::Validate::validation_options( allow_extra => 1 );
+{
+    # need to untaint this value
+    my ($program) = $0 =~ /(.+)/;
 
-# need to untaint this value
-my ($program) = $0 =~ /(.+)/;
-
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-
-    my %p = validate(
-        @_, {
+    my $validator = validation_for(
+        params => {
             subject => {
-                type    => SCALAR,
-                default => "$program: log email"
+                type    => t('Str'),
+                default => "$program: log email",
             },
-            to   => { type => SCALAR | ARRAYREF },
+            to   => { type => t('ArrayOfAddresses') },
             from => {
-                type     => SCALAR,
-                optional => 1
+                type     => t('SimpleStr'),
+                optional => 1,
             },
             buffered => {
-                type    => BOOLEAN,
-                default => 1
+                type    => t('Bool'),
+                default => 1,
             },
-        }
+        },
+        slurpy => 1,
     );
 
-    my $self = bless {}, $class;
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
 
-    $self->_basic_init(%p);
+        my $self = bless {
+            subject  => delete $p{subject},
+            to       => delete $p{to},
+            from     => delete $p{from},
+            buffered => delete $p{buffered},
+        }, $class;
+        $self->{buffer} = [] if $self->{buffered};
 
-    $self->{subject} = $p{subject} || "$0: log email";
-    $self->{to} = ref $p{to} ? $p{to} : [ $p{to} ];
-    $self->{from} = $p{from};
+        $self->_basic_init(%p);
 
-    # Default to buffered for obvious reasons!
-    $self->{buffered} = $p{buffered};
-
-    $self->{buffer} = [] if $self->{buffered};
-
-    return $self;
+        return $self;
+    }
 }
 
 sub log_message {

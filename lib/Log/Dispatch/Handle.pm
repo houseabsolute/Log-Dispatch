@@ -5,25 +5,26 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Output );
 
-use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
-Params::Validate::validation_options( allow_extra => 1 );
+{
+    my $validator = validation_for(
+        params => { handle => { type => t('CanPrint') } },
+        slurpy => 1,
+    );
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
 
-    my %p = validate( @_, { handle => { can => 'print' } } );
+        my $self = bless { handle => delete $p{handle} }, $class;
+        $self->_basic_init(%p);
 
-    my $self = bless {}, $class;
-
-    $self->_basic_init(%p);
-    $self->{handle} = $p{handle};
-
-    return $self;
+        return $self;
+    }
 }
 
 sub log_message {

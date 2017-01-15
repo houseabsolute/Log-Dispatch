@@ -5,36 +5,39 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
+use Encode qw( encode );
+use IO::Handle;
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Output );
 
-use Encode qw( encode );
-use IO::Handle;
-use Params::Validate qw(validate BOOLEAN);
-Params::Validate::validation_options( allow_extra => 1 );
-
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-
-    my %p = validate(
-        @_, {
+{
+    my $validator = validation_for(
+        params => {
             stderr => {
-                type    => BOOLEAN,
+                type    => t('Bool'),
                 default => 1,
             },
             utf8 => {
-                type    => BOOLEAN,
+                type    => t('Bool'),
                 default => 0,
             },
-        }
+        },
+        slurpy => 1,
     );
 
-    my $self = bless \%p, $class;
-    $self->_basic_init(%p);
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
 
-    return $self;
+        my $self = bless { map { $_ => delete $p{$_} } qw( stderr utf8 ) },
+            $class;
+
+        $self->_basic_init(%p);
+
+        return $self;
+    }
 }
 
 sub log_message {

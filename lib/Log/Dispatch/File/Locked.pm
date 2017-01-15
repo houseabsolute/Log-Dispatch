@@ -3,17 +3,17 @@ package Log::Dispatch::File::Locked;
 use strict;
 use warnings;
 
-use base qw( Log::Dispatch::File );
-
 our $VERSION = '2.59';
 
 use Fcntl qw(:DEFAULT :flock);
+
+use base qw( Log::Dispatch::File );
 
 sub log_message {
     my $self = shift;
     my %p    = @_;
 
-    if ( $self->{close} ) {
+    if ( $self->{close_after_write} ) {
         $self->_open_file;
     }
 
@@ -36,7 +36,7 @@ sub log_message {
     }
 
     flock( $fh, LOCK_UN ) or die "Cannot unlock '$self->{filename}'";
-    if ( $self->{close} ) {
+    if ( $self->{close_after_write} ) {
         close $fh
             or die "Cannot close '$self->{filename}': $!";
         delete $self->{fh};

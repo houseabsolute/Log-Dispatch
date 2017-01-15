@@ -5,14 +5,17 @@ use 5.006;
 use strict;
 use warnings;
 
+use Devel::Confess;
+
 our $VERSION = '2.59';
 
-use base qw( Log::Dispatch::Base );
-
+use Carp ();
+use Log::Dispatch::Types;
 use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels );
 use Module::Runtime qw( use_package_optimistically );
-use Params::Validate 1.03 qw(validate_with ARRAYREF CODEREF);
-use Carp ();
+use Params::ValidationCompiler qw( validation_for );
+
+use base qw( Log::Dispatch::Base );
 
 BEGIN {
     foreach my $l ( keys %CanonicalLevelNames ) {
@@ -29,52 +32,58 @@ BEGIN {
     }
 }
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-
-    my %p = validate_with(
-        params => \@_,
-        spec   => {
-            outputs   => { type => ARRAYREF,           optional => 1 },
-            callbacks => { type => ARRAYREF | CODEREF, optional => 1 }
+{
+    my $validator = validation_for(
+        params => {
+            outputs => {
+                type     => t('ArrayRef'),
+                optional => 1,
+            },
+            callbacks => {
+                type     => t('Callbacks'),
+                optional => 1,
+            },
         },
-        allow_extra => 1,    # for backward compatibility
     );
 
-    my $self = bless {}, $class;
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
 
-    my @cb = $self->_get_callbacks(%p);
-    $self->{callbacks} = \@cb if @cb;
+        my $self = bless {}, $class;
 
-    if ( my $outputs = $p{outputs} ) {
-        if ( ref $outputs->[1] eq 'HASH' ) {
+        $self->{callbacks} = $p{callbacks}
+            if $p{callbacks};
 
-            # 2.23 API
-            # outputs => [
-            #   File => { min_level => 'debug', filename => 'logfile' },
-            #   Screen => { min_level => 'warning' }
-            # ]
-            while ( my ( $class, $params ) = splice @$outputs, 0, 2 ) {
-                $self->_add_output( $class, %$params );
+        if ( my $outputs = $p{outputs} ) {
+            if ( ref $outputs->[1] eq 'HASH' ) {
+
+                # 2.23 API
+                # outputs => [
+                #   File => { min_level => 'debug', filename => 'logfile' },
+                #   Screen => { min_level => 'warning' }
+                # ]
+                while ( my ( $class, $params ) = splice @$outputs, 0, 2 ) {
+                    $self->_add_output( $class, %$params );
+                }
+            }
+            else {
+
+                # 2.24+ syntax
+                # outputs => [
+                #   [ 'File',   min_level => 'debug', filename => 'logfile' ],
+                #   [ 'Screen', min_level => 'warning' ]
+                # ]
+                foreach my $arr ( @{$outputs} ) {
+                    die "expected arrayref, not '$arr'"
+                        unless ref $arr eq 'ARRAY';
+                    $self->_add_output( @{$arr} );
+                }
             }
         }
-        else {
 
-            # 2.24+ syntax
-            # outputs => [
-            #   [ 'File',   min_level => 'debug', filename => 'logfile' ],
-            #   [ 'Screen', min_level => 'warning' ]
-            # ]
-            foreach my $arr (@$outputs) {
-                die "expected arrayref, not '$arr'"
-                    unless ref $arr eq 'ARRAY';
-                $self->_add_output(@$arr);
-            }
-        }
+        return $self;
     }
-
-    return $self;
 }
 
 sub clone {

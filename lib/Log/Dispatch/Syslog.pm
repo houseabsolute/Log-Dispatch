@@ -5,77 +5,78 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
-
-use base qw( Log::Dispatch::Output );
-
-use Params::Validate qw(validate ARRAYREF BOOLEAN HASHREF SCALAR);
-Params::Validate::validation_options( allow_extra => 1 );
-
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
 use Scalar::Util qw( reftype );
 use Sys::Syslog 0.28 ();
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-
-    my %p = @_;
-
-    my $self = bless {}, $class;
-
-    $self->_basic_init(%p);
-    $self->_init(%p);
-
-    return $self;
-}
-
-my ($Ident) = $0 =~ /(.+)/;
+use base qw( Log::Dispatch::Output );
 
 my $thread_lock;
-my $threads_loaded;
+
+{
+    my ($DefaultIdent) = $0 =~ /(.+)/;
+
+    my $validator = validation_for(
+        params => {
+            ident => {
+                type    => t('NonEmptyStr'),
+                default => $DefaultIdent
+            },
+            logopt => {
+                type    => t('Str'),
+                default => q{},
+            },
+            facility => {
+                type    => t('NonEmptyStr'),
+                default => 'user'
+            },
+            socket => {
+                type    => t('SyslogSocket'),
+                default => undef,
+            },
+            lock => {
+                type    => t('Bool'),
+                default => 0,
+            },
+        },
+        slurpy => 1,
+    );
+
+    my $threads_loaded;
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
+
+        my $self = bless { map { $_ => delete $p{$_} }
+                qw( ident logopt facility socket lock ) },
+            $class;
+
+        if ( $self->{lock} ) {
+            unless ($threads_loaded) {
+                local ( $@, $SIG{__DIE__} );
+
+                # These need to be loaded with use, not require.
+                eval 'use threads; use threads::shared';
+                $threads_loaded = 1;
+            }
+            &threads::shared::share( \$thread_lock );
+        }
+
+        $self->_basic_init(%p);
+
+        return $self;
+    }
+}
 
 sub _init {
     my $self = shift;
 
-    my %p = validate(
-        @_, {
-            ident => {
-                type    => SCALAR,
-                default => $Ident
-            },
-            logopt => {
-                type    => SCALAR,
-                default => ''
-            },
-            facility => {
-                type    => SCALAR,
-                default => 'user'
-            },
-            socket => {
-                type    => SCALAR | ARRAYREF | HASHREF,
-                default => undef
-            },
-            lock => {
-                type    => BOOLEAN,
-                default => 0,
-            },
-        }
-    );
 
-    $self->{$_} = $p{$_} for qw( ident logopt facility socket lock );
-    if ( $self->{lock} ) {
+}
 
-        unless ($threads_loaded) {
-            local ( $@, $SIG{__DIE__} );
-
-            # These need to be loaded with use, not require.
-            eval 'use threads; use threads::shared';
-            $threads_loaded = 1;
-        }
-        &threads::shared::share( \$thread_lock );
-    }
-
-    $self->{priorities} = [
+{
+    my @priorities = (
         'DEBUG',
         'INFO',
         'NOTICE',
@@ -84,37 +85,38 @@ sub _init {
         'CRIT',
         'ALERT',
         'EMERG'
-    ];
-}
+    );
 
-sub log_message {
-    my $self = shift;
-    my %p    = @_;
+    sub log_message {
+        my $self = shift;
+        my %p    = @_;
 
-    my $pri = $self->_level_as_number( $p{level} );
+        my $pri = $self->_level_as_number( $p{level} );
 
-    lock($thread_lock) if $self->{lock};
+        lock($thread_lock) if $self->{lock};
 
-    local ( $@, $SIG{__DIE__} );
-    eval {
-        if ( defined $self->{socket} ) {
-            Sys::Syslog::setlogsock(
-                ref $self->{socket} && reftype( $self->{socket} ) eq 'ARRAY'
-                ? @{ $self->{socket} }
-                : $self->{socket}
+        local ( $@, $SIG{__DIE__} );
+        eval {
+            if ( defined $self->{socket} ) {
+                Sys::Syslog::setlogsock(
+                    ref $self->{socket}
+                        && reftype( $self->{socket} ) eq 'ARRAY'
+                    ? @{ $self->{socket} }
+                    : $self->{socket}
+                );
+            }
+
+            Sys::Syslog::openlog(
+                $self->{ident},
+                $self->{logopt},
+                $self->{facility}
             );
-        }
+            Sys::Syslog::syslog( $priorities[$pri], $p{message} );
+            Sys::Syslog::closelog;
+        };
 
-        Sys::Syslog::openlog(
-            $self->{ident},
-            $self->{logopt},
-            $self->{facility}
-        );
-        Sys::Syslog::syslog( $self->{priorities}[$pri], $p{message} );
-        Sys::Syslog::closelog;
-    };
-
-    warn $@ if $@ and $^W;
+        warn $@ if $@ and $^W;
+    }
 }
 
 1;

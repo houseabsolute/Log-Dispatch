@@ -5,11 +5,9 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Email;
+use Mail::Send;
 
 use base qw( Log::Dispatch::Email );
-
-use Mail::Send;
 
 sub send_email {
     my $self = shift;

@@ -69,7 +69,7 @@ my $tempdir = tempdir( CLEANUP => 1 );
 {
     eval { Log::Dispatch->new( outputs => 'File' ) };
     like(
-        $@, qr/not one of the allowed types: arrayref/,
+        $@, qr/Validation failed for type named ArrayRef/,
         "got error for expected outer arrayref"
     );
 }

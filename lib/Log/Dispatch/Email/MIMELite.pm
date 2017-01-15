@@ -5,11 +5,9 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Email;
+use MIME::Lite;
 
 use base qw( Log::Dispatch::Email );
-
-use MIME::Lite;
 
 sub send_email {
     my $self = shift;

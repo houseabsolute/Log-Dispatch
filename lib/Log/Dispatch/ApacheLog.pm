@@ -5,12 +5,8 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Output;
-
-use base qw( Log::Dispatch::Output );
-
-use Params::Validate qw(validate);
-Params::Validate::validation_options( allow_extra => 1 );
+use Log::Dispatch::Types;
+use Params::ValidationCompiler qw( validation_for );
 
 BEGIN {
     if ( $ENV{MOD_PERL} && $ENV{MOD_PERL} =~ /2\./ ) {
@@ -21,18 +17,23 @@ BEGIN {
     }
 }
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
+use base qw( Log::Dispatch::Output );
 
-    my %p = validate( @_, { apache => { can => 'log' } } );
+{
+    my $validator = validation_for(
+        params => { apache => { type => t('ApacheLog') } },
+        slurpy => 1,
+    );
 
-    my $self = bless {}, $class;
+    sub new {
+        my $class = shift;
+        my %p     = validator->(@_);
 
-    $self->_basic_init(%p);
-    $self->{apache_log} = $p{apache}->log;
+        my $self = bless { apache_log => ( delete $p{apache} )->log }, $class;
+        $self->_basic_init(%p);
 
-    return $self;
+        return $self;
+    }
 }
 
 {

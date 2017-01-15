@@ -10,42 +10,55 @@ use warnings;
 
 our $VERSION = '2.59';
 
-use Log::Dispatch::Email;
+use Log::Dispatch::Types;
+use Mail::Sender ();
+use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Email );
 
-use Mail::Sender ();
+{
+    my $validator = validation_for(
+        params => {
+            smtp         => { default => 'localhost' },
+            port         => { default => 25 },
+            authid       => 0,
+            authpwd      => 0,
+            auth         => 0,
+            tls_required => 0,
+            replyto      => 0,
+            fake_from    => 0,
+        },
+        slurpy => 1,
+    );
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
+    sub new {
+        my $class = shift;
+        my %p     = $validator->(@_);
 
-    my %p = @_;
+        my $smtp         = delete $p{smtp};
+        my $port         = delete $p{port};
+        my $authid       = delete $p{authid};
+        my $authpwd      = delete $p{authpwd};
+        my $auth         = delete $p{auth};
+        my $tls_required = delete $p{tls_required};
+        my $replyto      = delete $p{replyto};
+        my $fake_from    = delete $p{fake_from};
 
-    my $smtp = delete $p{smtp} || 'localhost';
-    my $port = delete $p{port} || '25';
+        my $self = $class->SUPER::new(%p);
 
-    my $authid       = delete $p{authid};
-    my $authpwd      = delete $p{authpwd};
-    my $auth         = delete $p{auth};
-    my $tls_required = delete $p{tls_required};
-    my $replyto      = delete $p{replyto};
-    my $fake_from    = delete $p{fake_from};
+        $self->{smtp} = $smtp;
+        $self->{port} = $port;
 
-    my $self = $class->SUPER::new(%p);
+        $self->{authid}       = $authid;
+        $self->{authpwd}      = $authpwd;
+        $self->{auth}         = $auth;
+        $self->{tls_required} = $tls_required;
 
-    $self->{smtp} = $smtp;
-    $self->{port} = $port;
+        $self->{fake_from} = $fake_from;
+        $self->{replyto}   = $replyto;
 
-    $self->{authid}       = $authid;
-    $self->{authpwd}      = $authpwd;
-    $self->{auth}         = $auth;
-    $self->{tls_required} = $tls_required;
-
-    $self->{fake_from} = $fake_from;
-    $self->{replyto}   = $replyto;
-
-    return $self;
+        return $self;
+    }
 }
 
 sub send_email {
