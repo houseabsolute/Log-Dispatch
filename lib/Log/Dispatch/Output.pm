@@ -65,18 +65,20 @@ sub _basic_init {
 
     $self->{name} = $p{name} || $self->_unique_name();
 
-    $self->{min_level} = $self->_level_as_number( $p{min_level} );
-    die "Invalid level specified for min_level"
+    eval { $self->{min_level} = $self->_level_as_number( $p{min_level} ) };
+    Carp::croak "Invalid level specified for min_level"
         unless defined $self->{min_level};
 
     # Either use the parameter supplied or just the highest possible level.
-    $self->{max_level} = (
-        exists $p{max_level}
-        ? $self->_level_as_number( $p{max_level} )
-        : $#{ $self->{level_names} }
-    );
+    eval {
+        $self->{max_level} = (
+            exists $p{max_level}
+            ? $self->_level_as_number( $p{max_level} )
+            : $#{ $self->{level_names} }
+        );
+    };
 
-    die "Invalid level specified for max_level"
+    Carp::croak "Invalid level specified for max_level"
         unless defined $self->{max_level};
 
     my @cb = $self->_get_callbacks(%p);
@@ -128,11 +130,11 @@ sub _level_as_number {
         Carp::croak "undefined value provided for log level";
     }
 
-    return $level if $level =~ /^\d$/;
-
     unless ( Log::Dispatch->level_is_valid($level) ) {
         Carp::croak "$level is not a valid Log::Dispatch log level";
     }
+
+    return $level if $level =~ /\A[0-9]+\z/;
 
     return $self->{level_numbers}{$level};
 }
@@ -145,7 +147,12 @@ sub _level_as_name {
         Carp::croak "undefined value provided for log level";
     }
 
-    return $level unless $level =~ /^\d$/;
+    my $canonical_level;
+    unless ( $canonical_level = Log::Dispatch->level_is_valid($level) ) {
+        Carp::croak "$level is not a valid Log::Dispatch log level";
+    }
+
+    return $canonical_level unless $level =~ /\A[0-9]+\z/;
 
     return $self->{level_names}[$level];
 }
