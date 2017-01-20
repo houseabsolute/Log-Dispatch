@@ -24,6 +24,9 @@ sub send_email {
         From => $self->{from} || 'LogDispatch@foo.bar',
     );
 
+    # merge options from %{send_args}
+    %mail = ( %mail, %{ $self->{send_args} } ) if defined $self->{send_args};
+
     local $?;
     unless ( Mail::Sendmail::sendmail(%mail) ) {
         warn "Error sending mail: $Mail::Sendmail::error";
@@ -46,7 +49,8 @@ __END__
               'Email::MailSendmail',
               min_level => 'emerg',
               to        => [qw( foo@example.com bar@example.org )],
-              subject   => 'Big error!'
+              subject   => 'Big error!',
+              send_args => { smtp => '127.0.0.1', retries => 10, delay => 5, debug => 0, X-Custom-Header => 'epale' }
           ]
       ],
   );
@@ -57,5 +61,10 @@ __END__
 
 This is a subclass of L<Log::Dispatch::Email> that implements the
 send_email method using the L<Mail::Sendmail> module.
+
+=head1 CHANGING HOW MAIL IS SENT
+
+To change how mail is sent, set send_args to a hash reference just
+like L<< %Mail::Sendmail::mailcfg >>.
 
 =cut

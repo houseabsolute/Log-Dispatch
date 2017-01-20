@@ -10,7 +10,7 @@ use Log::Dispatch::Output;
 use base qw( Log::Dispatch::Output );
 
 use Devel::GlobalDestruction qw( in_global_destruction );
-use Params::Validate qw(validate SCALAR ARRAYREF BOOLEAN);
+use Params::Validate qw(validate SCALAR ARRAYREF HASHREF BOOLEAN);
 Params::Validate::validation_options( allow_extra => 1 );
 
 # need to untaint this value
@@ -31,6 +31,10 @@ sub new {
                 type     => SCALAR,
                 optional => 1
             },
+            send_args => {
+                type     => SCALAR | ARRAYREF | HASHREF,
+                optional => 1
+            },
             buffered => {
                 type    => BOOLEAN,
                 default => 1
@@ -43,8 +47,9 @@ sub new {
     $self->_basic_init(%p);
 
     $self->{subject} = $p{subject} || "$0: log email";
-    $self->{to} = ref $p{to} ? $p{to} : [ $p{to} ];
-    $self->{from} = $p{from};
+    $self->{to}        = ref $p{to} ? $p{to} : [ $p{to} ];
+    $self->{from}      = $p{from};
+    $self->{send_args} = $p{send_args};
 
     # Default to buffered for obvious reasons!
     $self->{buffered} = $p{buffered};
@@ -153,6 +158,11 @@ addresses. Required.
 
 A string containing an email address. This is optional and may not
 work with all mail sending methods.
+
+=item * send_args ($, \@ or \%)
+
+This stores any options used to send email, such as smtp host, port, etc.
+These are different for each subclass.
 
 =item * buffered (0 or 1)
 
