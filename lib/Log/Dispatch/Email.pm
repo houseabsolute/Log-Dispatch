@@ -130,7 +130,7 @@ __END__
 This module should be used as a base class to implement
 Log::Dispatch::* objects that send their log messages via email.
 Implementing a subclass simply requires the code shown in the
-L<SYNOPSIS> with a real implementation of the C<send_email()> method.
+L</SYNOPSIS> with a real implementation of the C<send_email()> method.
 
 =head1 CONSTRUCTOR
 

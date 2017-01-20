@@ -356,7 +356,7 @@ string following '+' is taken to be a full classname. e.g.
 For each inner list, a new output object is created and added to the
 dispatcher (via the C<add()> method).
 
-See L<OUTPUT CLASSES> for the parameters that can be used when creating an
+See L</"OUTPUT CLASSES"> for the parameters that can be used when creating an
 output object.
 
 =item * callbacks( \& or [ \&, \&, ... ] )
@@ -476,7 +476,7 @@ This returns true if the logger will log a message at the given level.
 
 =head2 $dispatch->add( Log::Dispatch::* OBJECT )
 
-Adds a new L<output object|OUTPUT CLASSES> to the dispatcher. If an object
+Adds a new L<output object|/"OUTPUT CLASSES"> to the dispatcher. If an object
 of the same name already exists, then that object is replaced, with
 a warning if C<$^W> is true.
 
@@ -525,11 +525,11 @@ form of generated names, as they may change.
 
 =item * min_level ($)
 
-The minimum L<logging level|LOG LEVELS> this object will accept. Required.
+The minimum L<logging level|/"LOG LEVELS"> this object will accept. Required.
 
 =item * max_level ($)
 
-The maximum L<logging level|LOG LEVELS> this object will accept. By default
+The maximum L<logging level|/"LOG LEVELS"> this object will accept. By default
 the maximum is the highest possible level (which means functionally that the
 object has no maximum).
 
