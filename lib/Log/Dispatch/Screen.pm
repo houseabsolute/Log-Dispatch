@@ -3,7 +3,7 @@ package Log::Dispatch::Screen;
 use strict;
 use warnings;
 
-our $VERSION = '2.59';
+our $VERSION = '2.60';
 
 use Encode qw( encode );
 use IO::Handle;

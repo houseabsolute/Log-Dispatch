@@ -3,7 +3,7 @@ package Log::Dispatch::File::Locked;
 use strict;
 use warnings;
 
-our $VERSION = '2.59';
+our $VERSION = '2.60';
 
 use Fcntl qw(:DEFAULT :flock);
 
