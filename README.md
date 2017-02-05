@@ -4,7 +4,7 @@ Log::Dispatch - Dispatches messages to one or more outputs
 
 # VERSION
 
-version 2.58
+version 2.59
 
 # SYNOPSIS
 
@@ -113,7 +113,7 @@ Sends the message (at the appropriate level) to all the output objects that
 the dispatcher contains (by calling the `log_to` method repeatedly).
 
 The level can be specified by name or by an integer from 0 (debug) to 7
-(critical).
+(emergency).
 
 This method also accepts a subroutine reference as the message
 argument. This reference will be called only if there is an output
@@ -198,7 +198,7 @@ This returns true if the logger will log a message at the given level.
 
 ## $dispatch->add( Log::Dispatch::\* OBJECT )
 
-Adds a new [output object](https://metacpan.org/pod/OUTPUT&#x20;CLASSES) to the dispatcher. If an object
+Adds a new [output object](#output-classes) to the dispatcher. If an object
 of the same name already exists, then that object is replaced, with
 a warning if `$^W` is true.
 
@@ -245,11 +245,11 @@ these, see their documentation for details.
 
 - min\_level ($)
 
-    The minimum [logging level](https://metacpan.org/pod/LOG&#x20;LEVELS) this object will accept. Required.
+    The minimum [logging level](#log-levels) this object will accept. Required.
 
 - max\_level ($)
 
-    The maximum [logging level](https://metacpan.org/pod/LOG&#x20;LEVELS) this object will accept. By default
+    The maximum [logging level](#log-levels) this object will accept. By default
     the maximum is the highest possible level (which means functionally that the
     object has no maximum).
 
@@ -367,9 +367,13 @@ Log::Dispatch does. Originally written by Raphael Manfredi.
 
 # SUPPORT
 
-Bugs may be submitted through [https://github.com/houseabsolute/Log-Dispatch/issues](https://github.com/houseabsolute/Log-Dispatch/issues).
+Bugs may be submitted at [https://github.com/houseabsolute/Log-Dispatch/issues](https://github.com/houseabsolute/Log-Dispatch/issues).
 
 I am also usually active on IRC as 'autarch' on `irc://irc.perl.org`.
+
+# SOURCE
+
+The source code repository for Log-Dispatch can be found at [https://github.com/houseabsolute/Log-Dispatch](https://github.com/houseabsolute/Log-Dispatch).
 
 # DONATIONS
 
@@ -394,9 +398,11 @@ Dave Rolsky <autarch@urth.org>
 
 # CONTRIBUTORS
 
-- Doug Bell <madcityzen@gmail.com>
+- Anirvan Chatterjee <anirvan@users.noreply.github.com>
+- Doug Bell <doug@preaction.me>
 - Graham Ollis <plicease@cpan.org>
 - Gregory Oschwald <goschwald@maxmind.com>
+- Johann Rolschewski <jorol@cpan.org>
 - Jonathan Swartz <swartz@pobox.com>
 - Karen Etheridge <ether@cpan.org>
 - Konrad Bucheli <kb@open.ch>
@@ -410,8 +416,11 @@ Dave Rolsky <autarch@urth.org>
 
 # COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 by Dave Rolsky.
+This software is Copyright (c) 2017 by Dave Rolsky.
 
 This is free software, licensed under:
 
     The Artistic License 2.0 (GPL Compatible)
+
+The full text of the license can be found in the
+`LICENSE` file included with this distribution.

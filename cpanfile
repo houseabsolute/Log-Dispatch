@@ -1,4 +1,5 @@
 requires "Carp" => "0";
+requires "Devel::Confess" => "0";
 requires "Devel::GlobalDestruction" => "0";
 requires "Dist::CheckConflicts" => "0.02";
 requires "Encode" => "0";
@@ -6,10 +7,19 @@ requires "Exporter" => "0";
 requires "Fcntl" => "0";
 requires "IO::Handle" => "0";
 requires "Module::Runtime" => "0";
-requires "Params::Validate" => "1.03";
+requires "Params::ValidationCompiler" => "0";
 requires "Scalar::Util" => "0";
+requires "Specio" => "0.32";
+requires "Specio::Declare" => "0";
+requires "Specio::Exporter" => "0";
+requires "Specio::Library::Builtins" => "0";
+requires "Specio::Library::Numeric" => "0";
+requires "Specio::Library::String" => "0";
 requires "Sys::Syslog" => "0.28";
+requires "Try::Tiny" => "0";
 requires "base" => "0";
+requires "namespace::autoclean" => "0";
+requires "parent" => "0";
 requires "perl" => "5.006";
 requires "strict" => "0";
 requires "warnings" => "0";
@@ -46,6 +56,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll" => "0.56";
   requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
   requires "Cwd" => "0";
   requires "MIME::Lite" => "0";
