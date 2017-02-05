@@ -13,6 +13,7 @@ our @EXPORT_OK = qw(
     @OrderedLevels
 );
 
+## no critic (Variables::ProhibitPackageVars)
 our %CanonicalLevelNames = (
     (
         map { $_ => $_ }
@@ -49,7 +50,7 @@ our %LevelNamesToNumbers = (
     warn  => 3,
     err   => 4,
     crit  => 5,
-    emerg => 7
+    emerg => 7,
 );
 
 1;

@@ -50,6 +50,8 @@ sub log_message {
     # or 2 and use that.
     my $message
         = $self->{utf8} ? encode( 'UTF-8', $p{message} ) : $p{message};
+
+    ## no critic (InputOutput::RequireCheckedSyscalls)
     if ( $self->{stderr} ) {
         print STDERR $message;
     }

@@ -22,7 +22,7 @@ sub send_email {
         From => $self->{from} || 'LogDispatch@foo.bar',
     );
 
-    local $?;
+    local $? = undef;
     unless ( Mail::Sendmail::sendmail(%mail) ) {
         warn "Error sending mail: $Mail::Sendmail::error";
     }

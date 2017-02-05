@@ -90,8 +90,10 @@ done_testing();
 sub _slurp {
     open my $fh, '<', $_[0]
         or die "Cannot read $_[0]: $!";
-    return do {
-        local $/;
+    my $s = do {
+        local $/ = undef;
         <$fh>;
     };
+    close $fh or die $!;
+    return $s;
 }

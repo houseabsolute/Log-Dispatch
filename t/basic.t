@@ -1,3 +1,4 @@
+## no critic (Modules::ProhibitExcessMainComplexity)
 use strict;
 use warnings;
 
@@ -7,14 +8,16 @@ use Test::Fatal;
 use File::Spec;
 use File::Temp qw( tempdir );
 use Module::Runtime qw( use_module );
+use Try::Tiny;
 
 use Log::Dispatch;
 
 my %tests;
 
 BEGIN {
-    local $@;
+    local $@ = undef;
     foreach (qw( MailSend MIMELite MailSendmail MailSender )) {
+        ## no critic (BuiltinFunctions::ProhibitStringyEval, ErrorHandling::RequireCheckingReturnValueOfEval)
         eval "use Log::Dispatch::Email::$_";
         $tests{$_} = !$@;
         $tests{$_} = 0 if $ENV{LD_NO_MAIL};
@@ -49,11 +52,11 @@ use IO::File;
 
 my $tempdir = tempdir( CLEANUP => 1 );
 
-my $dispatch = Log::Dispatch->new;
-ok( $dispatch, 'created Log::Dispatch object' );
-
 # Test Log::Dispatch::File
 {
+    my $dispatch = Log::Dispatch->new;
+    ok( $dispatch, 'created Log::Dispatch object' );
+
     my $emerg_log = File::Spec->catdir( $tempdir, 'emerg.log' );
 
     $dispatch->add(
@@ -93,6 +96,7 @@ ok( $dispatch, 'created Log::Dispatch object' );
     # This'll close them filehandles!
     undef $dispatch;
 
+    ## no critic (InputOutput::RequireBriefOpen)
     open my $emerg_fh, '<', $emerg_log
         or die "Can't read $emerg_log: $!";
     open my $debug_fh, '<', $debug_log
@@ -120,8 +124,12 @@ ok( $dispatch, 'created Log::Dispatch object' );
         q{Second line in log file set to level 'debug' is 'emerg level 2'}
     );
 
+    close $emerg_fh or die $!;
+    close $debug_fh or die $!;
+
 SKIP:
     {
+        ## no critic (ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions)
         skip 'This test requires Perl 5.16+', 1
             unless $] >= 5.016;
         is_deeply(
@@ -157,6 +165,7 @@ SKIP:
     open my $fh, '<', $max_log
         or die "Can't read $max_log: $!";
     my @log = <$fh>;
+    close $fh or die $!;
 
     is(
         $log[0], "critical\n",
@@ -191,7 +200,7 @@ SKIP:
 
     my @log = <$fh>;
 
-    close $fh;
+    close $fh or die $!;
 
     is(
         $log[0], "handle test\n",
@@ -305,17 +314,11 @@ SKIP:
     my @expected = qw(warning error critical alert);
     my @levels   = $l->accepted_levels;
 
-    my $pass = 1;
-    for ( my $x = 0; $x < scalar @expected; $x++ ) {
-        $pass = 0 unless $expected[$x] eq $levels[$x];
-    }
-
-    is(
-        scalar @expected, scalar @levels,
-        'number of levels matched'
+    is_deeply(
+        \@expected,
+        \@levels,
+        'accepted_levels matches what is expected'
     );
-
-    ok( $pass, 'levels matched' );
 }
 
 # Log::Dispatch single callback
@@ -503,14 +506,14 @@ SKIP:
             qw( debug info notice warn warning err
             error crit critical alert emerg emergency )
             ) {
-            $string = '';
+            $string = q{};
             $dispatch->$test_level( $test_level, 'test' );
 
             if ( $levels{$test_level} eq $allowed_level ) {
                 my $expect = join $", $test_level, 'test';
                 is(
                     $string, $expect,
-                    "Calling $test_level method should send message '$expect'"
+                    qq{Calling $test_level method should send message '$expect'}
                 );
             }
             else {
@@ -605,8 +608,8 @@ SKIP:
 
     open my $fh, '<', $mode_log
         or die "Cannot read $mode_log: $!";
-    my $data = join '', <$fh>;
-    close $fh;
+    my $data = do { local $/ = undef; <$fh> };
+    close $fh or die $!;
 
     like( $data, qr/^test2/, 'test write mode' );
 }
@@ -614,7 +617,7 @@ SKIP:
 # Log::Dispatch::Email::MailSender
 SKIP:
 {
-    skip "Cannot do MailSender tests", 1
+    skip 'Cannot do MailSender tests', 1
         unless $tests{MailSender} && $TestConfig{email_address};
 
     my $dispatch = Log::Dispatch->new;
@@ -671,6 +674,7 @@ SKIP:
 
     my $close_log = File::Spec->catfile( $tempdir, 'close.log' );
 
+    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
     $dispatch->add(
         Log::Dispatch::File->new(
             name              => 'close',
@@ -685,9 +689,8 @@ SKIP:
 
     open my $fh, '<', $close_log
         or die "Can't read $close_log: $!";
-
     my @log = <$fh>;
-    close $fh;
+    close $fh or die $!;
 
     is(
         $log[0], "info\n",
@@ -701,19 +704,20 @@ SKIP:
 
     if ( $^O =~ /win32/i ) {
         ok(
-            $mode_string == '0777' || $mode_string == '0666',
+            $mode_string eq '0777' || $mode_string eq '0666',
             'Mode should be 0777 or 0666'
         );
     }
     elsif ( $^O =~ /cygwin|msys/i ) {
         ok(
-            $mode_string == '0777' || $mode_string == '0644',
+            $mode_string eq '0777' || $mode_string eq '0644',
             'Mode should be 0777 or 0644'
         );
     }
     else {
         is(
-            $mode_string, '0777',
+            $mode_string,
+            '0777',
             'Mode should be 0777'
         );
     }
@@ -726,15 +730,17 @@ SKIP:
 
     open my $fh, '>', $chmod_log
         or die "Cannot write to $chmod_log: $!";
-    close $fh;
+    close $fh or die $!;
 
     chmod 0777, $chmod_log
         or die "Cannot chmod 0777 $chmod_log: $!";
 
     my @chmod;
+    ## no critic (TestingAndDebugging::ProhibitNoWarnings)
     no warnings 'once';
     local *CORE::GLOBAL::chmod = sub { @chmod = @_; warn @chmod };
 
+    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
     $dispatch->add(
         Log::Dispatch::File->new(
             name        => 'chmod',
@@ -754,6 +760,7 @@ SKIP:
 
 SKIP:
 {
+    ## no critic (ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions)
     skip "Cannot test utf8 files with this version of Perl ($])", 1
         unless $] >= 5.008;
 
@@ -796,12 +803,12 @@ SKIP:
 
     ok(
         !$dispatch->would_log('foo'),
-        "will not log 'foo'"
+        q{will not log 'foo'}
     );
 
     ok(
         !$dispatch->would_log('debug'),
-        "will not log 'debug'"
+        q{will not log 'debug'}
     );
 
     ok(
@@ -816,12 +823,12 @@ SKIP:
 
     ok(
         $dispatch->would_log('crit'),
-        "will log 'crit'"
+        q{will log 'crit'}
     );
 
     ok(
         $dispatch->is_crit,
-        "will log 'crit'"
+        q{will log 'crit'}
     );
 }
 
@@ -919,10 +926,11 @@ SKIP:
 
     undef $string;
 
-    $e = do {
-        local $@;
-        eval { Croaker::croak($dispatch) };
-        $@;
+    try {
+        Croaker::croak($dispatch)
+    }
+    catch {
+        $e = $_;
     };
 
     ok( $e, 'died when calling log_and_croak()' );
@@ -951,12 +959,12 @@ SKIP:
     is( $string, 'foo', 'first test w/o callback' );
 
     my $cb = sub { return 'bar' };
-    $string = '';
+    $string = q{};
     $dispatch->add_callback($cb);
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'bar', 'second call, callback overrides message' );
 
-    $string = '';
+    $string = q{};
     $dispatch->remove_callback($cb);
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'foo', 'third call, callback is removed' );
@@ -980,12 +988,12 @@ SKIP:
     is( $string, 'baz', 'first test gets orig callback result' );
 
     my $cb = sub { return 'bar' };
-    $string = '';
+    $string = q{};
     $dispatch->add_callback($cb);
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'bar', 'second call, callback overrides message' );
 
-    $string = '';
+    $string = q{};
     $dispatch->remove_callback($cb);
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'baz', 'third call, output callback is removed' );
@@ -1006,7 +1014,7 @@ SKIP:
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'foo', 'first test w/o callback' );
 
-    $string = '';
+    $string = q{};
     $dispatch->add_callback( sub { return 'bar' } );
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'bar', 'second call, callback overrides message' );
@@ -1029,7 +1037,7 @@ SKIP:
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'baz', 'first test gets orig callback result' );
 
-    $string = '';
+    $string = q{};
     $dispatch->add_callback( sub { return 'bar' } );
     $dispatch->log( level => 'debug', message => 'foo' );
     is( $string, 'bar', 'second call, callback overrides message' );
@@ -1143,7 +1151,7 @@ SKIP:
 
     open my $fh, '<', $log or die $!;
     my @log = <$fh>;
-    close $fh;
+    close $fh or die $!;
 
     is( $log[0], "emerg level 1\n", 'at level 3, emerg works' );
     is( $log[1], "warn level 1\n",  'at level 3, warn works' );
@@ -1184,7 +1192,7 @@ SKIP:
 
     open my $fh, '<', $log or die $!;
     my @log = <$fh>;
-    close $fh;
+    close $fh or die $!;
 
     is( $log[0], "bug 106495 0\n", 'at level 0, int works' );
     is( $log[1], "bug 106495 1\n", 'at level 1, int works' );
@@ -1198,38 +1206,43 @@ SKIP:
 
 done_testing();
 
-package Log::Dispatch::String;
+## no critic (Modules::ProhibitMultiplePackages)
+{
+    package Log::Dispatch::String;
 
-use strict;
+    use strict;
 
-use Log::Dispatch::Output;
+    use Log::Dispatch::Output;
 
-use base qw( Log::Dispatch::Output );
+    use base qw( Log::Dispatch::Output );
 
-sub new {
-    my $proto = shift;
-    my $class = ref $proto || $proto;
-    my %p     = @_;
+    sub new {
+        my $proto = shift;
+        my $class = ref $proto || $proto;
+        my %p     = @_;
 
-    my $self = bless { string => $p{string} }, $class;
+        my $self = bless { string => $p{string} }, $class;
 
-    $self->_basic_init(%p);
+        $self->_basic_init(%p);
 
-    return $self;
+        return $self;
+    }
+
+    sub log_message {
+        my $self = shift;
+        my %p    = @_;
+
+        ${ $self->{string} } .= $p{message};
+    }
 }
 
-sub log_message {
-    my $self = shift;
-    my %p    = @_;
-
-    ${ $self->{string} } .= $p{message};
-}
-
+{
 #line 10000
-package Croaker;
+    package Croaker;
 
-sub croak {
-    my $log = shift;
+    sub croak {
+        my $log = shift;
 
-    $log->log_and_croak( level => 'error', message => 'croak' );
+        $log->log_and_croak( level => 'error', message => 'croak' );
+    }
 }

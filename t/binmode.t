@@ -8,6 +8,7 @@ use Test::More 0.88;
 use Log::Dispatch;
 use Log::Dispatch::File;
 
+## no critic (ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions)
 plan skip_all => "Cannot test utf8 files with this version of Perl ($])"
     unless $] >= 5.008;
 
@@ -42,10 +43,10 @@ for my $t (@tests) {
     $dispatcher->log( level => 'info', message => $t->{message} );
 
     ok( -e $file, "$file exists" );
-    open my $fh, '<', $file;
 
-    my $line = do { local $/; <$fh> };
-    close $fh;
+    open my $fh, '<', $file or die $!;
+    my $line = do { local $/ = undef; <$fh> };
+    close $fh or die $!;
 
     is( $line, $t->{expected_message}, 'output contains UTF-8 bytes' );
 }

@@ -50,7 +50,7 @@ use PerlIO;
                 stderr => 0,
                 utf8   => 0,
             }, {
-                stdout => "test message",
+                stdout => 'test message',
                 stderr => q{},
             },
         ],
@@ -60,7 +60,7 @@ use PerlIO;
                 utf8   => 0,
             }, {
                 stdout => q{},
-                stderr => "test message",
+                stderr => 'test message',
             },
         ],
         [

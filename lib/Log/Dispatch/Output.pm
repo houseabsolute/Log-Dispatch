@@ -29,13 +29,14 @@ sub new {
         slurpy => 1,
     );
 
+    ## no critic (Subroutines::ProhibitBuiltinHomonyms)
     sub log {
         my $self = shift;
         my %p    = $validator->(@_);
 
         return unless $self->_should_log( $p{level} );
 
-        local $!;
+        local $! = undef;
         $p{message} = $self->_apply_callbacks(%p)
             if $self->{callbacks};
 
@@ -70,6 +71,7 @@ sub new {
         slurpy => 1,
     );
 
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
     sub _basic_init {
         my $self = shift;
         my %p    = $validator->(@_);
@@ -80,7 +82,7 @@ sub new {
         $self->{name} = $p{name} || $self->_unique_name();
 
         $self->{min_level} = $self->_level_as_number( $p{min_level} );
-        die "Invalid level specified for min_level"
+        die 'Invalid level specified for min_level'
             unless defined $self->{min_level};
 
         # Either use the parameter supplied or just the highest possible level.
@@ -90,7 +92,7 @@ sub new {
             : $#{ $self->{level_names} }
         );
 
-        die "Invalid level specified for max_level"
+        die 'Invalid level specified for max_level'
             unless defined $self->{max_level};
 
         $self->{callbacks} = $p{callbacks} if $p{callbacks};
@@ -139,7 +141,7 @@ sub _level_as_number {
     my $level = shift;
 
     unless ( defined $level ) {
-        Carp::croak "undefined value provided for log level";
+        Carp::croak 'undefined value provided for log level';
     }
 
     return $level if $level =~ /^\d$/;
@@ -151,18 +153,20 @@ sub _level_as_number {
     return $self->{level_numbers}{$level};
 }
 
+## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _level_as_name {
     my $self  = shift;
     my $level = shift;
 
     unless ( defined $level ) {
-        Carp::croak "undefined value provided for log level";
+        Carp::croak 'undefined value provided for log level';
     }
 
     return $level unless $level =~ /^\d$/;
 
     return $self->{level_names}[$level];
 }
+## use critic
 
 my $_unique_name_counter = 0;
 

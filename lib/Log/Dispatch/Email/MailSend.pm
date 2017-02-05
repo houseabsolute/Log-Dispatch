@@ -6,6 +6,7 @@ use warnings;
 our $VERSION = '2.59';
 
 use Mail::Send;
+use Try::Tiny;
 
 use base qw( Log::Dispatch::Email );
 
@@ -21,17 +22,20 @@ sub send_email {
     # Does this ever work for this module?
     $msg->set( 'From', $self->{from} ) if $self->{from};
 
-    local ( $?, $@, $SIG{__DIE__} );
-    eval {
+    local $? = undef;
+    return
+        if try {
         my $fh = $msg->open
-            or die "Cannot open handle to mail program";
+            or die 'Cannot open handle to mail program';
 
         $fh->print( $p{message} )
-            or die "Cannot print message to mail program handle";
+            or die 'Cannot print message to mail program handle';
 
         $fh->close
-            or die "Cannot close handle to mail program";
-    };
+            or die 'Cannot close handle to mail program';
+
+        1;
+        };
 
     warn $@ if $@;
 }
@@ -57,7 +61,7 @@ __END__
       ],
   );
 
-  $log->emerg("Something bad is happening");
+  $log->emerg('Something bad is happening');
 
 =head1 DESCRIPTION
 

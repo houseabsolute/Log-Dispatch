@@ -8,6 +8,7 @@ unless ( -d '.git' ) {
     exit;
 }
 
+## no critic (InputOutput::RequireCheckedSyscalls)
 system( $^X, 't/email-exit-helper.pl' );
 
 is( $? >> 8, 5, 'exit code of helper was 5' );

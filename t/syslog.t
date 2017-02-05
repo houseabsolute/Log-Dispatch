@@ -9,7 +9,9 @@ use Test::Needs {
 
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
+use Try::Tiny;
 
+## no critic (TestingAndDebugging::ProhibitNoWarnings)
 no warnings 'redefine', 'once';
 
 my @sock;
@@ -78,11 +80,14 @@ local *Sys::Syslog::syslog = sub { push @log, [@_] };
         )
     );
 
-    eval { die "foo!" };
+    local $@ = 'foo!';
 
     $dispatch->debug('Foo');
 
-    like( $@, qr/^foo!/, '$@ is not changed' );
+    like(
+        $@, qr/^foo!/,
+        '$@ is not changed when Log::Dispatch::Syslog does logging'
+    );
 }
 
 done_testing();

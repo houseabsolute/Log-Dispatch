@@ -17,6 +17,7 @@ use Test::Needs {
 use Log::Dispatch;
 use Log::Dispatch::Syslog;
 
+## no critic (TestingAndDebugging::ProhibitNoWarnings)
 no warnings 'redefine', 'once';
 
 my @sock;

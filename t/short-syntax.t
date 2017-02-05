@@ -1,10 +1,14 @@
 use strict;
 use warnings;
-use lib qw(t/lib);
+
+use Test::Fatal;
 use Test::More;
-use Log::Dispatch;
-use Log::Dispatch::TestUtil qw(cmp_deeply);
+
+use lib qw( t/lib );
+
 use File::Temp qw( tempdir );
+use Log::Dispatch::TestUtil qw( cmp_deeply );
+use Log::Dispatch;
 
 my $tempdir = tempdir( CLEANUP => 1 );
 
@@ -51,26 +55,27 @@ my $tempdir = tempdir( CLEANUP => 1 );
 
     cmp_deeply(
         $dispatch0, $dispatch2,
-        "created equivalent dispatchers - 0"
+        'created equivalent dispatchers - 0'
     );
     cmp_deeply(
         $dispatch1, $dispatch2,
-        "created equivalent dispatchers - 1"
+        'created equivalent dispatchers - 1'
     );
 }
 
 {
-    eval { Log::Dispatch->new( outputs => ['File'] ) };
     like(
-        $@, qr/expected arrayref/,
-        "got error for expected inner arrayref"
+        exception { Log::Dispatch->new( outputs => ['File'] ) },
+        qr/expected arrayref/,
+        'got error for expected inner arrayref'
     );
 }
+
 {
-    eval { Log::Dispatch->new( outputs => 'File' ) };
     like(
-        $@, qr/Validation failed for type named ArrayRef/,
-        "got error for expected outer arrayref"
+        exception { Log::Dispatch->new( outputs => 'File' ) },
+        qr/Validation failed for type named ArrayRef/,
+        'got error for expected outer arrayref'
     );
 }
 

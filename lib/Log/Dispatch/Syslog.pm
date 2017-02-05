@@ -9,6 +9,7 @@ use Log::Dispatch::Types;
 use Params::ValidationCompiler qw( validation_for );
 use Scalar::Util qw( reftype );
 use Sys::Syslog 0.28 ();
+use Try::Tiny;
 
 use base qw( Log::Dispatch::Output );
 
@@ -44,6 +45,7 @@ my $thread_lock;
     );
 
     my $threads_loaded;
+
     sub new {
         my $class = shift;
         my %p     = $validator->(@_);
@@ -54,10 +56,11 @@ my $thread_lock;
 
         if ( $self->{lock} ) {
             unless ($threads_loaded) {
-                local ( $@, $SIG{__DIE__} );
+                local ( $@, $SIG{__DIE__} ) = ( undef, undef );
 
+                ## no critic (BuiltinFunctions::ProhibitStringyEval)
                 # These need to be loaded with use, not require.
-                eval 'use threads; use threads::shared';
+                die $@ unless eval 'use threads; use threads::shared; 1;';
                 $threads_loaded = 1;
             }
             &threads::shared::share( \$thread_lock );
@@ -69,12 +72,6 @@ my $thread_lock;
     }
 }
 
-sub _init {
-    my $self = shift;
-
-
-}
-
 {
     my @priorities = (
         'DEBUG',
@@ -84,7 +81,7 @@ sub _init {
         'ERR',
         'CRIT',
         'ALERT',
-        'EMERG'
+        'EMERG',
     );
 
     sub log_message {
@@ -95,8 +92,8 @@ sub _init {
 
         lock($thread_lock) if $self->{lock};
 
-        local ( $@, $SIG{__DIE__} );
-        eval {
+        return
+            if try {
             if ( defined $self->{socket} ) {
                 Sys::Syslog::setlogsock(
                     ref $self->{socket}
@@ -112,8 +109,10 @@ sub _init {
                 $self->{facility}
             );
             Sys::Syslog::syslog( $priorities[$pri], $p{message} );
-            Sys::Syslog::closelog;
-        };
+            Sys::Syslog::closelog();
+
+            1;
+            };
 
         warn $@ if $@ and $^W;
     }

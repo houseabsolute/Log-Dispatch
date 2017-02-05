@@ -8,6 +8,7 @@ use File::Temp qw( tempdir );
 use Log::Dispatch;
 use Log::Dispatch::File::Locked;
 use POSIX qw( :sys_wait_h );
+use Try::Tiny;
 
 my $ChildCount = 10;
 for my $close_after_write ( 0, 1 ) {
@@ -42,7 +43,7 @@ sub _run_children {
     }
 
     my %exit_status;
-    eval {
+    try {
         local $SIG{ALRM}
             = sub { die 'Waited 10 seconds for children to exit' };
         alarm 10;
@@ -53,8 +54,6 @@ sub _run_children {
                 $exit_status{$pid} = $?;
             }
         }
-
-        1;
     };
 
     return ( $file, $@, \%exit_status );
@@ -134,7 +133,7 @@ sub _test_file_content {
         push @lines, $line;
     }
 
-    close $fh;
+    close $fh or die $!;
 
     return if is_deeply(
         [ sort @lines ],
@@ -142,8 +141,9 @@ sub _test_file_content {
         'file contains expected content'
     );
 
-    open my $diag_fh, '<', $file;
+    open my $diag_fh, '<', $file or die $!;
     diag(
-        do { local $/; <$diag_fh> }
+        do { local $/ = undef; <$diag_fh> }
     );
+    close $diag_fh or die $!;
 }

@@ -5,6 +5,7 @@ use warnings;
 
 our $VERSION = '2.59';
 
+use IO::Handle;
 use Log::Dispatch::Types;
 use Params::ValidationCompiler qw( validation_for );
 use Scalar::Util qw( openhandle );
@@ -88,17 +89,17 @@ sub _make_handle {
 sub _open_file {
     my $self = shift;
 
+    ## no critic (InputOutput::RequireBriefOpen)
     open my $fh, $self->{mode}, $self->{filename}
         or die "Cannot write to '$self->{filename}': $!";
 
     if ( $self->{autoflush} ) {
-        my $oldfh = select $fh;
-        $| = 1;
-        select $oldfh;
+        $fh->autoflush(1);
     }
 
     if ( $self->{permissions}
         && !$self->{chmodded} ) {
+        ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
         my $current_mode = ( stat $self->{filename} )[2] & 07777;
         if ( $current_mode ne $self->{permissions} ) {
             chmod $self->{permissions}, $self->{filename}
@@ -110,7 +111,8 @@ sub _open_file {
     }
 
     if ( $self->{binmode} ) {
-        binmode $fh, $self->{binmode};
+        binmode $fh, $self->{binmode}
+            or die "Cannot set binmode on filehandle: $!";
     }
 
     $self->{fh} = $fh;
@@ -147,6 +149,7 @@ sub DESTROY {
 
     if ( $self->{fh} ) {
         my $fh = $self->{fh};
+        ## no critic (InputOutput::RequireCheckedSyscalls)
         close $fh if openhandle($fh);
     }
 }

@@ -75,7 +75,7 @@ sub flush {
     my $self = shift;
 
     if ( $self->{buffered} && @{ $self->{buffer} } ) {
-        my $message = join '', @{ $self->{buffer} };
+        my $message = join q{}, @{ $self->{buffer} };
 
         $self->send_email( message => $message );
         $self->{buffer} = [];

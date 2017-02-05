@@ -27,6 +27,7 @@ BEGIN {
             );
         };
 
+        ## no critic (TestingAndDebugging::ProhibitNoStrict)
         no strict 'refs';
         *{$l} = $sub;
     }
@@ -118,8 +119,8 @@ sub add {
     # Once 5.6 is more established start using the warnings module.
     if ( exists $self->{outputs}{ $object->name } && $^W ) {
         Carp::carp(
-            "Log::Dispatch::* object ", $object->name,
-            " already exists."
+            'Log::Dispatch::* object ', $object->name,
+            ' already exists.'
         );
     }
 
@@ -145,6 +146,7 @@ sub callbacks {
     return @{ $self->{callbacks} };
 }
 
+## no critic (Subroutines::ProhibitBuiltinHomonyms)
 sub log {
     my $self = shift;
     my %p    = @_;
@@ -157,6 +159,7 @@ sub log {
 
     $self->_log_to_outputs( $self->_prepare_message(%p) );
 }
+## use critic
 
 sub _prepare_message {
     my $self = shift;

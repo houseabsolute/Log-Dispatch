@@ -65,8 +65,9 @@ sub send_email {
     my $self = shift;
     my %p    = @_;
 
-    local ( $?, $@, $SIG{__DIE__} );
-    eval {
+    local ( $?, $@, $SIG{__DIE__} ) = ( undef, undef, undef );
+    return
+        if eval {
         my $sender = Mail::Sender->new(
             {
                 from => $self->{from} || 'LogDispatch@foo.bar',
@@ -90,7 +91,9 @@ sub send_email {
 
         ref $sender->MailMsg( { msg => $p{message} } )
             or die "Error sending mail: $Mail::Sender::Error";
-    };
+
+        1;
+        };
 
     warn $@ if $@;
 }
