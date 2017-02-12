@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.60     2017-02-12
+
 - Same as 2.59 ... Switched from Params::Validate to
   Params::ValidationCompiler. This should speed up constructors and logging a
   little bit. This also allows Log::Dispatch::File to accept things like
