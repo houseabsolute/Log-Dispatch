@@ -7,7 +7,7 @@ use warnings;
 
 use Devel::Confess;
 
-our $VERSION = '2.60';
+our $VERSION = '2.61';
 
 use Carp ();
 use Log::Dispatch::Types;
