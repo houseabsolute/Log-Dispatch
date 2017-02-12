@@ -1,11 +1,17 @@
 {{$NEXT}}
 
+- Same as 2.59 ... Switched from Params::Validate to
+  Params::ValidationCompiler. This should speed up constructors and logging a
+  little bit. This also allows Log::Dispatch::File to accept things like
+  Path::Tiny objects for filenames. Reported by Joel Berger. GitHub #36.
+
+
 2.59     2017-02-05 (TRIAL RELEASE)
 
 - Switched from Params::Validate to Params::ValidationCompiler. This should
   speed up constructors and logging a little bit. This also allows
   Log::Dispatch::File to accept things like Path::Tiny objects for
-  filenames. Reported by Joel Berge. GitHub #36.
+  filenames. Reported by Joel Berger. GitHub #36.
 
 
 2.58     2016-11-13
