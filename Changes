@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.61     2017-02-13
+
 - The 2.60 release would throw an exception if the logged message was
   empty. While this makes sense, it also breaks backwards compatibility, so it
   has been reverted. Reported by Greg Oschwald. GitHub #38.
