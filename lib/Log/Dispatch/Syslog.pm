@@ -21,7 +21,10 @@ my $thread_lock;
     my $validator = validation_for(
         params => {
             ident => {
-                type    => t('NonEmptyStr'),
+
+                # It's weird to allow an empty string but that's how this
+                # worked pre-PVC.
+                type    => t('Str'),
                 default => $DefaultIdent
             },
             logopt => {
