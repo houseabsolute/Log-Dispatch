@@ -22,7 +22,7 @@ sub send_email {
     # Does this ever work for this module?
     $msg->set( 'From', $self->{from} ) if $self->{from};
 
-    local $? = undef;
+    local $? = 0;
     return
         if try {
         my $fh = $msg->open

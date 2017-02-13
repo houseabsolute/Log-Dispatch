@@ -22,7 +22,7 @@ sub send_email {
 
     $mail{From} = $self->{from} if defined $self->{from};
 
-    local $? = undef;
+    local $? = 0;
     unless ( MIME::Lite->new(%mail)->send ) {
         warn 'Error sending mail with MIME::Lite';
     }
