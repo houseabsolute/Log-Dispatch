@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- The 2.60 release would throw an exception if the logged message was
+  empty. While this makes sense, it also breaks backwards compatibility, so it
+  has been reverted. Reported by Greg Oschwald. GitHub #38.
+
+
 2.60     2017-02-12
 
 - Same as 2.59 ... Switched from Params::Validate to

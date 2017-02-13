@@ -23,8 +23,12 @@ sub new {
 {
     my $validator = validation_for(
         params => {
-            level   => { type => t('LogLevel') },
-            message => { type => t('NonEmptyStr') },
+            level => { type => t('LogLevel') },
+
+            # Pre-PVC we accepted empty strings, which is weird, but we don't
+            # want to break back-compat. See
+            # https://github.com/houseabsolute/Log-Dispatch/issues/38.
+            message => { type => t('Str') },
         },
         slurpy => 1,
     );
