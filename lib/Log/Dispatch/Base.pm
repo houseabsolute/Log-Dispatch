@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Scalar::Util qw( refaddr );
 
-our $VERSION = '2.61';
+our $VERSION = '2.62';
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _apply_callbacks {

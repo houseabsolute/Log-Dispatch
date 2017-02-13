@@ -3,7 +3,7 @@ package Log::Dispatch::Email::MailSend;
 use strict;
 use warnings;
 
-our $VERSION = '2.61';
+our $VERSION = '2.62';
 
 use Mail::Send;
 use Try::Tiny;

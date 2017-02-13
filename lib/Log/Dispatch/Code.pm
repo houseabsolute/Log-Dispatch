@@ -3,7 +3,7 @@ package Log::Dispatch::Code;
 use strict;
 use warnings;
 
-our $VERSION = '2.61';
+our $VERSION = '2.62';
 
 use Log::Dispatch::Types;
 use Params::ValidationCompiler qw( validation_for );
