@@ -5,8 +5,6 @@ use 5.006;
 use strict;
 use warnings;
 
-use Devel::Confess;
-
 our $VERSION = '2.62';
 
 use Carp ();
