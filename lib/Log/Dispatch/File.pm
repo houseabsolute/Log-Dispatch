@@ -3,7 +3,7 @@ package Log::Dispatch::File;
 use strict;
 use warnings;
 
-our $VERSION = '2.62';
+our $VERSION = '2.63';
 
 use IO::Handle;
 use Log::Dispatch::Types;
