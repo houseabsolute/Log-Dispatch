@@ -1,5 +1,4 @@
 requires "Carp" => "0";
-requires "Devel::Confess" => "0";
 requires "Devel::GlobalDestruction" => "0";
 requires "Dist::CheckConflicts" => "0.02";
 requires "Encode" => "0";

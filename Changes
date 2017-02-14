@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.62     2017-02-13
+
 - Devel::Confess was accidentally being loaded in Log::Dispatch. Fixed by
   Karen Etheridge. GitHub #39.
 
