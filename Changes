@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+- remove the inclusion of Devel::Confess.
+
 2.61     2017-02-13
 
 - The 2.60 release would throw an exception if the logged message was
