@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+ - Updated the conflicting version for Log::Dispatch::File::Stamped in
+   metadata (due to changes in handling of close_after_write). Patch by Karen
+   Etheridge. GitHub #41.
+
+
 2.62     2017-02-13
 
 - Devel::Confess was accidentally being loaded in Log::Dispatch. Fixed by
