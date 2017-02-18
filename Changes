@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+ - Updated a conflict entry for older Log::Dispatch::File::Stamped in metadata
+   (due to changes in handling of close_after_write).
+
+
 2.62     2017-02-13
 
 - Devel::Confess was accidentally being loaded in Log::Dispatch. Fixed by
