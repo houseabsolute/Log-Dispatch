@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.63     2017-02-19
+
  - Updated the conflicting version for Log::Dispatch::File::Stamped in
    metadata (due to changes in handling of close_after_write). Patch by Karen
    Etheridge. GitHub #41.
