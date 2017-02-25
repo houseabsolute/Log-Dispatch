@@ -3,7 +3,7 @@ package Log::Dispatch::ApacheLog;
 use strict;
 use warnings;
 
-our $VERSION = '2.64';
+our $VERSION = '2.65';
 
 use Log::Dispatch::Types;
 use Params::ValidationCompiler qw( validation_for );

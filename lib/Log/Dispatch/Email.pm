@@ -3,7 +3,7 @@ package Log::Dispatch::Email;
 use strict;
 use warnings;
 
-our $VERSION = '2.64';
+our $VERSION = '2.65';
 
 use Devel::GlobalDestruction qw( in_global_destruction );
 use Log::Dispatch::Types;

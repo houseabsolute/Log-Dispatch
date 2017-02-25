@@ -5,7 +5,7 @@ use 5.006;
 use strict;
 use warnings;
 
-our $VERSION = '2.64';
+our $VERSION = '2.65';
 
 use Carp ();
 use Log::Dispatch::Types;
