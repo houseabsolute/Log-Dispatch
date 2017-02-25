@@ -86,21 +86,14 @@ sub new {
 
         $self->{name} = $p{name} || $self->_unique_name();
 
-        try { $self->{min_level} = $self->_level_as_number( $p{min_level} ) };
-        Carp::croak 'Invalid level specified for min_level'
-            unless defined $self->{min_level};
+        $self->{min_level} = $self->_level_as_number( $p{min_level} );
 
         # Either use the parameter supplied or just the highest possible level.
-        try {
-            $self->{max_level} = (
-                exists $p{max_level}
-                ? $self->_level_as_number( $p{max_level} )
-                : $#{ $self->{level_names} }
-            );
-        };
-
-        Carp::croak 'Invalid level specified for max_level'
-            unless defined $self->{max_level};
+        $self->{max_level} = (
+            exists $p{max_level}
+            ? $self->_level_as_number( $p{max_level} )
+            : $#{ $self->{level_names} }
+        );
 
         $self->{callbacks} = $p{callbacks} if $p{callbacks};
 
