@@ -589,6 +589,34 @@ SKIP:
     );
 }
 
+# Log::Dispatch->would_log method
+{
+
+    my $string;
+    my $dispatch = Log::Dispatch->new(
+        outputs => [
+            [
+                'String',
+                name      => 'string',
+                string    => \$string,
+                min_level => 'debug',
+            ],
+        ],
+    );
+
+    is(
+        $dispatch->would_log('debug'),
+        1,
+        'Would log works with level name'
+    );
+
+    is(
+        $dispatch->would_log(0),
+        1,
+        'Would log works with level number'
+    );
+}
+
 # make sure passing mode as write works
 {
     my $mode_log = File::Spec->catfile( $tempdir, 'mode.log' );
