@@ -191,10 +191,11 @@ sub log_and_die {
 sub log_and_croak {
     my $self = shift;
 
-    $self->log_and_die( @_ );
+    $self->log_and_die(@_);
 }
 
-my @CARP_NOT =  __PACKAGE__;
+my @CARP_NOT = __PACKAGE__;
+
 sub _die_with_message {
     my $self = shift;
     my %p    = @_;

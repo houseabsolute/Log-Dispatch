@@ -1012,7 +1012,8 @@ subtest(
         );
 
         my $e = exception {
-            _log_and_die($dispatch,
+            _log_and_die(
+                $dispatch,
                 level   => 'error',
                 message => 'this is my message',
             );
@@ -1370,6 +1371,9 @@ sub _log_and_die {
     package Croaker;
 
     sub croak {
-        shift->log_and_croak( level => 'error', message => 'croaking a message' );
+        shift->log_and_croak(
+            level   => 'error',
+            message => 'croaking a message'
+        );
     }
 }
