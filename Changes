@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.64     2017-02-25 (TRIAL RELEASE)
+
 - Improve level validation and canonicalization logic. Patch by Kerin Millar,
   minor changes and tests by Kivanc Yazan. Github #42.
 
