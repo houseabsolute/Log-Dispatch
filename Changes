@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+ - Improve level validation and canonicalization logic. Patch by Kerin Millar,
+   minor changes and tests by Kivanc Yazan. Github #42.
+
+
 2.63     2017-02-19
 
  - Updated the conflicting version for Log::Dispatch::File::Stamped in
