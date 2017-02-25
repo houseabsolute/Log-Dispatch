@@ -148,7 +148,7 @@ sub _level_as_number {
         Carp::croak "$level is not a valid Log::Dispatch log level";
     }
 
-    return $level if $level =~ /\A[0-9]+\z/;
+    return $level if $level =~ /\A[0-7]+\z/;
 
     return $self->{level_numbers}{$level};
 }
@@ -167,7 +167,7 @@ sub _level_as_name {
         Carp::croak "$level is not a valid Log::Dispatch log level";
     }
 
-    return $canonical_level unless $level =~ /\A[0-9]+\z/;
+    return $canonical_level unless $level =~ /\A[0-7]+\z/;
 
     return $self->{level_names}[$level];
 }
