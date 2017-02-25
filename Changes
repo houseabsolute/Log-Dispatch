@@ -1,7 +1,11 @@
 {{$NEXT}}
 
- - Improve level validation and canonicalization logic. Patch by Kerin Millar,
-   minor changes and tests by Kivanc Yazan. Github #42.
+- Improve level validation and canonicalization logic. Patch by Kerin Millar,
+  minor changes and tests by Kivanc Yazan. Github #42.
+
+- The log_and_die and log_and_croak methods are now identical, as we set
+  @CARP_NOT for Log::Dispatch to exclude the Log::Dispatch package. You can
+  still explicitly pass carp_level to log_and_croak.
 
 
 2.63     2017-02-19
