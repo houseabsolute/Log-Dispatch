@@ -103,7 +103,7 @@ sub _open_file {
         my $current_mode = ( stat $self->{filename} )[2] & 07777;
         if ( $current_mode ne $self->{permissions} ) {
             chmod $self->{permissions}, $self->{filename}
-                or die sprintf("Cannot chmod %s to %04o: %s",
+                or die sprintf('Cannot chmod %s to %04o: %s',
                   $self->{filename}, $self->{permissions} & 07777, $!);
         }
 
