@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- When Log::Dispatch::File is asked to chmod a file and that fails, show the
+  requested permissions in octal. Patch by Carsten Grohmann. GitHub #46.
+
+
 2.64     2017-02-25 (TRIAL RELEASE)
 
 - Improve level validation and canonicalization logic. Patch by Kerin Millar,
