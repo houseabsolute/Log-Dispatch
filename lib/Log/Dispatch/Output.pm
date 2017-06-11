@@ -3,7 +3,7 @@ package Log::Dispatch::Output;
 use strict;
 use warnings;
 
-our $VERSION = '2.65';
+our $VERSION = '2.66';
 
 use Carp ();
 use Try::Tiny;
