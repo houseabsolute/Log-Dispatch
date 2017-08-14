@@ -27,7 +27,7 @@ use base qw( Log::Dispatch::Output );
 
     sub new {
         my $class = shift;
-        my %p     = validator->(@_);
+        my %p     = $validator->(@_);
 
         my $self = bless { apache_log => ( delete $p{apache} )->log }, $class;
         $self->_basic_init(%p);
