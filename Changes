@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.66     2017-08-14
+
 - Fixed the ApacheLog output, which was broken in 2.60. Fixed by Michael
   Schout. GitHub #48 and #49.
 
