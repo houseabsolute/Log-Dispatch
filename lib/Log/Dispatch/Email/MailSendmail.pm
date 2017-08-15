@@ -3,7 +3,7 @@ package Log::Dispatch::Email::MailSendmail;
 use strict;
 use warnings;
 
-our $VERSION = '2.66';
+our $VERSION = '2.67';
 
 use Mail::Sendmail ();
 
