@@ -37,6 +37,10 @@ sub APPEND {0}
                 type    => t('Bool'),
                 default => 0,
             },
+            lazy_open => {
+                type    => t('Bool'),
+                default => 0,
+            },
             permissions => {
                 type     => t('PositiveOrZeroInt'),
                 optional => 1,
@@ -55,7 +59,7 @@ sub APPEND {0}
 
         my $self
             = bless { map { $_ => delete $p{$_} }
-                qw( filename binmode autoflush close_after_write permissions syswrite )
+                qw( filename binmode autoflush close_after_write lazy_open permissions syswrite )
             }, $class;
 
         if ( $self->{close_after_write} ) {
@@ -83,7 +87,8 @@ sub APPEND {0}
 sub _make_handle {
     my $self = shift;
 
-    $self->_open_file() unless $self->{close_after_write};
+    $self->_open_file()
+        unless $self->{close_after_write} || $self->{lazy_open};
 }
 
 sub _open_file {
@@ -126,6 +131,10 @@ sub log_message {
 
     if ( $self->{close_after_write} ) {
         $self->_open_file;
+    }
+    elsif ( $self->{lazy_open} ) {
+        $self->_open_file;
+        $self->{lazy_open} = 0;
     }
 
     my $fh = $self->{fh};
@@ -223,6 +232,11 @@ defaults to false.
 
 If this is true, then the mode will always be append, so that the file is not
 re-written for each new message.
+
+=item * lazy_open ($)
+
+Whether or not the file should be opened only on first write. This defaults to
+false.
 
 =item * autoflush ($)
 
