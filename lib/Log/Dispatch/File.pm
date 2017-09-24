@@ -53,14 +53,22 @@ sub APPEND {0}
         slurpy => 1,
     );
 
+    # We stick these in $self as-is without looking at them in new().
+    my @self_p = qw(
+        autoflush
+        binmode
+        close_after_write
+        filename
+        lazy_open
+        permissions
+        syswrite
+    );
+
     sub new {
         my $class = shift;
         my %p     = $validator->(@_);
 
-        my $self
-            = bless { map { $_ => delete $p{$_} }
-                qw( filename binmode autoflush close_after_write lazy_open permissions syswrite )
-            }, $class;
+        my $self = bless { map { $_ => delete $p{$_} } @self_p }, $class;
 
         if ( $self->{close_after_write} ) {
             $self->{mode} = '>>';
@@ -78,17 +86,11 @@ sub APPEND {0}
         delete $p{mode};
 
         $self->_basic_init(%p);
-        $self->_make_handle;
+        $self->_open_file()
+            unless $self->{close_after_write} || $self->{lazy_open};
 
         return $self;
     }
-}
-
-sub _make_handle {
-    my $self = shift;
-
-    $self->_open_file()
-        unless $self->{close_after_write} || $self->{lazy_open};
 }
 
 sub _open_file {
