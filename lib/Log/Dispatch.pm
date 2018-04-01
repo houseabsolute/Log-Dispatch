@@ -440,15 +440,14 @@ C<log()> method.
 Has the same behavior as calling C<log()> but calls
 C<_die_with_message()> at the end.
 
-=head2 $dispatch->log_and_croak( level => $, message => $ or \& )
-
-This method adjusts the C<$Carp::CarpLevel> scalar so that the croak
-comes from the context in which it is called.
-
 You can throw exception objects by subclassing this method.
 
 If the C<carp_level> parameter is present its value will be added to
 the current value of C<$Carp::CarpLevel>.
+
+=head2 $dispatch->log_and_croak( level => $, message => $ or \& )
+
+A synonym for C<$dispatch->log_and_die()>.
 
 =head2 $dispatch->log_to( name => $, level => $, message => $ )
 
