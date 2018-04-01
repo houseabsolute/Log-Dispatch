@@ -77,7 +77,7 @@ sub APPEND {0}
             $p{mode} =~ /^(?:>>|append)$/
             || (   $p{mode} =~ /^\d+$/
                 && $p{mode} == O_APPEND() )
-            ) {
+        ) {
             $self->{mode} = '>>';
         }
         else {

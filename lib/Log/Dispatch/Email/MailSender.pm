@@ -70,7 +70,7 @@ sub send_email {
         if eval {
         my $sender = Mail::Sender->new(
             {
-                from => $self->{from} || 'LogDispatch@foo.bar',
+                from         => $self->{from} || 'LogDispatch@foo.bar',
                 fake_from    => $self->{fake_from},
                 replyto      => $self->{replyto},
                 to           => ( join ',', @{ $self->{to} } ),

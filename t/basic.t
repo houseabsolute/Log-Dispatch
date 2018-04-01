@@ -572,7 +572,7 @@ subtest(
             foreach my $test_level (
                 qw( debug info notice warn warning err
                 error crit critical alert emerg emergency )
-                ) {
+            ) {
                 $string = q{};
                 $dispatch->$test_level( $test_level, 'test' );
 
@@ -633,7 +633,7 @@ subtest(
         foreach my $l (
             qw( debug info notice warning err error
             crit critical alert emerg emergency )
-            ) {
+        ) {
             ok( Log::Dispatch->level_is_valid($l), "$l is valid level" );
         }
 
