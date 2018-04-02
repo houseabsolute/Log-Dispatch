@@ -95,6 +95,8 @@ sub DESTROY {
             = "Log messages for the $name output (a $class object) remain unsent but the program is terminating.\n";
         $message .= "The messages are:\n";
         $message .= "  $_\n" for @{ $self->{buffer} };
+
+        warn $message;
     }
     else {
         $self->flush();
