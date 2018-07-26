@@ -39,7 +39,7 @@ sub new {
         my $self = shift;
         my %p    = $validator->(@_);
 
-        return unless $self->_should_log( $p{level} );
+        return unless $self->_should_log( $p{level}, $p{_level_id} );
 
         local $! = undef;
         $p{message} = $self->_apply_callbacks(%p)
@@ -129,9 +129,10 @@ sub accepted_levels {
 }
 
 sub _should_log {
-    my $self = shift;
+    my ( $self, $level, $level_id ) = @_;
 
-    my $msg_level = $self->_level_as_number(shift);
+    my $msg_level
+        = defined $level_id ? $level_id : $self->_level_as_number($level);
     return (   ( $msg_level >= $self->{min_level} )
             && ( $msg_level <= $self->{max_level} ) );
 }

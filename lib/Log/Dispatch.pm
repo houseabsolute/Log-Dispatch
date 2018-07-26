@@ -9,7 +9,7 @@ our $VERSION = '2.68';
 
 use Carp ();
 use Log::Dispatch::Types;
-use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels );
+use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels %LevelNamesToNumbers);
 use Module::Runtime qw( use_package_optimistically );
 use Params::ValidationCompiler qw( validation_for );
 
@@ -17,11 +17,13 @@ use base qw( Log::Dispatch::Base );
 
 BEGIN {
     foreach my $l ( keys %CanonicalLevelNames ) {
+        my $level_id = $LevelNamesToNumbers{ $l };
         my $sub = sub {
             my $self = shift;
             $self->log(
-                level   => $CanonicalLevelNames{$l},
-                message => @_ > 1 ? "@_" : $_[0],
+                level     => $CanonicalLevelNames{$l},
+                _level_id => $level_id,
+                message   => @_ > 1 ? "@_" : $_[0],
             );
         };
 
@@ -149,7 +151,7 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
-    return unless $self->would_log( $p{level} );
+    return unless $self->would_log( $p{level}, $p{_level_id} );
 
     $self->_log_to_outputs( $self->_prepare_message(%p) );
 }
@@ -172,9 +174,8 @@ sub _log_to_outputs {
     my $self = shift;
     my %p    = @_;
 
-    foreach ( keys %{ $self->{outputs} } ) {
-        $p{name} = $_;
-        $self->_log_to(%p);
+    foreach ( values %{ $self->{outputs} } ) {
+        $_->log(%p);
     }
 }
 
@@ -255,10 +256,12 @@ sub level_is_valid {
 }
 
 sub would_log {
-    my $self  = shift;
-    my $level = shift;
+    my ($self, $level, $level_id) = @_;
 
-    return 0 unless $self->level_is_valid($level);
+    # assume that level is correct if ID given
+    if (! defined $level_id) {
+        return 0 unless $self->level_is_valid($level);
+    }
 
     foreach ( values %{ $self->{outputs} } ) {
         return 1 if $_->_should_log($level);
