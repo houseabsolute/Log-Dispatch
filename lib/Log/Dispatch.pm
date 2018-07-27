@@ -9,7 +9,8 @@ our $VERSION = '2.68';
 
 use Carp ();
 use Log::Dispatch::Types;
-use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels %LevelNamesToNumbers);
+use Log::Dispatch::Vars
+    qw( %CanonicalLevelNames @OrderedLevels %LevelNamesToNumbers);
 use Module::Runtime qw( use_package_optimistically );
 use Params::ValidationCompiler qw( validation_for );
 
@@ -17,8 +18,8 @@ use base qw( Log::Dispatch::Base );
 
 BEGIN {
     foreach my $l ( keys %CanonicalLevelNames ) {
-        my $level_id = $LevelNamesToNumbers{ $l };
-        my $sub = sub {
+        my $level_id = $LevelNamesToNumbers{$l};
+        my $sub      = sub {
             my $self = shift;
             $self->log(
                 level     => $CanonicalLevelNames{$l},
@@ -256,10 +257,10 @@ sub level_is_valid {
 }
 
 sub would_log {
-    my ($self, $level, $level_id) = @_;
+    my ( $self, $level, $level_id ) = @_;
 
     # assume that level is correct if ID given
-    if (! defined $level_id) {
+    if ( !defined $level_id ) {
         return 0 unless $self->level_is_valid($level);
     }
 
