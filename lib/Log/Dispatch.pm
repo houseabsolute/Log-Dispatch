@@ -21,7 +21,7 @@ BEGIN {
         my $level_id = $LevelNamesToNumbers{$l};
         my $sub      = sub {
             my $self = shift;
-            $self->log(
+            $self->_log_with_id(
                 level     => $CanonicalLevelNames{$l},
                 _level_id => $level_id,
                 message   => @_ > 1 ? "@_" : $_[0],
@@ -152,11 +152,23 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
-    return unless $self->would_log( $p{level}, $p{_level_id} );
+    return unless $self->would_log( $p{level} );
 
     $self->_log_to_outputs( $self->_prepare_message(%p) );
 }
 ## use critic
+
+sub _log_with_id {
+    my $self = shift;
+    my %p    = @_;
+
+    return unless $self->_would_log( $p{_level_id} );
+
+    my %pm = $self->_prepare_message(%p);
+    foreach ( values %{ $self->{outputs} } ) {
+        $_->_log_with_id(%pm);
+    }
+}
 
 sub _prepare_message {
     my $self = shift;
@@ -257,15 +269,24 @@ sub level_is_valid {
 }
 
 sub would_log {
-    my ( $self, $level, $level_id ) = @_;
+    my $self  = shift;
+    my $level = shift;
 
-    # assume that level is correct if ID given
-    if ( !defined $level_id ) {
-        return 0 unless $self->level_is_valid($level);
-    }
+    return 0 unless $self->level_is_valid($level);
 
     foreach ( values %{ $self->{outputs} } ) {
         return 1 if $_->_should_log($level);
+    }
+
+    return 0;
+}
+
+sub _would_log {
+    my $self     = shift;
+    my $level_id = shift;
+
+    foreach ( values %{ $self->{outputs} } ) {
+        return 1 if $_->_should_log_id($level_id);
     }
 
     return 0;
