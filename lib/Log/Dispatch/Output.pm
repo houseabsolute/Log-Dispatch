@@ -147,7 +147,8 @@ sub _should_log {
     my $level    = shift;
     my $level_id = shift;
 
-    my $msg_level = $level_id // $self->_level_as_number($level);
+    my $msg_level
+        = defined $level_id ? $level_id : $self->_level_as_number($level);
     return (   ( $msg_level >= $self->{min_level} )
             && ( $msg_level <= $self->{max_level} ) );
 }
