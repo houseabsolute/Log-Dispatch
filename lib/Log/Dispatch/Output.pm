@@ -39,7 +39,7 @@ sub new {
         my $self = shift;
         my %p    = $validator->(@_);
 
-        return unless $self->_should_log( $p{level} );
+        return unless $self->_should_log( $p{level}, $p{_level_id} );
 
         local $! = undef;
         $p{message} = $self->_apply_callbacks(%p)
@@ -47,6 +47,21 @@ sub new {
 
         $self->log_message(%p);
     }
+
+    ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
+    sub _log_with_id {
+        my $self = shift;
+        my %p    = $validator->(@_);
+
+        return unless $self->_should_log( undef, $p{_level_id} );
+
+        local $! = undef;
+        $p{message} = $self->_apply_callbacks(%p)
+            if $self->{callbacks};
+
+        $self->log_message(%p);
+    }
+    ## use critic
 }
 
 {
@@ -81,8 +96,7 @@ sub new {
         my $self = shift;
         my %p    = $validator->(@_);
 
-        $self->{level_names}   = \@OrderedLevels;
-        $self->{level_numbers} = \%LevelNamesToNumbers;
+        $self->{level_names} = \@OrderedLevels;
 
         $self->{name} = $p{name} || $self->_unique_name();
 
@@ -129,29 +143,24 @@ sub accepted_levels {
 }
 
 sub _should_log {
-    my $self = shift;
+    my $self     = shift;
+    my $level    = shift;
+    my $level_id = shift;
 
-    my $msg_level = $self->_level_as_number(shift);
+    my $msg_level
+        = defined $level_id ? $level_id : $self->_level_as_number($level);
     return (   ( $msg_level >= $self->{min_level} )
             && ( $msg_level <= $self->{max_level} ) );
 }
 
+## no critic (Subroutines::ProtectPrivateSubs)
 sub _level_as_number {
-    my $self  = shift;
-    my $level = shift;
+    shift;
 
-    unless ( defined $level ) {
-        Carp::croak 'undefined value provided for log level';
-    }
-
-    unless ( Log::Dispatch->level_is_valid($level) ) {
-        Carp::croak "$level is not a valid Log::Dispatch log level";
-    }
-
-    return $level if $level =~ /\A[0-7]+\z/;
-
-    return $self->{level_numbers}{$level};
+    # should it be public?
+    return Log::Dispatch->_level_as_number(shift);
 }
+## use critic
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _level_as_name {

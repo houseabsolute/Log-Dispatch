@@ -9,7 +9,8 @@ our $VERSION = '2.68';
 
 use Carp ();
 use Log::Dispatch::Types;
-use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels );
+use Log::Dispatch::Vars
+    qw( %CanonicalLevelNames @OrderedLevels %LevelNamesToNumbers);
 use Module::Runtime qw( use_package_optimistically );
 use Params::ValidationCompiler qw( validation_for );
 
@@ -17,11 +18,13 @@ use base qw( Log::Dispatch::Base );
 
 BEGIN {
     foreach my $l ( keys %CanonicalLevelNames ) {
-        my $sub = sub {
+        my $level_id = $LevelNamesToNumbers{$l};
+        my $sub      = sub {
             my $self = shift;
-            $self->log(
-                level   => $CanonicalLevelNames{$l},
-                message => @_ > 1 ? "@_" : $_[0],
+            $self->_log_with_id(
+                level     => $CanonicalLevelNames{$l},
+                _level_id => $level_id,
+                message   => @_ > 1 ? "@_" : $_[0],
             );
         };
 
@@ -149,11 +152,25 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
-    return unless $self->would_log( $p{level} );
+    my $level_id = $self->_level_as_number( $p{level} );
+    return unless defined $level_id;
 
-    $self->_log_to_outputs( $self->_prepare_message(%p) );
+    return $self->_log_with_id( %p, _level_id => $level_id );
+
 }
 ## use critic
+
+sub _log_with_id {
+    my $self = shift;
+    my %p    = @_;
+
+    return unless $self->_would_log( $p{_level_id} );
+
+    my %pm = $self->_prepare_message(%p);
+    foreach ( values %{ $self->{outputs} } ) {
+        $_->_log_with_id(%pm);
+    }
+}
 
 sub _prepare_message {
     my $self = shift;
@@ -172,9 +189,8 @@ sub _log_to_outputs {
     my $self = shift;
     my %p    = @_;
 
-    foreach ( keys %{ $self->{outputs} } ) {
-        $p{name} = $_;
-        $self->_log_to(%p);
+    foreach ( values %{ $self->{outputs} } ) {
+        $_->log(%p);
     }
 }
 
@@ -258,10 +274,18 @@ sub would_log {
     my $self  = shift;
     my $level = shift;
 
-    return 0 unless $self->level_is_valid($level);
+    my $level_id = $self->_level_as_number($level);
+    return 0 unless defined $level_id;
+
+    return $self->_would_log($level_id);
+}
+
+sub _would_log {
+    my $self     = shift;
+    my $level_id = shift;
 
     foreach ( values %{ $self->{outputs} } ) {
-        return 1 if $_->_should_log($level);
+        return 1 if $_->_should_log( undef, $level_id );
     }
 
     return 0;
@@ -279,6 +303,16 @@ sub is_crit      { $_[0]->would_log('crit') }
 sub is_alert     { $_[0]->would_log('alert') }
 sub is_emerg     { $_[0]->would_log('emerg') }
 sub is_emergency { $_[0]->would_log('emergency') }
+
+sub _level_as_number {
+    my $self  = shift;
+    my $level = shift;
+
+    my $level_name = $self->level_is_valid($level);
+    return unless $level_name;
+
+    return $LevelNamesToNumbers{$level_name};
+}
 
 1;
 

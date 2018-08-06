@@ -1237,11 +1237,13 @@ subtest(
             \@calls,
             [
                 {
-                    level   => 'error',
-                    message => 'foo',
+                    level     => 'error',
+                    _level_id => 4,
+                    message   => 'foo',
                 }, {
-                    level   => 'critical',
-                    message => 'baz',
+                    level     => 'critical',
+                    _level_id => 5,
+                    message   => 'baz',
                 },
             ],
             'code received the expected messages'
