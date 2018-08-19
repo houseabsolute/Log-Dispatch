@@ -43,7 +43,7 @@ sub _apply_callbacks {
     my %p    = @_;
 
     my $msg = delete $p{message};
-    foreach my $cb ( @{ $self->{callbacks} } ) {
+    for my $cb ( @{ $self->{callbacks} } ) {
         $msg = $cb->( message => $msg, %p );
     }
 

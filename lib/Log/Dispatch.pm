@@ -16,7 +16,7 @@ use Params::ValidationCompiler qw( validation_for );
 use base qw( Log::Dispatch::Base );
 
 BEGIN {
-    foreach my $l ( keys %CanonicalLevelNames ) {
+    for my $l ( keys %CanonicalLevelNames ) {
         my $level_num = $LevelNamesToNumbers{$l};
         my $sub       = sub {
             my $self = shift;
@@ -75,7 +75,7 @@ BEGIN {
                 #   [ 'File',   min_level => 'debug', filename => 'logfile' ],
                 #   [ 'Screen', min_level => 'warning' ]
                 # ]
-                foreach my $arr ( @{$outputs} ) {
+                for my $arr ( @{$outputs} ) {
                     die "expected arrayref, not '$arr'"
                         unless ref $arr eq 'ARRAY';
                     $self->_add_output( @{$arr} );
@@ -189,7 +189,7 @@ sub _log_to_outputs {
     my $self = shift;
     my %p    = @_;
 
-    foreach ( values %{ $self->{outputs} } ) {
+    for ( values %{ $self->{outputs} } ) {
         $_->log(%p);
     }
 }
@@ -270,7 +270,7 @@ sub _would_log {
     my $self      = shift;
     my $level_num = shift;
 
-    foreach ( values %{ $self->{outputs} } ) {
+    for ( values %{ $self->{outputs} } ) {
         return 1 if $_->_should_log($level_num);
     }
 
