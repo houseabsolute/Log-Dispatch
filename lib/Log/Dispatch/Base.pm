@@ -8,7 +8,7 @@ use Log::Dispatch::Vars
     qw( %CanonicalLevelNames %LevelNamesToNumbers @OrderedLevels );
 use Scalar::Util qw( refaddr );
 
-our $VERSION = '2.68';
+our $VERSION = '2.69';
 
 ## no critic (Subroutines::ProhibitUnusedPrivateSubroutines)
 sub _level_as_number {
