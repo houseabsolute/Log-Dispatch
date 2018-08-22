@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Speedups to the internals to avoid re-validating the same sets of parameters
+  repeatedly. Based on a PR #54 from Sergey Leschenko.
+
+
 2.67     2017-09-24
 
 - Added a lazy_open option to the File output. This delays opening the file

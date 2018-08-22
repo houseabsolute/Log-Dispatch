@@ -9,17 +9,19 @@ our $VERSION = '2.68';
 
 use Carp ();
 use Log::Dispatch::Types;
-use Log::Dispatch::Vars qw( %CanonicalLevelNames @OrderedLevels );
+use Log::Dispatch::Vars qw( %CanonicalLevelNames %LevelNamesToNumbers );
 use Module::Runtime qw( use_package_optimistically );
 use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Base );
 
 BEGIN {
-    foreach my $l ( keys %CanonicalLevelNames ) {
-        my $sub = sub {
+    for my $l ( keys %CanonicalLevelNames ) {
+        my $level_num = $LevelNamesToNumbers{$l};
+        my $sub       = sub {
             my $self = shift;
-            $self->log(
+            $self->_log_with_num(
+                $level_num,
                 level   => $CanonicalLevelNames{$l},
                 message => @_ > 1 ? "@_" : $_[0],
             );
@@ -73,7 +75,7 @@ BEGIN {
                 #   [ 'File',   min_level => 'debug', filename => 'logfile' ],
                 #   [ 'Screen', min_level => 'warning' ]
                 # ]
-                foreach my $arr ( @{$outputs} ) {
+                for my $arr ( @{$outputs} ) {
                     die "expected arrayref, not '$arr'"
                         unless ref $arr eq 'ARRAY';
                     $self->_add_output( @{$arr} );
@@ -149,11 +151,26 @@ sub log {
     my $self = shift;
     my %p    = @_;
 
-    return unless $self->would_log( $p{level} );
+    my $level_num = $self->_level_as_number( $p{level} );
+    return unless defined $level_num;
 
-    $self->_log_to_outputs( $self->_prepare_message(%p) );
+    return $self->_log_with_num( $level_num, %p );
+
 }
 ## use critic
+
+sub _log_with_num {
+    my $self      = shift;
+    my $level_num = shift;
+    my %p         = @_;
+
+    return unless $self->_would_log($level_num);
+
+    $p{message} = $self->_prepare_message(%p);
+    $_->_log_with_num( $level_num, %p ) for values %{ $self->{outputs} };
+
+    return;
+}
 
 sub _prepare_message {
     my $self = shift;
@@ -165,23 +182,23 @@ sub _prepare_message {
     $p{message} = $self->_apply_callbacks(%p)
         if $self->{callbacks};
 
-    return %p;
+    return $p{message};
 }
 
 sub _log_to_outputs {
     my $self = shift;
     my %p    = @_;
 
-    foreach ( keys %{ $self->{outputs} } ) {
-        $p{name} = $_;
-        $self->_log_to(%p);
+    for ( values %{ $self->{outputs} } ) {
+        $_->log(%p);
     }
 }
 
 sub log_and_die {
     my $self = shift;
+    my %p    = @_;
 
-    my %p = $self->_prepare_message(@_);
+    $p{message} = $self->_prepare_message(%p);
 
     $self->_log_to_outputs(%p) if $self->would_log( $p{level} );
 
@@ -239,29 +256,22 @@ sub output {
     return $self->{outputs}{$name};
 }
 
-sub level_is_valid {
-    shift;
-    my $level = shift;
-
-    if ( !defined $level ) {
-        Carp::croak('Logging level was not provided');
-    }
-
-    if ( $level =~ /\A[0-9]+\z/ && $level <= $#OrderedLevels ) {
-        return $OrderedLevels[$level];
-    }
-
-    return $CanonicalLevelNames{$level};
-}
-
 sub would_log {
     my $self  = shift;
     my $level = shift;
 
-    return 0 unless $self->level_is_valid($level);
+    my $level_num = $self->_level_as_number($level);
+    return 0 unless defined $level_num;
 
-    foreach ( values %{ $self->{outputs} } ) {
-        return 1 if $_->_should_log($level);
+    return $self->_would_log($level_num);
+}
+
+sub _would_log {
+    my $self      = shift;
+    my $level_num = shift;
+
+    for ( values %{ $self->{outputs} } ) {
+        return 1 if $_->_should_log($level_num);
     }
 
     return 0;
