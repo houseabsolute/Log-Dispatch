@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.68     2018-08-21
+
 - Speedups to the internals to avoid re-validating the same sets of parameters
   repeatedly. Based on a PR #54 from Sergey Leschenko.
 
