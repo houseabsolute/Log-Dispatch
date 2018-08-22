@@ -2,8 +2,9 @@
 
 2.68     2018-08-21
 
-- Speedups to the internals to avoid re-validating the same sets of parameters
-  repeatedly. Based on a PR #54 from Sergey Leschenko.
+- Changed some internals to avoid re-validating the same sets of parameters
+  repeatedly, which should offer a small speed bost. Based on PR #54 from
+  Sergey Leschenko.
 
 
 2.67     2017-09-24
