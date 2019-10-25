@@ -65,7 +65,7 @@ sub send_email {
     my $self = shift;
     my %p    = @_;
 
-    local ( $?, $@, $SIG{__DIE__} ) = ( undef, undef, undef );
+    local ( $?, $@, $SIG{__DIE__} ) = ( 0, undef, undef );
     return
         if eval {
         my $sender = Mail::Sender->new(
