@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.69     2019-10-25
+
 - Fix a warning Log::Dispatch::Email::Mailsender (GH #57). Fixed by Graham
   Knop. 58 #GH.
 
