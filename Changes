@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+2.70     2020-07-20
+
 - Make locking test wait longer before giving up. Some filesystems (like NFS)
   can be quite slow to lock files. Fixed by Joelle Maslak. GH #61.
 
