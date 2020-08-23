@@ -95,8 +95,7 @@ my $thread_lock;
 
         lock($thread_lock) if $self->{lock};
 
-        return
-            if try {
+        try {
             if ( defined $self->{socket} ) {
                 Sys::Syslog::setlogsock(
                     ref $self->{socket}
@@ -113,11 +112,9 @@ my $thread_lock;
             );
             Sys::Syslog::syslog( $priorities[$pri], $p{message} );
             Sys::Syslog::closelog();
-
-            1;
-            };
-
-        warn $@ if $@ and $^W;
+        } catch {
+            warn $_ if $^W;
+        };
     }
 }
 
