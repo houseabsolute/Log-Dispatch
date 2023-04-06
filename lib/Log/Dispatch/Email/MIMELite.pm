@@ -3,7 +3,7 @@ package Log::Dispatch::Email::MIMELite;
 use strict;
 use warnings;
 
-our $VERSION = '2.71';
+our $VERSION = '2.72';
 
 use MIME::Lite;
 

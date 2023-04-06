@@ -3,7 +3,7 @@ package Log::Dispatch::Vars;
 use strict;
 use warnings;
 
-our $VERSION = '2.71';
+our $VERSION = '2.72';
 
 use Exporter qw( import );
 

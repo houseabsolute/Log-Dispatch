@@ -3,7 +3,7 @@ package Log::Dispatch::Syslog;
 use strict;
 use warnings;
 
-our $VERSION = '2.71';
+our $VERSION = '2.72';
 
 use Log::Dispatch::Types;
 use Params::ValidationCompiler qw( validation_for );
