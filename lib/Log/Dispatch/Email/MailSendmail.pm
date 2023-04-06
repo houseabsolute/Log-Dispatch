@@ -53,7 +53,7 @@ __END__
 
 =head1 DESCRIPTION
 
-This is a subclass of L<Log::Dispatch::Email> that implements the
-send_email method using the L<Mail::Sendmail> module.
+This is a subclass of L<Log::Dispatch::Email> that implements the send_email
+method using the L<Mail::Sendmail> module.
 
 =cut

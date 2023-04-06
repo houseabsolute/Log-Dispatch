@@ -95,7 +95,6 @@ __END__
 
 =head1 DESCRIPTION
 
-Unless you are me, you probably don't need to know what this class
-does.
+Unless you are me, you probably don't need to know what this class does.
 
 =cut

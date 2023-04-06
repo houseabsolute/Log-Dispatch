@@ -8,7 +8,7 @@ our $VERSION = '2.71';
 use IO::Handle;
 use Log::Dispatch::Types;
 use Params::ValidationCompiler qw( validation_for );
-use Scalar::Util qw( openhandle );
+use Scalar::Util               qw( openhandle );
 
 use base qw( Log::Dispatch::Output );
 
@@ -219,9 +219,8 @@ The filename to be opened for writing.
 
 =item * mode ($)
 
-The mode the file should be opened with. Valid options are 'write',
-'>', 'append', '>>', or the relevant constants from Fcntl. The
-default is 'write'.
+The mode the file should be opened with. Valid options are 'write', '>',
+'append', '>>', or the relevant constants from Fcntl. The default is 'write'.
 
 =item * binmode ($)
 
@@ -229,8 +228,8 @@ A layer name to be passed to binmode, like ":encoding(UTF-8)" or ":raw".
 
 =item * close_after_write ($)
 
-Whether or not the file should be closed after each write. This
-defaults to false.
+Whether or not the file should be closed after each write. This defaults to
+false.
 
 If this is true, then the mode will always be append, so that the file is not
 re-written for each new message.
@@ -246,20 +245,19 @@ Whether or not the file should be autoflushed. This defaults to true.
 
 =item * syswrite ($)
 
-Whether or not to perform the write using L<perlfunc/syswrite>(),
-as opposed to L<perlfunc/print>(). This defaults to false.
-The usual caveats and warnings as documented in L<perlfunc/syswrite> apply.
+Whether or not to perform the write using L<perlfunc/syswrite>(), as opposed to
+L<perlfunc/print>(). This defaults to false. The usual caveats and warnings as
+documented in L<perlfunc/syswrite> apply.
 
 =item * permissions ($)
 
-If the file does not already exist, the permissions that it should
-be created with. Optional. The argument passed must be a valid
-octal value, such as 0600 or the constants available from Fcntl, like
-S_IRUSR|S_IWUSR.
+If the file does not already exist, the permissions that it should be created
+with. Optional. The argument passed must be a valid octal value, such as 0600
+or the constants available from Fcntl, like S_IRUSR|S_IWUSR.
 
-See L<perlfunc/chmod> for more on potential traps when passing octal
-values around. Most importantly, remember that if you pass a string
-that looks like an octal value, like this:
+See L<perlfunc/chmod> for more on potential traps when passing octal values
+around. Most importantly, remember that if you pass a string that looks like an
+octal value, like this:
 
  my $mode = '0644';
 

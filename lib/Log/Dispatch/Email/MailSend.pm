@@ -70,10 +70,9 @@ method using the L<Mail::Send> module.
 
 =head1 CHANGING HOW MAIL IS SENT
 
-Since L<Mail::Send> is a subclass of L<Mail::Mailer>, you can change
-how mail is sent from this module by simply C<use>ing L<Mail::Mailer>
-in your code before mail is sent. For example, to send mail via smtp,
-you could do:
+Since L<Mail::Send> is a subclass of L<Mail::Mailer>, you can change how mail
+is sent from this module by simply C<use>ing L<Mail::Mailer> in your code
+before mail is sent. For example, to send mail via smtp, you could do:
 
   use Mail::Mailer 'smtp', Server => 'foo.example.com';
 

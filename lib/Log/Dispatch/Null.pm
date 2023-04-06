@@ -37,8 +37,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This class provides a null logging object. Messages can be sent to the
-object but it does nothing with them.
+This class provides a null logging object. Messages can be sent to the object
+but it does nothing with them.
 
 =cut
 

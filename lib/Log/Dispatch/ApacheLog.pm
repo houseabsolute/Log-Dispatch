@@ -75,8 +75,8 @@ __END__
 
 =head1 DESCRIPTION
 
-This module allows you to pass messages to Apache's log object,
-represented by the L<Apache::Log> class.
+This module allows you to pass messages to Apache's log object, represented by
+the L<Apache::Log> class.
 
 =head1 CONSTRUCTOR
 

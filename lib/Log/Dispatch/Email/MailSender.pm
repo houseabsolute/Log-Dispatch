@@ -11,7 +11,7 @@ use warnings;
 our $VERSION = '2.71';
 
 use Log::Dispatch::Types;
-use Mail::Sender ();
+use Mail::Sender               ();
 use Params::ValidationCompiler qw( validation_for );
 
 use base qw( Log::Dispatch::Email );
@@ -144,8 +144,7 @@ The port to use when connecting. This defaults to 25.
 =item * auth ($)
 
 Optional. The SMTP authentication protocol to use to login to the server. At
-the time of writing Mail::Sender only supports LOGIN, PLAIN, CRAM-MD5 and
-NTLM.
+the time of writing Mail::Sender only supports LOGIN, PLAIN, CRAM-MD5 and NTLM.
 
 Some protocols have module dependencies. CRAM-MD5 depends on Digest::HMAC_MD5
 and NTLM on Authen::NTLM.

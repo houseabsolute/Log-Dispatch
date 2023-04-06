@@ -87,11 +87,11 @@ __END__
 
 =head1 DESCRIPTION
 
-This module provides an object for logging to the screen (really
-C<STDOUT> or C<STDERR>).
+This module provides an object for logging to the screen (really C<STDOUT> or
+C<STDERR>).
 
-Note that a newline will I<not> be added automatically at the end of a
-message by default. To do that, pass C<< newline => 1 >>.
+Note that a newline will I<not> be added automatically at the end of a message
+by default. To do that, pass C<< newline => 1 >>.
 
 =head1 CONSTRUCTOR
 
@@ -102,8 +102,8 @@ parameters documented in L<Log::Dispatch::Output>:
 
 =item * stderr (0 or 1)
 
-Indicates whether or not logging information should go to C<STDERR>. If
-false, logging information is printed to C<STDOUT> instead.
+Indicates whether or not logging information should go to C<STDERR>. If false,
+logging information is printed to C<STDOUT> instead.
 
 This defaults to true.
 

@@ -69,13 +69,12 @@ __END__
 
 =head1 DESCRIPTION
 
-This module acts exactly like L<Log::Dispatch::File> except that it
-obtains an exclusive lock on the file while opening it.
+This module acts exactly like L<Log::Dispatch::File> except that it obtains an
+exclusive lock on the file while opening it.
 
-Note that if you are using this output because you want to write to a file
-from multiple processes, you should open the file with the append C<mode>
-(C<<< >> >>>), or else it's quite likely that one process will overwrite
-another.
+Note that if you are using this output because you want to write to a file from
+multiple processes, you should open the file with the append C<mode> (C<<< >>
+>>>), or else it's quite likely that one process will overwrite another.
 
 =head1 SEE ALSO
 
