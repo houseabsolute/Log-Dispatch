@@ -93,9 +93,6 @@ C<STDOUT> or C<STDERR>).
 Note that a newline will I<not> be added automatically at the end of a
 message by default. To do that, pass C<< newline => 1 >>.
 
-The handle will be autoflushed, but this module opens it's own handle to fd 1
-or 2 instead of using the global C<STDOUT> or C<STDERR>.
-
 =head1 CONSTRUCTOR
 
 The constructor takes the following parameters in addition to the standard
@@ -112,9 +109,10 @@ This defaults to true.
 
 =item * utf8 (0 or 1)
 
-If this is true, then the output uses C<binmode> to apply the
-C<:encoding(UTF-8)> layer to the relevant handle for output. This will not
-affect C<STDOUT> or C<STDERR> in other parts of your code.
+If this is true, then the output will be encoded using the UTF-8 encoding. If
+you have I<already> applied an encoding layer to the relevant filehandle,
+C<STDOUT> or C<STDERR>, then your output will end up double-encoded if this is
+true.
 
 This defaults to false.
 
