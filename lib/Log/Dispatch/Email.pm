@@ -30,6 +30,14 @@ use base qw( Log::Dispatch::Output );
                 type    => t('Bool'),
                 default => 1,
             },
+            buffer_max_age => {
+                type => t('Int'),
+                default => 0,
+            },
+            buffer_max_size => {
+                type => t('Int'),
+                default => 0,
+            },
         },
         slurpy => 1,
     );
@@ -43,6 +51,8 @@ use base qw( Log::Dispatch::Output );
             to       => delete $p{to},
             from     => delete $p{from},
             buffered => delete $p{buffered},
+            buffer_max_age => delete $p{buffer_max_age},
+            buffer_max_size => delete $p{buffer_max_size},
         }, $class;
         $self->{buffer} = [] if $self->{buffered};
 
@@ -58,6 +68,16 @@ sub log_message {
 
     if ( $self->{buffered} ) {
         push @{ $self->{buffer} }, $p{message};
+        $self->{buffer_ts} ||= time();
+        my $buffer_age = time() - $self->{buffer_ts};
+        if ( $self->{buffer_max_size} and @{ $self->{buffer} } >= $self->{buffer_max_size} ) {
+            push @{ $self->{buffer} }, "Reached threshold of $self->{buffer_max_size} messages";
+            $self->flush;
+        }
+        elsif ( $self->{buffer_max_age} and $buffer_age > $self->{buffer_max_age} ) {
+            push @{ $self->{buffer} }, "Reached threshold of $self->{buffer_max_age} seconds";
+            $self->flush;
+        }
     }
     else {
         $self->send_email(@_);
@@ -79,6 +99,7 @@ sub flush {
 
         $self->send_email( message => $message );
         $self->{buffer} = [];
+        $self->{buffer_ts} = time();
     }
 }
 
@@ -158,6 +179,17 @@ all mail sending methods.
 This determines whether the object sends one email per message it is given or
 whether it stores them up and sends them all at once. The default is to buffer
 messages.
+
+=item * buffer_max_age (integer, defaulting to 0)
+
+Relevant only with buffered option. If not 0, flush the buffer if its
+age in seconds is greater than this value.
+
+=item * buffer_max_size (integer, defaulting to 0)
+
+Relevant only with buffered option. If not 0, flush the buffer if the
+number of messages is greater than this value.
+
 
 =back
 
