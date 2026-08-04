@@ -1,0 +1,4 @@
+# Contributor surnames, not misspellings.
+[default.extend-words]
+Signes = "Signes"
+Goess = "Goess"
