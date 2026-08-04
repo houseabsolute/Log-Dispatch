@@ -1,6 +1,9 @@
 exclude = [
+    "!xt/author/test-dependents.t",
     ".build/**/*",
     "Log-Dispatch-*/**/*",
+    "META.yml",
+    "MYMETA.yml",
     "blib/**/*",
     "lib/Log/Dispatch/Conflicts.pm",
     "t/00-*",
@@ -8,7 +11,6 @@ exclude = [
     "t/release-*",
     "t/zzz-*",
     "xt/**/*",
-    "!xt/author/test-dependents.t",
 ]
 
 [commands.omegasort-gitignore]
