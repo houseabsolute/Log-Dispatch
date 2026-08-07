@@ -26,7 +26,10 @@ my $dispatch = Log::Dispatch->new(
 );
 
 my $message = 'test message';
-$message .= " - \x{1f60}" if $utf8;
+if ($utf8) {
+    binmode( $stderr ? \*STDERR : \*STDOUT );
+    $message .= " - \x{1f60}";
+}
 $dispatch->warning($message);
 
 exit 0;
